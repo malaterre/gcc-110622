@@ -84,11 +84,17 @@ HWY_NOINLINE void TestMath(const char* name, T (*fx1)(T),
       const auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
       max_ulp = HWY_MAX(max_ulp, ulp);
       if (ulp > max_error_ulp) {
-        fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g ulp %g max ulp %u\n",
+        fprintf(stderr, "KO %s: %s(%.17g) expected %.17g actual %.17g ulp %g max ulp %u\n",
                 hwy::TypeName(T(), Lanes(d)).c_str(), name, value, expected,
                 actual, static_cast<double>(ulp),
                 static_cast<uint32_t>(max_error_ulp));
 	if( value == 5.526720574244119e-20 && expected == 5.526720574244119e-20 && actual == 0) exit(42);
+      } else {
+        fprintf(stderr, "OK %s: %s(%.17g) expected %.17g actual %.17g ulp %g max ulp %u\n",
+                hwy::TypeName(T(), Lanes(d)).c_str(), name, value, expected,
+                actual, static_cast<double>(ulp),
+                static_cast<uint32_t>(max_error_ulp));
+
       }
     }
   }
