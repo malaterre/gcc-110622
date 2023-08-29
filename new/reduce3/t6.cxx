@@ -146,7 +146,7 @@ template <class bl, class cm> void cq(cm, bl o) {
   co cs(da);
   co p(o);
   co cp[]{cs, p};
-  co q;
+  co q = 0;
   for (int r = 0; r < 1; ++r) {
     co cu = 0, s = cp[1], cr(q);
     for (co y = cu; y <= s; y = cr)
