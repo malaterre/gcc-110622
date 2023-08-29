@@ -11,41 +11,40 @@ void ay() {}
 void az() {}
 void ba() {}
 struct c {
-  template <class bd, class bh> void operator()(bd, bh p2) {
-    bk(p2, 1.79769313486231570814527423731704357e308L);
+  template <class bd, class bh> void operator()(bd, bh e) {
+    bk(e, 1.79769313486231570814527423731704357e308L);
   }
 };
-//template <typename, int, int> using bb = struct c;
-template <int, int bc, int e> struct g {
-  static void f(int, int) {
+template <int, int> struct B {
+  static void f(int) {
     c d;
     c()(double(), d);
   }
 };
-template <int e> class i {
+class g {
 public:
-  template <typename bd> void operator()(bd) {
+  void operator()(double) {
     constexpr int h = 0, be = 0, bg = h, bc{};
-    g<bg, bc, e>::f(1, be);
+    B<bg, bc>::f(be);
   }
 };
 class {
 public:
-  void operator()(double k) { i<0>()(k); }
+  void operator()(double i) { g()(i); }
 } j;
 long bi;
-template <class bd, class bh> void bk(bh, bd p2) {
+template <class bd, class bh> void bk(bh, bd e) {
   using bj = long;
   bj bm(bi);
-  bj l(p2);
-  bj bl[]{bm, l};
-  bj m = 0;
-  bj bo = 0, n = bl[1], bn(m);
-  for (bj o = bo; o <= n; o = bn)
+  bj k(e);
+  bj bl[]{bm, k};
+  bj l = 0;
+  bj bo = 0, m = bl[1], bn(l);
+  for (bj n = bo; n <= m; n = bn)
     exit(42);
 }
-void p() { j(double()); }
-decltype(&p) bp[]{decltype(b)::aw<bp>,
+void o() { j(double()); }
+decltype(&o) bp[]{decltype(b)::aw<bp>,
                   nullptr,
                   nullptr,
                   nullptr,
@@ -61,5 +60,5 @@ decltype(&p) bp[]{decltype(b)::aw<bp>,
                   az,
                   nullptr,
                   ay,
-                  p};
+                  o};
 int main() { (*bp)(); }
