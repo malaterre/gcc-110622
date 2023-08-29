@@ -264,7 +264,7 @@ void TestMath(const char *, bl(bl), D(D, D), D d, b min, bl bk, b) {
   b max_ulp;
   UintT kSamplesPerRange(0);
   for (int range_index = 0; range_index < range_count; ++range_index) {
-    UintT start;
+    UintT start = 0;
     UintT stop = ranges[range_index][1];
     UintT step(kSamplesPerRange);
     for (UintT value_bits = start; value_bits <= stop; value_bits = step) {
