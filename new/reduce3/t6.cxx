@@ -10,10 +10,15 @@ struct a {
 void ay() {}
 void az() {}
 void ba() {}
-template <typename, int, int> using bb = struct c;
+struct c {
+  template <class bd, class bh> void operator()(bd, bh p2) {
+    bk(p2, 1.79769313486231570814527423731704357e308L);
+  }
+};
+//template <typename, int, int> using bb = struct c;
 template <int, int bc, int e> struct g {
   static void f(int, int) {
-    bb<long, bc, e> d;
+    c d;
     c()(double(), d);
   }
 };
@@ -39,11 +44,6 @@ template <class bd, class bh> void bk(bh, bd p2) {
   for (bj o = bo; o <= n; o = bn)
     exit(42);
 }
-struct c {
-  template <class bd, class bh> void operator()(bd, bh p2) {
-    bk(p2, 1.79769313486231570814527423731704357e308L);
-  }
-};
 void p() { j(double()); }
 decltype(&p) bp[]{decltype(b)::aw<bp>,
                   nullptr,
