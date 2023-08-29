@@ -13,7 +13,7 @@ template <typename ae, typename> class n {
   ae af;
 
 public:
-  n(ae t) : af(t) {}
+  n(ae) {}
   typename g<ae>::ad operator*() { return *af; }
   n operator++() {
     ++af;
@@ -25,81 +25,77 @@ template <typename ah, typename ai, typename aj>
 bool operator!=(n<ah, aj> t, n<ai, aj>) {
   return t.ag();
 }
-struct ak {
+struct D {
   template <typename c> using al = c;
 };
-struct am : ak {
+struct K : D {
   using an = aa<int *, al>;
 };
-struct u {
-  struct ao {
-    am::an ap;
-    am::an aq;
-    ao() : aq() {}
-  } ar;
+struct F {
+  struct {
+    K::an ao;
+    K::an ap;
+  } aq;
 };
-class as : u {
+class u : F {
 public:
-  n<am::an, int> begin() { return ar.ap; }
-  n<am::an, int> end() { return ar.aq; }
+  n<K::an, int> begin() { return aq.ao; }
+  n<K::an, int> end() { return aq.ap; }
 };
-namespace hwy {
-void SetSupportedTargetsForTest(long long);
-as f() {
-  as at;
-  return at;
+u f() {
+  u as;
+  return as;
 }
-struct v {
-  int au() { return 15 + 1; }
+struct G {
+  int at() { return 15 + 1; }
 };
-struct w {
-  typedef void(av)();
-  template <av *aw[]> static void ax() {
-    v ay;
-    aw[ay.au()]();
+struct {
+  typedef void(au)();
+  template <au *av[]> static void aw() {
+    G ax;
+    av[ax.at()]();
   }
-};
+} s;
+void ay() {}
 void az() {}
 void ba() {}
-void bb() {}
-template <typename, int, int> using bc = struct h;
-template <int, int bd, int j> struct x {
+template <typename, int, int> using bb = struct h;
+template <int, int bc, int j> struct v {
   static void i(int, int) {
-    bc<long, bd, j> d;
+    bb<long, bc, j> d;
     h()(double(), d);
   }
 };
-template <int j> class y {
+template <int j> class w {
 public:
-  template <typename be> void operator()(be) {
-    constexpr int l = 0, bf = 0, bg = l, bd{};
-    x<bg, bd, j>::i(1, bf);
+  template <typename bd> void operator()(bd) {
+    constexpr int l = 0, be = 0, bg = l, bc{};
+    v<bg, bc, j>::i(1, be);
   }
 };
 class {
 public:
-  void operator()(double t) { y<0>()(t); }
+  void operator()(double t) { w<0>()(t); }
 } k;
-void bh() { k(double()); }
+void bf() { k(double()); }
 long bi;
-template <class be, class bj> void bk(bj, be z) {
-  using bl = long;
-  bl bm(bi);
-  bl m(z);
-  bl bn[]{bm, m};
-  bl o = 0;
-  bl bo = 0, q = bn[1], cr(o);
-  for (bl r = bo; r <= q; r = cr)
+template <class bd, class bh> void bk(bh, bd x) {
+  using bj = long;
+  bj bm(bi);
+  bj m(x);
+  bj bl[]{bm, m};
+  bj o = 0;
+  bj bo = 0, q = bl[1], bn(o);
+  for (bj r = bo; r <= q; r = bn)
     exit(42);
 }
 struct h {
-  template <class be, class bj> void operator()(be, bj z) {
-    bk(z, 1.79769313486231570814527423731704357e308L);
+  template <class bd, class bh> void operator()(bd, bh x) {
+    bk(x, 1.79769313486231570814527423731704357e308L);
   }
 };
-w s;
-void p() { bh(); }
-decltype(&p) bp[]{decltype(s)::ax<bp>,
+void p() { bf(); }
+decltype(&p) bp[]{decltype(s)::aw<bp>,
                   nullptr,
                   nullptr,
                   nullptr,
@@ -111,16 +107,15 @@ decltype(&p) bp[]{decltype(s)::ax<bp>,
                   nullptr,
                   nullptr,
                   nullptr,
-                  bb,
                   ba,
-                  nullptr,
                   az,
+                  nullptr,
+                  ay,
                   p};
 void bq() {
   for (long long br : f()) {
-    SetSupportedTargetsForTest(br);
+    (void)br;
     (*bp)();
   }
 }
-} // namespace hwy
-int main() { hwy::bq(); }
+int main() { bq(); }
