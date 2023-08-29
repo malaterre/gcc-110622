@@ -150,7 +150,7 @@ void cm<g, bq>::r(cn cr, s &&...) {
   bt y(x);
   try {
     _Alloc_traits::ca(q);
-    if constexpr (co())
+    if (co())
       u, cs;
   } catch (...) {
   }
