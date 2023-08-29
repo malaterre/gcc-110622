@@ -143,15 +143,15 @@ template <typename g, typename bq>
 template <typename... s>
 void cm<g, bq>::r(cn cr, s &&...) {
   bm cq = cp(1, "");
-  bt u;
-  bt cs;
+  //bt u;
+  //bt cs;
   bm q = cr - begin();
   bt x(this->ck(cq));
   bt y(x);
   try {
     _Alloc_traits::ca(q);
-    if (co())
-      u, cs;
+    //if (co())
+    //  u, cs;
   } catch (...) {
   }
   this->cj.ch = this->cj.ci = y;
