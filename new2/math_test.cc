@@ -10,7 +10,7 @@ template <class b, class c> b al(c e) {
 template <class g, class h>
 void am(std::string i, g an(g), Vec<h> j(h, VecArg<Vec<h>>), h d, g k, g l,
         uint64_t m) {
-	(void)i;
+  (void)i;
   using n = MakeUnsigned<g>;
   n o(k), p = al<n>(l), s(4000);
   n q[][1]{o, p};
@@ -24,13 +24,12 @@ void am(std::string i, g an(g), Vec<h> j(h, VecArg<Vec<h>>), h d, g k, g l,
       g ab = an(t);
       auto ac = hwy::detail::ComputeUlpDelta(aa, ab);
       r = HWY_MAX(r, ac);
-      //fprintf(stderr, TypeName(g(), 0).c_str(), i);
     }
   }
   HWY_ASSERT(r <= m);
 }
 #define v(w)                                                                   \
-  void TestAll##w() { ForFloatTypes(ForPartialVectors<x##w>()); }
+  void MyAll##w() { ForFloatTypes(ForPartialVectors<x##w>()); }
 #define y(w, z, ad, ae, af, ag, ah, ai, aj, ak, a)                             \
   struct x##w {                                                                \
     template <class g, class h> void operator()(g, h d) {                      \
@@ -41,4 +40,4 @@ void am(std::string i, g an(g), Vec<h> j(h, VecArg<Vec<h>>), h d, g k, g l,
 y(Log1p, log1p, CallLog1p, 0.0f, 1e37f, 3, , , , , )
 } // namespace HWY_NAMESPACE
 } // namespace hwy
-int main() { hwy::N_EMU128::TestAllLog1p(); }
+int main() { hwy::N_EMU128::MyAllLog1p(); }
