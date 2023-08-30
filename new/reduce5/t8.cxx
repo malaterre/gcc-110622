@@ -21,10 +21,9 @@ void k() {
   cz h(4000);
   cz de = g, i = dc[1], df(i / h);
   for (cz j = de; j <= i; j += df) {
-    double aa = cv<double>(j) ;
+    double aa = cv<double>(j), dj(aa);
     d di;
     long actual = cl(di);
-    auto dj(aa);
     if (dj == 5.526720574244119e-20 && actual == 0)
       exit(42);
   }
