@@ -2,48 +2,40 @@ extern "C" void exit(int);
 template <int a, typename as, typename at> void au(as b, at c) {
   __builtin_memcpy(c, b, a);
 }
-struct ca {
-  int ch = 15 + 1;
-  typedef void(cb)();
-  template <cb *cc[]> static void cd() {
-    ca ce;
-    cc[ce.ch]();
-  }
-} e;
-struct f {
+struct e {
   static constexpr int co = 0;
 };
-template <typename, int, int> using g = f;
-template <typename, int> struct l {
+template <typename, int, int> using f = e;
+template <typename, int> struct g {
   long cj[sizeof(long)];
 };
-template <class h> l<h, h::co> i(h);
+template <class h> g<h, h::co> i(h);
 template <class h> using j = decltype(i(h()));
-template <typename bc, int ck> long cl(l<bc, ck> b) { return b.cj[0]; }
-struct r {
+template <typename bc, int ck> long cl(g<bc, ck> b) { return b.cj[0]; }
+struct l {
   template <class bc, class h> void operator()(bc, h c) {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
-template <int, int k, int cm> struct F {
+template <int, int k, int cm> struct r {
   static void cw(int, int) {
-    g<long, k, cm> d;
-    r()(double(), d);
+    f<long, k, cm> d;
+    l()(double(), d);
   }
 };
-template <int cm> class D {
+template <int cm> class F {
 public:
   template <typename bc> void operator()(bc) {
     constexpr int m(sizeof(long));
     int cp = 0;
     constexpr int cq = m;
     constexpr int k{};
-    F<cq, k, cm>::cw(1, cp);
+    r<cq, k, cm>::cw(1, cp);
   }
 };
 class {
 public:
-  void operator()(double b) { D<0>()(b); }
+  void operator()(double b) { F<0>()(b); }
 } cr;
 template <class db, class cu> db cv(cu b) {
   db dg;
@@ -72,22 +64,5 @@ template <class bc, class h> void cy(h, bc c) {
   }
 }
 void q() { cr(double()); }
-decltype(&q) dl[]{decltype(e)::cd<dl>,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  nullptr,
-                  q};
-void dm() { (*dl)(); }
-int main() { dm(); }
+decltype(&q) dl{q};
+int main() { dl(); }
