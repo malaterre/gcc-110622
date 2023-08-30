@@ -19,16 +19,13 @@ struct i {
 //  static void k() {
 //  }
 //};
-class l {
-public:
-  void operator()(double) {
+  void l(double) {
     constexpr int m(sizeof(long));
     (void)m;
     e d;
     i()(double(), d);
 
   }
-};
 //class {
 //public:
 //  void operator()(double b) { l()(b); }
@@ -59,6 +56,6 @@ template <class bc, class f> void cy(f, bc c) {
     }
   }
 }
-void q() { l()(double()); }
+void q() { l(0.0); }
 decltype(&q) dl{q};
 int main() { dl(); }
