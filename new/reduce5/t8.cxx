@@ -28,10 +28,10 @@ public:
     j<m>::k();
   }
 };
-class {
-public:
-  void operator()(double b) { l()(b); }
-} cr;
+//class {
+//public:
+//  void operator()(double b) { l()(b); }
+//} cr;
 template <class db, class cu> db cv(cu b) {
   db dg;
   au<sizeof(dg)>(&b, &dg);
@@ -58,6 +58,6 @@ template <class bc, class f> void cy(f, bc c) {
     }
   }
 }
-void q() { cr(double()); }
+void q() { l()(double()); }
 decltype(&q) dl{q};
 int main() { dl(); }
