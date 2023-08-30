@@ -22,7 +22,12 @@ template <typename, int> struct B {
 template <class h> B<h, h::co> i(h);
 template <class h> using j = decltype(i(h()));
 template <typename bc, int ck> long cl(B<bc, ck> b) { return b.cj[0]; }
-struct ct;
+struct ct {
+  template <class bc, class h> void operator()(bc, h c) {
+    cy(c, bc(1.79769313486231570814527423731704357e308L));
+  }
+};
+
 template <int, int k, int cm> struct u {
   static void cw(int, int) {
     g<long, k, cm> d;
@@ -69,11 +74,6 @@ template <class bc, class h> void cy(h, bc c) {
     }
   }
 }
-struct ct {
-  template <class bc, class h> void operator()(bc, h c) {
-    cy(c, bc(1.79769313486231570814527423731704357e308L));
-  }
-};
 void q() { cr(double()); }
 decltype(&q) dl[]{decltype(e)::cd<dl>,
                   nullptr,
