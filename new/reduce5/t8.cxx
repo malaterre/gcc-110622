@@ -15,18 +15,18 @@ struct i {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
-struct j {
-  static void k() {
-    e d;
-    i()(double(), d);
-  }
-};
+//struct j {
+//  static void k() {
+//  }
+//};
 class l {
 public:
   void operator()(double) {
     constexpr int m(sizeof(long));
     (void)m;
-    j::k();
+    e d;
+    i()(double(), d);
+
   }
 };
 //class {
