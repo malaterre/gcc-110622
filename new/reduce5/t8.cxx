@@ -2,30 +2,29 @@ extern "C" void exit(int);
 template <int a, typename as, typename at> void au(as b, at c) {
   __builtin_memcpy(c, b, a);
 }
-struct e {};
-struct g {
+struct d {
   long cj[sizeof(long)];
-} p;
-using h = decltype(p);
-long cl(g b) { return b.cj[0]; }
+} e;
+using f = decltype(e);
+long cl(d b) { return b.cj[0]; }
 template <class db, class cu> db cv(cu b) {
   db dg;
   au<sizeof(dg)>(&b, &dg);
   return dg;
 }
-template <class bc > void cy( bc c) {
-  using cz = long long;
-  cz da(0);
-  cz i = cv<cz>(c);
-  int dk = 1;
-  cz dc[]{da, i};
-  cz j = da;
-  cz k(4000);
-  for (int dd = 0; dd < dk; ++dd) {
-    cz de = j, l = dc[1], df(l / k);
-    for (cz m = de; m <= l; m += df) {
-      bc aa = cv<bc>(m), dh(aa);
-      h di;
+double m = 1.79769313486231570814527423731704357e308L;
+void l() {
+  {
+    using cz = long long;
+    cz da(0);
+    cz g = cv<cz>(m);
+    cz dc[]{da, g};
+    cz h = da;
+    cz i(4000);
+    cz de = h, j = dc[1], df(j / i);
+    for (cz k = de; k <= j; k += df) {
+      double aa = cv<double>(k), dh(aa);
+      f di;
       long actual = cl(di);
       auto dj(dh);
       if (dj == 5.526720574244119e-20 && actual == 0)
@@ -33,13 +32,5 @@ template <class bc > void cy( bc c) {
     }
   }
 }
-struct n {
-  void operator()() {
-    cy( double(1.79769313486231570814527423731704357e308L));
-  }
-};
-void o() {
-  n()();
-}
-decltype(&o) dl{o};
+decltype(&l) dl{l};
 int main() { dl(); }
