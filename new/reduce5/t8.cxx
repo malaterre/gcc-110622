@@ -10,28 +10,25 @@ struct ca {
     cc[ce.ch()]();
   }
 } e;
-void l() {}
-void f() {}
-struct r {
+struct f {
   static constexpr int co = 0;
 };
-template <typename, int, int> using g = r;
-template <typename, int> struct B {
+template <typename, int, int> using g = f;
+template <typename, int> struct l {
   long cj[sizeof(long)];
 };
-template <class h> B<h, h::co> i(h);
+template <class h> l<h, h::co> i(h);
 template <class h> using j = decltype(i(h()));
-template <typename bc, int ck> long cl(B<bc, ck> b) { return b.cj[0]; }
-struct ct {
+template <typename bc, int ck> long cl(l<bc, ck> b) { return b.cj[0]; }
+struct r {
   template <class bc, class h> void operator()(bc, h c) {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
-
-template <int, int k, int cm> struct u {
+template <int, int k, int cm> struct F {
   static void cw(int, int) {
     g<long, k, cm> d;
-    ct()(double(), d);
+    r()(double(), d);
   }
 };
 template <int cm> class D {
@@ -41,7 +38,7 @@ public:
     int cp = 0;
     constexpr int cq = m;
     constexpr int k{};
-    u<cq, k, cm>::cw(1, cp);
+    F<cq, k, cm>::cw(1, cp);
   }
 };
 class {
@@ -87,10 +84,10 @@ decltype(&q) dl[]{decltype(e)::cd<dl>,
                   nullptr,
                   nullptr,
                   nullptr,
-                  f,
-                  f,
                   nullptr,
-                  l,
+                  nullptr,
+                  nullptr,
+                  nullptr,
                   q};
 void dm() { (*dl)(); }
 int main() { dm(); }
