@@ -13,7 +13,7 @@ template <class db, class cu> db cv(cu b) {
   au<sizeof(dg)>(&b, &dg);
   return dg;
 }
-template <class bc, class f> void cy(f, bc c) {
+template <class bc > void cy( bc c) {
   using cz = long long;
   cz da(0);
   cz i = cv<cz>(c);
@@ -34,13 +34,12 @@ template <class bc, class f> void cy(f, bc c) {
   }
 }
 struct n {
-  void operator()(e b) {
-    cy(b, double(1.79769313486231570814527423731704357e308L));
+  void operator()() {
+    cy( double(1.79769313486231570814527423731704357e308L));
   }
 };
 void o() {
-  e d;
-  n()(d);
+  n()();
 }
 decltype(&o) dl{o};
 int main() { dl(); }
