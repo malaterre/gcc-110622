@@ -3,14 +3,13 @@ template <int a, typename as, typename at> void au(as b, at c) {
   __builtin_memcpy(c, b, a);
 }
 struct e {};
-struct B {
+struct g {
   long cj[sizeof(long)];
-};
-B g(e);
-using h = decltype(g(e()));
-long cl(B b) { return b.cj[0]; }
+} p;
+using h = decltype(p);
+long cl(g b) { return b.cj[0]; }
 struct i {
-  template <class bc > void operator()(bc, e c) {
+  template <class bc> void operator()(bc, e c) {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
