@@ -5,7 +5,6 @@ template <int a, typename as, typename at> void au(as b, at c) {
 struct e {
   static constexpr int co = 0;
 };
-template <typename, int, int> using f = e;
 template <typename, int> struct g {
   long cj[sizeof(long)];
 };
@@ -19,7 +18,7 @@ struct l {
 };
 template <int, int k, int cm> struct r {
   static void cw(int, int) {
-    f<long, k, cm> d;
+    e d;
     l()(double(), d);
   }
 };
@@ -27,10 +26,7 @@ template <int cm> class F {
 public:
   template <typename bc> void operator()(bc) {
     constexpr int m(sizeof(long));
-    int cp = 0;
-    constexpr int cq = m;
-    constexpr int k{};
-    r<cq, k, cm>::cw(1, cp);
+    r<m, 0, cm>::cw(1, 0);
   }
 };
 class {
