@@ -6,11 +6,11 @@ struct e {};
 struct B {
   long cj[sizeof(long)];
 };
-template <class f> B g(f);
-template <class f> using h = decltype(g(f()));
+B g(e);
+using h = decltype(g(e()));
 long cl(B b) { return b.cj[0]; }
 struct i {
-  template <class bc, class f> void operator()(bc, f c) {
+  template <class bc > void operator()(bc, e c) {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
@@ -19,10 +19,9 @@ template <class db, class cu> db cv(cu b) {
   au<sizeof(dg)>(&b, &dg);
   return dg;
 }
-long cx;
 template <class bc, class f> void cy(f, bc c) {
   using cz = long long;
-  cz da(cx);
+  cz da(0);
   cz j = cv<cz>(c);
   int dk = 1;
   cz dc[]{da, j};
@@ -32,7 +31,7 @@ template <class bc, class f> void cy(f, bc c) {
     cz de = k, m = dc[1], df(m / l);
     for (cz n = de; n <= m; n += df) {
       bc aa = cv<bc>(n), dh(aa);
-      h<f> di;
+      h di;
       long actual = cl(di);
       auto dj(dh);
       if (dj == 5.526720574244119e-20 && actual == 0)
