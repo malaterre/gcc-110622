@@ -3,12 +3,11 @@ template <int a, typename as, typename at> void au(as b, at c) {
   __builtin_memcpy(c, b, a);
 }
 struct e {
-  static constexpr int co = 0;
 };
 template <typename, int> struct B {
   long cj[sizeof(long)];
 };
-template <class f> B<f, f::co> g(f);
+template <class f> B<f, 0> g(f);
 template <class f> using h = decltype(g(f()));
 template <typename bc, int ck> long cl(B<bc, ck> b) { return b.cj[0]; }
 struct i {
