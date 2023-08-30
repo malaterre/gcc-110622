@@ -13,7 +13,7 @@ void am(std::string i, g an(g), Vec<h> j(h, VecArg<Vec<h>>), h d, g k, g l,
   (void)i;
   using n = MakeUnsigned<g>;
   n o(k), p = al<n>(l), s(4000);
-  n q[][1]{o, p};
+  n q[][2]{o, p};
   uint64_t r = 0;
   for (int ao = 0; ao < 1; ++ao) {
     n ap = q[ao][0], aq = q[ao][1], ar(s);
