@@ -4,12 +4,12 @@ template <int a, typename as, typename at> void au(as b, at c) {
 }
 struct e {
 };
-template <typename, int> struct B {
+template <typename > struct B {
   long cj[sizeof(long)];
 };
-template <class f> B<f, 0> g(f);
+template <class f> B<f > g(f);
 template <class f> using h = decltype(g(f()));
-template <typename bc, int ck> long cl(B<bc, ck> b) { return b.cj[0]; }
+template <typename bc > long cl(B<bc > b) { return b.cj[0]; }
 struct i {
   template <class bc, class f> void operator()(bc, f c) {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
