@@ -4,8 +4,8 @@ template <int a, typename as, typename at> void au(as b, at c) {
 }
 struct d {
   long cj[sizeof(long)];
-} e;
-using f = decltype(e);
+} ;
+//using f = decltype(e);
 long cl(d b) { return b.cj[0]; }
 template <class db, class cu> db cv(cu b) {
   db dg;
@@ -24,7 +24,7 @@ void l() {
     cz de = h, j = dc[1], df(j / i);
     for (cz k = de; k <= j; k += df) {
       double aa = cv<double>(k), dh(aa);
-      f di;
+      d di;
       long actual = cl(di);
       auto dj(dh);
       if (dj == 5.526720574244119e-20 && actual == 0)
