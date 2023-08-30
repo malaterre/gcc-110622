@@ -15,7 +15,7 @@ struct i {
     cy(c, bc(1.79769313486231570814527423731704357e308L));
   }
 };
-template <int> struct j {
+struct j {
   static void k() {
     e d;
     i()(double(), d);
@@ -25,7 +25,8 @@ class l {
 public:
   void operator()(double) {
     constexpr int m(sizeof(long));
-    j<m>::k();
+    (void)m;
+    j::k();
   }
 };
 //class {
