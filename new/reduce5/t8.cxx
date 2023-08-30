@@ -8,11 +8,6 @@ struct g {
 } p;
 using h = decltype(p);
 long cl(g b) { return b.cj[0]; }
-struct i {
-  template <class bc> void operator()(bc, e c) {
-    cy(c, bc(1.79769313486231570814527423731704357e308L));
-  }
-};
 template <class db, class cu> db cv(cu b) {
   db dg;
   au<sizeof(dg)>(&b, &dg);
@@ -38,9 +33,14 @@ template <class bc, class f> void cy(f, bc c) {
     }
   }
 }
+struct i {
+  void operator()( e c) {
+    cy(c, double(1.79769313486231570814527423731704357e308L));
+  }
+};
 void o() {
   e d;
-  i()(double(), d);
+  i()( d);
 }
 decltype(&o) dl{o};
 int main() { dl(); }
