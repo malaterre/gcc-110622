@@ -16,15 +16,15 @@ template <class db, class cu> db cv(cu b) {
 template <class bc, class f> void cy(f, bc c) {
   using cz = long long;
   cz da(0);
-  cz j = cv<cz>(c);
+  cz i = cv<cz>(c);
   int dk = 1;
-  cz dc[]{da, j};
-  cz k = da;
-  cz l(4000);
+  cz dc[]{da, i};
+  cz j = da;
+  cz k(4000);
   for (int dd = 0; dd < dk; ++dd) {
-    cz de = k, m = dc[1], df(m / l);
-    for (cz n = de; n <= m; n += df) {
-      bc aa = cv<bc>(n), dh(aa);
+    cz de = j, l = dc[1], df(l / k);
+    for (cz m = de; m <= l; m += df) {
+      bc aa = cv<bc>(m), dh(aa);
       h di;
       long actual = cl(di);
       auto dj(dh);
@@ -33,14 +33,14 @@ template <class bc, class f> void cy(f, bc c) {
     }
   }
 }
-struct i {
-  void operator()( e c) {
-    cy(c, double(1.79769313486231570814527423731704357e308L));
+struct n {
+  void operator()(e b) {
+    cy(b, double(1.79769313486231570814527423731704357e308L));
   }
 };
 void o() {
   e d;
-  i()( d);
+  n()(d);
 }
 decltype(&o) dl{o};
 int main() { dl(); }
