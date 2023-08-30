@@ -3,11 +3,11 @@ template <int a, typename as, typename at> void au(as b, at c) {
   __builtin_memcpy(c, b, a);
 }
 struct ca {
-  int ch() { return 15 + 1; }
+  int ch = 15 + 1;
   typedef void(cb)();
   template <cb *cc[]> static void cd() {
     ca ce;
-    cc[ce.ch()]();
+    cc[ce.ch]();
   }
 } e;
 struct f {
