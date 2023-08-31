@@ -1,5 +1,10 @@
 #include "hwy/ops/emu128-inl.h"
-#include "hwy/ops/generic_ops-inl.h"
+template <class bi> using bj = decltype(Zero(bi()));
+template <class bk> bk bl(bk a, bk b) { return a + b; }
+template <class bk> bk bm(bk a, bk b) { return a - b; }
+template <class bk> bk bg(bk a, bk b) { return a * b; }
+template <class bk> bk bo(bk a, bk b) { return a / b; }
+template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
 namespace hwy {
 template <typename ai> int aj(ai ak, ai actual) {
@@ -12,10 +17,10 @@ namespace N_EMU128 {
 template <class v, class w> w ad(v d, w x) { return ae(d, x); }
 template <class v, class w> w ae(v d, w x) {
   using ag = TFromD<v>;
-  w ay = Set(d, ag(1.0)), y = Add(x, ay), at(y);
-  auto au = Eq(y, ay);
-  auto av = Sub(IfThenZeroElse(au, y), ay);
-  auto ax = Mul(at, Div(x, av));
+  w ay = Set(d, ag(1.0)), y = bl(x, ay), at(y);
+  auto au = bp(y, ay);
+  auto av = bm(IfThenZeroElse(au, y), ay);
+  auto ax = bg(at, bo(x, av));
   return IfThenElse(au, x, ax);
 }
 template <typename ag, size_t, size_t az, class ba> struct bb {
@@ -35,15 +40,15 @@ public:
     bb<ag, 1, 1, ba>::bc(1, 1);
   }
 };
-struct bg;
-z<bg> bh;
+struct bn;
+z<bn> bh;
 template <class a, class b> a al(b c) {
   a f;
   CopyBytes<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
-void am(e an(e), Vec<h> g(h, VecArg<Vec<h>>), h d, e k, e i, uint64_t j) {
+void am(e an(e), bj<h> g(h, VecArg<bj<h>>), h d, e k, e i, uint64_t j) {
   using l = MakeUnsigned<e>;
   l m(k), n = al<l>(i), s(4000);
   l o[][2]{{m, n}};
@@ -61,7 +66,7 @@ void am(e an(e), Vec<h> g(h, VecArg<Vec<h>>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     Abort("", 9, "r <= m");
 }
-struct bg {
+struct bn {
   template <class e, class h> void operator()(e, h d) {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
   }
