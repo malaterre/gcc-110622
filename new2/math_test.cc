@@ -1,4 +1,5 @@
-#include "hwy/highway.h"
+#include "hwy/ops/emu128-inl.h"
+#include "hwy/ops/generic_ops-inl.h"
 int af, ah;
 namespace hwy {
 template <typename ai> int aj(ai ak, ai actual) {
