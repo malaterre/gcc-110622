@@ -1,13 +1,12 @@
 #include <math.h>
 #include <stdint.h>
-#include <stdlib.h>
 #define ae(a, b) a < b ? 0 : b
-using dg = uint32_t;
-template <size_t dh, typename dl, typename eb> void ed(dl ee, eb ef) {
-  __builtin_memcpy(ef, static_cast<void *>(ee), dh);
+using bo = uint32_t;
+template <size_t cz, typename db, typename dc> void ec(db dg, dc dh) {
+  __builtin_memcpy(dh, static_cast<void *>(dg), cz);
 }
-template <typename dl, typename eb> void eg(dl *ee, eb ef) {
-  ed<sizeof(dl)>(ee, ef);
+template <typename db, typename dc> void dl(db *dg, dc dh) {
+  ec<sizeof(db)>(dg, dh);
 }
 template <typename de, size_t, int> struct di {
   using dj = de;
@@ -27,12 +26,12 @@ template <typename dj, size_t, int du> struct dy {
 } // namespace dd
 template <typename dj, size_t dx, int du = 0>
 using ea = typename dd::dy<dj, dx, du>::dw;
-template <class dz> using ec = typename dz::dj;
+template <class dz> using eb = typename dz::dj;
 #define do(dz) dz::dm
 template <class dz> size_t dp(dz) { return do(dz); }
 template <class dz> size_t dq(dz) { return do(dz); }
 template <class dj, class dz> using dn = typename dz::template dn<dj>;
-template <class dz> using dr = dn<dg, dz>;
+template <class dz> using dr = dn<bo, dz>;
 template <typename bq, size_t br> struct bs {
   using bt = bq;
   static constexpr size_t bn = br;
@@ -44,14 +43,14 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   by bits[sizeof(int)];
 };
 template <class ca> using cb = di<typename ca::bt, ca::bn, 0>;
-template <class bz> bs<ec<bz>, do(bz)> cc(bz) {
-  bs<ec<bz>, do(bz)> u;
+template <class bz> bs<eb<bz>, do(bz)> cc(bz) {
+  bs<eb<bz>, do(bz)> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
 template <class bz, class ce> cd<bz> cf(bz, ce u) {
   cd<bz> cg;
-  eg(&u, &cg);
+  dl(&u, &cg);
   return cg;
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
@@ -83,7 +82,7 @@ bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
   bs<bq, br> u;
-  eg(&cm, &u);
+  dl(&cm, &u);
   return u;
 }
 template <typename bq, size_t br>
@@ -138,13 +137,13 @@ template <class bk> bk bg(bk a, bk b) { return a * b; }
 template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
 template <typename ai> int aj(ai ak, ai actual) {
-  eg(&ak, &af);
-  eg(&actual, &ah);
+  dl(&ak, &af);
+  dl(&actual, &ah);
   int aw = ah - ae(af, ah);
   return aw;
 }
 template <class u, class w> w ad(u d, w v) {
-  using ag = ec<u>;
+  using ag = eb<u>;
   w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
   auto au = bp(x, ay);
   auto av = bm(cu(au, x), ay);
@@ -172,12 +171,12 @@ struct z;
 y<z> bh;
 template <class a, class b> a al(b c) {
   a f;
-  ed<sizeof(f)>(&c, &f);
+  ec<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
 void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
-  using l = dg;
+  using l = bo;
   l m(k), n = al<l>(i), s(4000);
   l o[][2]{{m, n}};
   uint64_t p = 0;
@@ -199,6 +198,4 @@ struct z {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
   }
 };
-int main() {
-  { bh(float()); }
-}
+int main() { bh(float()); }
