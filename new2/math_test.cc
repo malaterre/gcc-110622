@@ -11,7 +11,6 @@ template <size_t dh, typename dl, typename eb> void ed(dl ee, eb ef) {
 template <typename dl, typename eb> void eg(dl *ee, eb ef) {
   ed<sizeof(dl)>(ee, ef);
 }
-#define eh() 0
 #include <math.h>
 template <class db> using dc = db;
 template <typename de, size_t, int> struct di {
@@ -26,7 +25,7 @@ template <typename dj, size_t, int> struct dv {
   using dw = di<dj, 6, 3>;
 };
 template <typename dj, size_t, int du> struct dy {
-  static constexpr size_t df = eh();
+  static constexpr size_t df = 0;
   using dw = typename dv<dj, df, du>::dw;
 };
 } // namespace dd
