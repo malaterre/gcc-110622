@@ -1,7 +1,6 @@
-#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #define ae(a, b) a < b ? 0 : b
-namespace hwy {
 struct bo {
   using cz = uint32_t;
 };
@@ -12,11 +11,8 @@ template <size_t dh, typename dl, typename eb> void ed(dl ee, eb ef) {
 template <typename dl, typename eb> void eg(dl *ee, eb ef) {
   ed<sizeof(dl)>(ee, ef);
 }
-void Abort(const char *, int, const char *...);
-} // namespace hwy
 #define eh() 0
 #include <math.h>
-namespace hwy {
 template <class db> using dc = db;
 template <typename de, size_t, int> struct di {
   using dj = de;
@@ -54,20 +50,20 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
 };
 template <class ca> using cb = di<typename ca::bt, ca::bn, 0>;
 template <class bz> bs<ec<bz>, do(bz)> cc(bz) {
-  bs<ec<bz>, do(bz)> v;
-  return v;
+  bs<ec<bz>, do(bz)> u;
+  return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
-template <class bz, class ce> cd<bz> cf(bz, ce v) {
+template <class bz, class ce> cd<bz> cf(bz, ce u) {
   cd<bz> cg;
-  eg(&v, &cg);
+  eg(&u, &cg);
   return cg;
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
-  cd<bz> v;
+  cd<bz> u;
   for (size_t i = 0; i < dp(d); ++i)
-    v.bw[i] = t;
-  return v;
+    u.bw[i] = t;
+  return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
@@ -91,9 +87,9 @@ bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
   return cl(cq, co);
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
-  bs<bq, br> v;
-  eg(&cm, &v);
-  return v;
+  bs<bq, br> u;
+  eg(&cm, &u);
+  return u;
 }
 template <typename bq, size_t br>
 bs<bq, br> cs(bx<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
@@ -139,28 +135,26 @@ bx<bq, br> operator==(bs<bq, br> a, bs<bq, br> b) {
     m.bits[i] = bx<int>::bv(a.bw[i] == b.bw[i]);
   return m;
 }
-template <typename bq, size_t br> bq cy(bs<bq, br> v) { return v.bw[0]; }
-} // namespace hwy
+template <typename bq, size_t br> bq cy(bs<bq, br> u) { return u.bw[0]; }
 template <class bi> using bj = decltype(cc(bi()));
 template <class bk> bk bl(bk a, bk b) { return a + b; }
 template <class bk> bk bm(bk a, bk b) { return a - b; }
 template <class bk> bk bg(bk a, bk b) { return a * b; }
 template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
-namespace hwy {
 template <typename ai> int aj(ai ak, ai actual) {
   eg(&ak, &af);
   eg(&actual, &ah);
   int aw = ah - ae(af, ah);
   return aw;
 }
-template <class v, class w> w ad(v d, w x) {
-  using ag = ec<v>;
-  w ay = ci(d, ag(1.0)), y = bl(x, ay), at;
-  auto au = bp(y, ay);
-  auto av = bm(cu(au, y), ay);
+template <class u, class w> w ad(u d, w v) {
+  using ag = ec<u>;
+  w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
+  auto au = bp(x, ay);
+  auto av = bm(cu(au, x), ay);
   auto ax = bg(at, av);
-  return cs(au, x, ax);
+  return cs(au, v, ax);
 }
 template <typename ag, size_t, size_t az, class ba> struct bb {
   static void bc(size_t bd, size_t be) {
@@ -172,15 +166,15 @@ template <typename ag, size_t, size_t az, class ba> struct bb {
       ba()(int(), d);
   }
 };
-template <class ba> class z {
+template <class ba> class y {
 public:
   template <typename ag> void operator()(ag t) {
     (void)t;
     bb<ag, 1, 1, ba>::bc(1, 1);
   }
 };
-struct ei;
-z<ei> bh;
+struct z;
+y<z> bh;
 template <class a, class b> a al(b c) {
   a f;
   ed<sizeof(f)>(&c, &f);
@@ -203,13 +197,13 @@ void am(e an(e), bj<h> g(h, dc<bj<h>>), h d, e k, e i, uint64_t j) {
     }
   }
   if (!(p <= j))
-    Abort("", 9, "");
+    abort();
 }
-struct ei {
+struct z {
   template <class e, class h> void operator()(e, h d) {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
   }
 };
-void u() { bh(float()); }
-} // namespace hwy
-int main() { hwy::u(); }
+int main() {
+  { bh(float()); }
+}
