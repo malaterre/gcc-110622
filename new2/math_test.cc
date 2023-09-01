@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
-using bo = uint32_t;
 template <size_t by, typename cz, typename db> void dc(cz dd, db dh) {
   __builtin_memcpy(dh, static_cast<void *>(dd), by);
 }
@@ -21,12 +20,12 @@ template <typename dj> struct dn {
 struct dy {
   using dw = dn<float>::dw;
 };
-template <typename, int> using ea = dy::dw;
+using ea = dy::dw;
 template <class dz> using eb = typename dz::dj;
 template <class dz> size_t dp(dz) { return dz::di; }
 template <class dz> size_t dq(dz) { return dz::di; }
 template <class dj, class dz> using dm = typename dz::template dm<dj>;
-template <class dz> using dr = dm<bo, dz>;
+template <class dz> using dr = dm<uint32_t, dz>;
 template <typename bq, size_t br> struct bs {
   using bt = bq;
   static constexpr size_t bn = br;
@@ -146,25 +145,23 @@ template <class u, class w> w ad(u d, w v) {
 }
 template <size_t az, class ba> struct bb {
   static void bc(size_t bd, size_t be) {
-    ea<float, az> d;
+    ea d;
     size_t bf = dq(d);
     if (bf < bd)
       return;
     if (be)
-      ba()(int(), d);
-  }
-};
-struct y;
-class z {
-public:
-  template <typename ag> void operator()(ag t) {
-    (void)t;
-    bb<1, y>::bc(1, 1);
+      ba()( d);
   }
 };
 struct y {
-  template <class e, class h> void operator()(e, h d) {
+  template <class h> void operator()( h d) {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
+  }
+};
+class z {
+public:
+  void operator()() {
+    bb<1, y>::bc(1, 1);
   }
 };
 z bh;
@@ -175,7 +172,7 @@ template <class a, class b> a al(b c) {
 }
 template <class e, class h>
 void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
-  using l = bo;
+  using l = uint32_t;
   l m(k), n = al<l>(i), s(4000);
   l o[][2]{{m, n}};
   uint64_t p = 0;
@@ -192,4 +189,4 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
-int main() { bh(float()); }
+int main() { bh(); }
