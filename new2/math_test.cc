@@ -143,28 +143,23 @@ template <class u, class w> w ad(u d, w v) {
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
-template <size_t az, class ba> struct bb {
+  template <class h> void y( h d) {
+    am(log1p, ad, d, 0.0f, 1e37f, 3);
+  }
+template <size_t az > struct bb {
   static void bc(size_t bd, size_t be) {
     ea d;
     size_t bf = dq(d);
     if (bf < bd)
       return;
     if (be)
-      ba()( d);
+      y( d);
   }
 };
-struct y {
-  template <class h> void operator()( h d) {
-    am(log1p, ad, d, 0.0f, 1e37f, 3);
+  void z() {
+    bb<1>::bc(1, 1);
   }
-};
-class z {
-public:
-  void operator()() {
-    bb<1, y>::bc(1, 1);
-  }
-};
-z bh;
+//z bh;
 template <class a, class b> a al(b c) {
   a f;
   dc<sizeof(f)>(&c, &f);
@@ -189,4 +184,4 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
-int main() { bh(); }
+int main() { z(); }
