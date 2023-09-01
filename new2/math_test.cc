@@ -7,23 +7,21 @@ template <size_t by, typename cz, typename db> void dc(cz dd, db dh) {
 template <typename cz, typename db> void df(cz *dd, db dh) {
   dc<sizeof(cz)>(dd, dh);
 }
-template <typename de, size_t, int> struct dg {
+template <typename de > struct dg {
   using dj = de;
-  static constexpr size_t di = 1;
-  static constexpr int dk() { return 0; }
-  static constexpr size_t ds() { return 0; }
-  template <typename dl> using dm = dg<dl, ds(), dk()>;
+//  static constexpr size_t di = 1;
+  template <typename dl> using dm = dg<dl >;
 };
 template <typename dj> struct dn {
-  using dw = dg<dj, 6, 3>;
+  using dw = dg<dj >;
 };
 struct dy {
   using dw = dn<float>::dw;
 };
 using ea = dy::dw;
 template <class dz> using eb = typename dz::dj;
-template <class dz> size_t dp(dz) { return dz::di; }
-template <class dz> size_t dq(dz) { return dz::di; }
+template <class dz> size_t dp(dz) { return 1; /*dz::di;*/ }
+//template <class dz> size_t dq(dz) { return 1; dz::di; }
 template <class dj, class dz> using dm = typename dz::template dm<dj>;
 template <class dz> using dr = dm<uint32_t, dz>;
 template <typename bq, size_t br> struct bs {
@@ -35,9 +33,9 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   static int bv(bool b) { return b ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
-template <class ca> using cb = dg<typename ca::bt, ca::bn, 0>;
-template <class bz> bs<eb<bz>, bz::di> cc(bz) {
-  bs<eb<bz>, bz::di> u;
+template <class ca> using cb = dg<typename ca::bt >;
+template <class bz> bs<eb<bz>, 1> cc(bz) {
+  bs<eb<bz>, 1> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
@@ -149,7 +147,7 @@ template <class u, class w> w ad(u d, w v) {
 template <size_t az > struct bb {
   static void bc(size_t bd, size_t be) {
     ea d;
-    size_t bf = dq(d);
+    size_t bf = dp(d);
     if (bf < bd)
       return;
     if (be)
