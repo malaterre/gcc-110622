@@ -1,18 +1,14 @@
+#include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #define ae(a, b) a < b ? 0 : b
-struct bo {
-  using cz = uint32_t;
-};
-template <typename> using dg = bo::cz;
+using dg = uint32_t;
 template <size_t dh, typename dl, typename eb> void ed(dl ee, eb ef) {
   __builtin_memcpy(ef, static_cast<void *>(ee), dh);
 }
 template <typename dl, typename eb> void eg(dl *ee, eb ef) {
   ed<sizeof(dl)>(ee, ef);
 }
-#include <math.h>
-template <class db> using dc = db;
 template <typename de, size_t, int> struct di {
   using dj = de;
   static constexpr size_t dm = 1;
@@ -36,7 +32,7 @@ template <class dz> using ec = typename dz::dj;
 template <class dz> size_t dp(dz) { return do(dz); }
 template <class dz> size_t dq(dz) { return do(dz); }
 template <class dj, class dz> using dn = typename dz::template dn<dj>;
-template <class dz> using dr = dn<dg<dz>, dz>;
+template <class dz> using dr = dn<dg, dz>;
 template <typename bq, size_t br> struct bs {
   using bt = bq;
   static constexpr size_t bn = br;
@@ -180,8 +176,8 @@ template <class a, class b> a al(b c) {
   return f;
 }
 template <class e, class h>
-void am(e an(e), bj<h> g(h, dc<bj<h>>), h d, e k, e i, uint64_t j) {
-  using l = dg<e>;
+void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
+  using l = dg;
   l m(k), n = al<l>(i), s(4000);
   l o[][2]{{m, n}};
   uint64_t p = 0;
