@@ -1,58 +1,55 @@
 #include <math.h>
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
-template <size_t by, typename cz, typename db> void dc(cz dd, db dh) {
-  __builtin_memcpy(dh, static_cast<void *>(dd), by);
+template <size_t az, typename ba, typename bh> void bn(ba bo, bh by) {
+  __builtin_memcpy(by, static_cast<void *>(bo), az);
 }
-template <typename cz, typename db> void df(cz *dd, db dh) {
-  dc<sizeof(cz)>(dd, dh);
+template <typename ba, typename bh> void cz(ba *bo, bh by) {
+  bn<sizeof(ba)>(bo, by);
 }
-template <typename de > struct dg {
-  using dj = de;
-//  static constexpr size_t di = 1;
-  template <typename dl> using dm = dg<dl >;
+template <typename db> struct z {
+  using dc = db;
+  template <typename dd> using de = z<dd>;
 };
-template <typename dj> struct dn {
-  using dw = dg<dj >;
+struct B {
+  using df = z<float>;
 };
-struct dy {
-  using dw = dn<float>::dw;
+struct dg {
+  using df = B::df;
 };
-using ea = dy::dw;
-template <class dz> using eb = typename dz::dj;
-template <class dz> size_t dp(dz) { return 1; /*dz::di;*/ }
-//template <class dz> size_t dq(dz) { return 1; dz::di; }
-template <class dj, class dz> using dm = typename dz::template dm<dj>;
-template <class dz> using dr = dm<uint32_t, dz>;
-template <typename bq, size_t br> struct bs {
+using dh = dg::df;
+template <class di> using dj = typename di::dc;
+template <class di> size_t dk(di) { return 1; }
+template <class dc, class di> using de = typename di::template de<dc>;
+template <class di> using dl = de<uint32_t, di>;
+template <typename bq, size_t> struct bs {
   using bt = bq;
-  static constexpr size_t bn = br;
   bq bw[sizeof(bq)]{};
 };
 template <typename bq, size_t = sizeof(bq)> struct bx {
   static int bv(bool b) { return b ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
-template <class ca> using cb = dg<typename ca::bt >;
-template <class bz> bs<eb<bz>, 1> cc(bz) {
-  bs<eb<bz>, 1> u;
+template <class ca> using cb = z<typename ca::bt>;
+template <class bz> bs<dj<bz>, 1> cc(bz) {
+  bs<dj<bz>, 1> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
 template <class bz, class ce> cd<bz> cf(bz, ce u) {
   cd<bz> cg;
-  df(&u, &cg);
+  cz(&u, &cg);
   return cg;
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   cd<bz> u;
-  for (size_t i = 0; i < dp(d); ++i)
+  for (size_t i = 0; i < dk(d); ++i)
     u.bw[i] = t;
   return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  dr<decltype(d)> ck;
+  dl<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] &= bu.bw[i];
@@ -60,7 +57,7 @@ template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
 }
 template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  dr<decltype(d)> ck;
+  dl<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] |= bu.bw[i];
@@ -73,7 +70,7 @@ bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
   bs<bq, br> u;
-  df(&cm, &u);
+  cz(&cm, &u);
   return u;
 }
 template <typename bq, size_t br>
@@ -128,39 +125,33 @@ template <class bk> bk bg(bk a, bk b) { return a * b; }
 template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
 template <typename ai> int aj(ai ak, ai actual) {
-  df(&ak, &af);
-  df(&actual, &ah);
+  cz(&ak, &af);
+  cz(&actual, &ah);
   int aw = ah - ae(af, ah);
   return aw;
 }
 template <class u, class w> w ad(u d, w v) {
-  using ag = eb<u>;
+  using ag = dj<u>;
   w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
   auto au = bp(x, ay);
   auto av = bm(cu(au, x), ay);
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
-  template <class h> void y( h d) {
-    am(log1p, ad, d, 0.0f, 1e37f, 3);
-  }
-template <size_t az > struct bb {
+template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
+template <size_t> struct bb {
   static void bc(size_t bd, size_t be) {
-    ea d;
-    size_t bf = dp(d);
+    dh d;
+    size_t bf = dk(d);
     if (bf < bd)
       return;
     if (be)
-      y( d);
+      y(d);
   }
 };
-  void z() {
-    bb<1>::bc(1, 1);
-  }
-//z bh;
 template <class a, class b> a al(b c) {
   a f;
-  dc<sizeof(f)>(&c, &f);
+  bn<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
@@ -182,4 +173,6 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
-int main() { z(); }
+int main() {
+  { bb<1>::bc(1, 1); }
+}
