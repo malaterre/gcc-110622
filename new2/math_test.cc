@@ -11,25 +11,24 @@ template <typename db, typename dc> void dl(db *dg, dc dh) {
 template <typename de, size_t, int> struct di {
   using dj = de;
   static constexpr size_t dm = 1;
-  template <typename> static constexpr int dk() { return 0; }
-  template <int, size_t> static constexpr size_t ds() { return 0; }
-  template <typename dt> using dn = di<dt, ds<dk<dt>(), dm>(), dk<dt>()>;
+  static constexpr int dk() { return 0; }
+  static constexpr size_t ds() { return 0; }
+  template <typename dt> using dn = di<dt, ds(), dk()>;
 };
 namespace dd {
-template <typename dj, size_t, int> struct dv {
+template <typename dj > struct dv {
   using dw = di<dj, 6, 3>;
 };
-template <typename dj, size_t, int du> struct dy {
+template <typename dj, int du> struct dy {
   static constexpr size_t df = 0;
-  using dw = typename dv<dj, df, du>::dw;
+  using dw = typename dv<dj >::dw;
 };
 } // namespace dd
 template <typename dj, size_t dx, int du = 0>
-using ea = typename dd::dy<dj, dx, du>::dw;
+using ea = typename dd::dy<dj, du>::dw;
 template <class dz> using eb = typename dz::dj;
-#define do(dz) dz::dm
-template <class dz> size_t dp(dz) { return do(dz); }
-template <class dz> size_t dq(dz) { return do(dz); }
+template <class dz> size_t dp(dz) { return dz::dm; }
+template <class dz> size_t dq(dz) { return dz::dm; }
 template <class dj, class dz> using dn = typename dz::template dn<dj>;
 template <class dz> using dr = dn<bo, dz>;
 template <typename bq, size_t br> struct bs {
@@ -38,13 +37,12 @@ template <typename bq, size_t br> struct bs {
   bq bw[sizeof(bq)]{};
 };
 template <typename bq, size_t = sizeof(bq)> struct bx {
-  using by = int;
-  static by bv(bool b) { return b ? ~by{} : 0; }
-  by bits[sizeof(int)];
+  static int bv(bool b) { return b ? ~int{} : 0; }
+  int bits[sizeof(int)];
 };
 template <class ca> using cb = di<typename ca::bt, ca::bn, 0>;
-template <class bz> bs<eb<bz>, do(bz)> cc(bz) {
-  bs<eb<bz>, do(bz)> u;
+template <class bz> bs<eb<bz>, bz::dm> cc(bz) {
+  bs<eb<bz>, bz::dm> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
@@ -150,7 +148,7 @@ template <class u, class w> w ad(u d, w v) {
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
-template <typename ag, size_t, size_t az, class ba> struct bb {
+template <typename ag, size_t az, class ba> struct bb {
   static void bc(size_t bd, size_t be) {
     ea<ag, az> d;
     size_t bf = dq(d);
@@ -164,10 +162,14 @@ template <class ba> class y {
 public:
   template <typename ag> void operator()(ag t) {
     (void)t;
-    bb<ag, 1, 1, ba>::bc(1, 1);
+    bb<ag, 1, ba>::bc(1, 1);
   }
 };
-struct z;
+struct z {
+  template <class e, class h> void operator()(e, h d) {
+    am(log1p, ad, d, 0.0f, 1e37f, 3);
+  }
+};
 y<z> bh;
 template <class a, class b> a al(b c) {
   a f;
@@ -193,9 +195,4 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
-struct z {
-  template <class e, class h> void operator()(e, h d) {
-    am(log1p, ad, d, 0.0f, 1e37f, 3);
-  }
-};
 int main() { bh(float()); }
