@@ -1,6 +1,38 @@
-#include "hwy/ops/shared-inl.h"
+#include "hwy/base.h"
+#include "hwy/ops/set_macros-inl.h"
+#include <math.h>
 namespace hwy {
 namespace HWY_NAMESPACE {
+template <class db> using dc = db;
+namespace dd {
+constexpr size_t cz(size_t df, int dg) { return dg ? 0 : df; }
+} // namespace dd
+template <typename de, size_t, int> struct di {
+  using dj = de;
+  static constexpr size_t dh = 5;
+  static constexpr int dl = 20;
+  static constexpr size_t dm = HWY_MAX(1, dd::cz(dh, dl));
+  template <typename> static constexpr int dk() { return 0; }
+  template <int, size_t> static constexpr size_t ds() { return 0; }
+  template <typename dt> using dn = di<dt, ds<dk<dt>(), dm>(), dk<dt>()>;
+};
+namespace dd {
+template <typename dj, size_t, int> struct dv {
+  using dw = di<dj, HWY_MAX_N, HWY_MAX_POW2>;
+};
+template <typename dj, size_t, int du> struct dy {
+  static constexpr size_t df = HWY_LANES(dj);
+  using dw = typename dv<dj, df, du>::dw;
+};
+} // namespace dd
+template <typename dj, size_t dx, int du = 0>
+using ea = typename dd::dy<dj, dx, du>::dw;
+template <class dz> using ec = typename dz::dj;
+#define do(dz) dz::dm
+template <class dz> size_t dp(dz) { return do(dz); }
+template <class dz> size_t dq(dz) { return do(dz); }
+template <class dj, class dz> using dn = typename dz::template dn<dj>;
+template <class dz> using dr = dn<MakeUnsigned<ec<dz>>, dz>;
 template <typename bq, size_t br> struct bs {
   using bt = bq;
   static constexpr size_t bn = br;
@@ -11,9 +43,9 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   static by bv(bool b) { return b ? ~by{} : 0; }
   by bits[sizeof(int)];
 };
-template <class ca> using cb = Simd<typename ca::bt, ca::bn, 0>;
-template <class bz> bs<TFromD<bz>, HWY_MAX_LANES_D(bz)> cc(bz) {
-  bs<TFromD<bz>, HWY_MAX_LANES_D(bz)> v;
+template <class ca> using cb = di<typename ca::bt, ca::bn, 0>;
+template <class bz> bs<ec<bz>, do(bz)> cc(bz) {
+  bs<ec<bz>, do(bz)> v;
   return v;
 }
 template <class bz> using cd = decltype(cc(bz()));
@@ -24,13 +56,13 @@ template <class bz, class ce> cd<bz> cf(bz, ce v) {
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   cd<bz> v;
-  for (size_t i = 0; i < MaxLanes(d); ++i)
+  for (size_t i = 0; i < dp(d); ++i)
     v.bw[i] = t;
   return v;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  RebindToUnsigned<decltype(d)> ck;
+  dr<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] &= bu.bw[i];
@@ -38,7 +70,7 @@ template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
 }
 template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  RebindToUnsigned<decltype(d)> ck;
+  dr<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] |= bu.bw[i];
@@ -124,7 +156,7 @@ template <typename ai> int aj(ai ak, ai actual) {
 namespace N_EMU128 {
 template <class v, class w> w ad(v d, w x) { return ae(d, x); }
 template <class v, class w> w ae(v d, w x) {
-  using ag = TFromD<v>;
+  using ag = ec<v>;
   w ay = ci(d, ag(1.0)), y = bl(x, ay), at;
   auto au = bp(y, ay);
   auto av = bm(cu(au, y), ay);
@@ -133,8 +165,8 @@ template <class v, class w> w ae(v d, w x) {
 }
 template <typename ag, size_t, size_t az, class ba> struct bb {
   static void bc(size_t bd, size_t be) {
-    CappedTag<ag, az> d;
-    size_t bf = Lanes(d);
+    ea<ag, az> d;
+    size_t bf = dq(d);
     if (bf < bd)
       return;
     if (be)
@@ -148,15 +180,15 @@ public:
     bb<ag, 1, 1, ba>::bc(1, 1);
   }
 };
-struct cz;
-z<cz> bh;
+struct eb;
+z<eb> bh;
 template <class a, class b> a al(b c) {
   a f;
   CopyBytes<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
-void am(e an(e), bj<h> g(h, VecArg<bj<h>>), h d, e k, e i, uint64_t j) {
+void am(e an(e), bj<h> g(h, dc<bj<h>>), h d, e k, e i, uint64_t j) {
   using l = MakeUnsigned<e>;
   l m(k), n = al<l>(i), s(4000);
   l o[][2]{{m, n}};
@@ -174,7 +206,7 @@ void am(e an(e), bj<h> g(h, VecArg<bj<h>>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     Abort("", 9, "r <= m");
 }
-struct cz {
+struct eb {
   template <class e, class h> void operator()(e, h d) {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
   }
