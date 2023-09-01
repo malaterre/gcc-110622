@@ -2,35 +2,31 @@
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
 using bo = uint32_t;
-template <size_t cz, typename db, typename dc> void ec(db dg, dc dh) {
-  __builtin_memcpy(dh, static_cast<void *>(dg), cz);
+template <size_t by, typename cz, typename db> void dc(cz dd, db dh) {
+  __builtin_memcpy(dh, static_cast<void *>(dd), by);
 }
-template <typename db, typename dc> void dl(db *dg, dc dh) {
-  ec<sizeof(db)>(dg, dh);
+template <typename cz, typename db> void df(cz *dd, db dh) {
+  dc<sizeof(cz)>(dd, dh);
 }
-template <typename de, size_t, int> struct di {
+template <typename de, size_t, int> struct dg {
   using dj = de;
-  static constexpr size_t dm = 1;
+  static constexpr size_t di = 1;
   static constexpr int dk() { return 0; }
   static constexpr size_t ds() { return 0; }
-  template <typename dt> using dn = di<dt, ds(), dk()>;
+  template <typename dl> using dm = dg<dl, ds(), dk()>;
 };
-namespace dd {
-template <typename dj > struct dv {
-  using dw = di<dj, 6, 3>;
+template <typename dj> struct dn {
+  using dw = dg<dj, 6, 3>;
 };
-template <typename dj, int du> struct dy {
-  static constexpr size_t df = 0;
-  using dw = typename dv<dj >::dw;
+struct dy {
+  using dw = dn<float>::dw;
 };
-} // namespace dd
-template <typename dj, size_t dx, int du = 0>
-using ea = typename dd::dy<dj, du>::dw;
+template <typename, int> using ea = dy::dw;
 template <class dz> using eb = typename dz::dj;
-template <class dz> size_t dp(dz) { return dz::dm; }
-template <class dz> size_t dq(dz) { return dz::dm; }
-template <class dj, class dz> using dn = typename dz::template dn<dj>;
-template <class dz> using dr = dn<bo, dz>;
+template <class dz> size_t dp(dz) { return dz::di; }
+template <class dz> size_t dq(dz) { return dz::di; }
+template <class dj, class dz> using dm = typename dz::template dm<dj>;
+template <class dz> using dr = dm<bo, dz>;
 template <typename bq, size_t br> struct bs {
   using bt = bq;
   static constexpr size_t bn = br;
@@ -40,15 +36,15 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   static int bv(bool b) { return b ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
-template <class ca> using cb = di<typename ca::bt, ca::bn, 0>;
-template <class bz> bs<eb<bz>, bz::dm> cc(bz) {
-  bs<eb<bz>, bz::dm> u;
+template <class ca> using cb = dg<typename ca::bt, ca::bn, 0>;
+template <class bz> bs<eb<bz>, bz::di> cc(bz) {
+  bs<eb<bz>, bz::di> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
 template <class bz, class ce> cd<bz> cf(bz, ce u) {
   cd<bz> cg;
-  dl(&u, &cg);
+  df(&u, &cg);
   return cg;
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
@@ -80,7 +76,7 @@ bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
   bs<bq, br> u;
-  dl(&cm, &u);
+  df(&cm, &u);
   return u;
 }
 template <typename bq, size_t br>
@@ -135,8 +131,8 @@ template <class bk> bk bg(bk a, bk b) { return a * b; }
 template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
 template <typename ai> int aj(ai ak, ai actual) {
-  dl(&ak, &af);
-  dl(&actual, &ah);
+  df(&ak, &af);
+  df(&actual, &ah);
   int aw = ah - ae(af, ah);
   return aw;
 }
@@ -148,9 +144,9 @@ template <class u, class w> w ad(u d, w v) {
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
-template <typename ag, size_t az, class ba> struct bb {
+template <size_t az, class ba> struct bb {
   static void bc(size_t bd, size_t be) {
-    ea<ag, az> d;
+    ea<float, az> d;
     size_t bf = dq(d);
     if (bf < bd)
       return;
@@ -158,22 +154,23 @@ template <typename ag, size_t az, class ba> struct bb {
       ba()(int(), d);
   }
 };
-template <class ba> class y {
+struct y;
+class z {
 public:
   template <typename ag> void operator()(ag t) {
     (void)t;
-    bb<ag, 1, ba>::bc(1, 1);
+    bb<1, y>::bc(1, 1);
   }
 };
-struct z {
+struct y {
   template <class e, class h> void operator()(e, h d) {
     am(log1p, ad, d, 0.0f, 1e37f, 3);
   }
 };
-y<z> bh;
+z bh;
 template <class a, class b> a al(b c) {
   a f;
-  ec<sizeof(f)>(&c, &f);
+  dc<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
