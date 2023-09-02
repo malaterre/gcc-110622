@@ -11,9 +11,9 @@ template <typename db> struct z {
   using dc = db;
   template <typename dd> using de = z<dd>;
 };
-template <class di> using dj = typename di::dc;
-template <class dc, class di> using de = typename di::template de<dc>;
-template <class di> using dl = de<uint32_t, di>;
+template <class df> using dg = typename df::dc;
+template <class dc, class df> using de = typename df::template de<dc>;
+template <class df> using dh = de<uint32_t, df>;
 template <typename bq, size_t> struct bs {
   using bt = bq;
   bq bw[sizeof(bq)]{};
@@ -23,8 +23,8 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   int bits[sizeof(int)];
 };
 template <class ca> using cb = z<typename ca::bt>;
-template <class bz> bs<dj<bz>, 1> cc(bz) {
-  bs<dj<bz>, 1> u;
+template <class bz> bs<dg<bz>, 1> cc(bz) {
+  bs<dg<bz>, 1> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
@@ -36,12 +36,12 @@ template <class bz, class ce> cd<bz> cf(bz, ce u) {
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   (void)d;
   cd<bz> u;
-    u.bw[0] = t;
+  u.bw[0] = t;
   return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  dl<decltype(d)> ck;
+  dh<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] &= bu.bw[i];
@@ -49,7 +49,7 @@ template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
 }
 template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
   cb<decltype(a)> d;
-  dl<decltype(d)> ck;
+  dh<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] |= bu.bw[i];
@@ -123,7 +123,7 @@ template <typename ai> int aj(ai ak, ai actual) {
   return aw;
 }
 template <class u, class w> w ad(u d, w v) {
-  using ag = dj<u>;
+  using ag = dg<u>;
   w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
   auto au = bp(x, ay);
   auto av = bm(cu(au, x), ay);
@@ -133,8 +133,7 @@ template <class u, class w> w ad(u d, w v) {
 template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
 template <size_t> struct bb {
   static void bc(size_t bd, size_t be) {
- z<float>
-     d;
+    z<float> d;
     size_t bf = 1;
     if (bf < bd)
       return;
