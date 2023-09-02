@@ -11,13 +11,6 @@ template <typename db> struct z {
   using dc = db;
   template <typename dd> using de = z<dd>;
 };
-struct dg {
-  using df = z<float>;
-};
-struct dk {
-  using df = dg::df;
-};
-using dh = dk::df;
 template <class di> using dj = typename di::dc;
 template <class dc, class di> using de = typename di::template de<dc>;
 template <class di> using dl = de<uint32_t, di>;
@@ -43,8 +36,7 @@ template <class bz, class ce> cd<bz> cf(bz, ce u) {
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   (void)d;
   cd<bz> u;
-  for (size_t i = 0; i < 1; ++i)
-    u.bw[i] = t;
+    u.bw[0] = t;
   return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
@@ -141,7 +133,8 @@ template <class u, class w> w ad(u d, w v) {
 template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
 template <size_t> struct bb {
   static void bc(size_t bd, size_t be) {
-    dh d;
+ z<float>
+     d;
     size_t bf = 1;
     if (bf < bd)
       return;
