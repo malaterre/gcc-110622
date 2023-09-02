@@ -40,24 +40,26 @@ template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
-  cb<decltype(a)> d;
-  dh<decltype(d)> ck;
-  auto au = cf(ck, a), bu = cf(ck, b);
+  cb<decltype(a)> const d;
+  dh<decltype(d)> const ck;
+  auto au = cf(ck, a);
+  auto bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] &= bu.bw[i];
   return cf(d, au);
 }
 template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
-  cb<decltype(a)> d;
-  dh<decltype(d)> ck;
-  auto au = cf(ck, a), bu = cf(ck, b);
+  cb<decltype(a)> const d;
+  dh<decltype(d)> const ck;
+  auto au = cf(ck, a);
+  auto bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] |= bu.bw[i];
   return cf(d, au);
 }
 template <typename bq, size_t br>
 bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
-  bs cq = cj(cm, cr);
+  bs const cq = cj(cm, cr);
   return cl(cq, co);
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
@@ -67,12 +69,12 @@ template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
 }
 template <typename bq, size_t br>
 bs<bq, br> cs(bx<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
-  bs da = cp(cm);
+  bs const da = cp(cm);
   return cn(da, cr, co);
 }
 template <typename bq, size_t br> bs<bq, br> cu(bx<bq, br> cm, bs<bq, br> co) {
-  cb<decltype(co)> d;
-  bs ct = cp(cm);
+  cb<decltype(co)> const d;
+  bs const ct = cp(cm);
   return cn(ct, cc(d), co);
 }
 template <typename bq, size_t br> bs<bq, br> cw(bs<bq, br> a, bs<bq, br> b) {
@@ -119,12 +121,14 @@ int af, ah;
 template <typename ai> int aj(ai ak, ai actual) {
   cz(&ak, &af);
   cz(&actual, &ah);
-  int aw = ah - ae(af, ah);
+  int const aw = ah - ae(af, ah);
   return aw;
 }
 template <class u, class w> w ad(u d, w v) {
   using ag = dg<u>;
-  w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
+  w ay = ci(d, ag(1.0));
+  w x = bl(v, ay);
+  w at;
   auto au = bp(x, ay);
   auto av = bm(cu(au, x), ay);
   auto ax = bg(at, av);
@@ -133,8 +137,8 @@ template <class u, class w> w ad(u d, w v) {
 template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
 template <size_t> struct bb {
   static void bc(size_t bd, size_t be) {
-    z<float> d;
-    size_t bf = 1;
+    z<float> const d;
+    size_t const bf = 1;
     if (bf < bd)
       return;
     if (be)
@@ -149,14 +153,19 @@ template <class a, class b> a al(b c) {
 template <class e, class h>
 void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   using l = uint32_t;
-  l m(k), n = al<l>(i), s(4000);
-  l o[][2]{{m, n}};
+  l m(k);
+  l n = al<l>(i);
+  l const s(4000);
+  l const o[][2]{{m, n}};
   uint64_t p = 0;
   for (int ao = 0; ao < 1; ++ao) {
-    l ap = m, aq = o[ao][1], ar(s);
+    l const ap = m;
+    l const aq = o[ao][1];
+    l const ar(s);
     for (l as = ap; as <= aq; as += ar) {
-      e q = al<e>(as), ab = an(q);
-      cd<h> r = ci(d, q);
+      e q = al<e>(as);
+      e ab = an(q);
+      cd<h> const r = ci(d, q);
       e aa = cy(g(d, r));
       auto ac = aj(aa, ab);
       p = p ?: ac;
