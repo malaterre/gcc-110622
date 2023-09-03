@@ -132,13 +132,7 @@ template <class u, class w> w ad(u d, w v) {
 }
 template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
 void bc() {
-  size_t bd = 1;
-  size_t be = 1;
   z<float> d;
-  size_t bf = 1;
-  if (bf < bd)
-    return;
-  if (be)
     y(d);
 }
 template <class a, class b> a al(b c) {
