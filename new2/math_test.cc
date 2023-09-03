@@ -14,7 +14,7 @@ template <typename bh> struct y {
 template <class by> using de = typename by::bn;
 template <class bn, class by> using bv = typename by::template bv<bn>;
 template <class by> using cz = bv<uint32_t, by>;
-template <typename bq, size_t> struct bs {
+template <typename bq > struct bs {
   using bt = bq;
   bq bw[sizeof(bq)]{};
 };
@@ -23,8 +23,8 @@ template <typename bq, size_t = sizeof(bq)> struct bx {
   int bits[sizeof(int)];
 };
 template <class ca> using cb = y<typename ca::bt>;
-template <class bz> bs<de<bz>, 1> cc(bz) {
-  bs<de<bz>, 1> u;
+template <class bz> bs<de<bz>> cc(bz) {
+  bs<de<bz>> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
@@ -39,77 +39,77 @@ template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   u.bw[0] = t;
   return u;
 }
-template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
+template <typename bq > bs<bq > cj(bs<bq> a, bs<bq> b) {
   cb<decltype(a)> d;
   cz<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
-  for (size_t i = 0; i < br; ++i)
+  for (size_t i = 0; i < 1; ++i)
     au.bw[i] &= bu.bw[i];
   return cf(d, au);
 }
-template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
+template <typename bq > bs<bq> cl(bs<bq> a, bs<bq> b) {
   cb<decltype(a)> d;
   cz<decltype(d)> ck;
   auto au = cf(ck, a), bu = cf(ck, b);
-  for (size_t i = 0; i < br; ++i)
+  for (size_t i = 0; i < 1; ++i)
     au.bw[i] |= bu.bw[i];
   return cf(d, au);
 }
-template <typename bq, size_t br>
-bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
+template <typename bq >
+bs<bq> cn(bs<bq> cm, bs<bq> cr, bs<bq> co) {
   bs cq = cj(cm, cr);
   return cl(cq, co);
 }
-template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
-  bs<bq, br> u;
+template <typename bq > bs<bq> cp(bx<bq> cm) {
+  bs<bq> u;
   bf(&cm, &u);
   return u;
 }
-template <typename bq, size_t br>
-bs<bq, br> cs(bx<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
+template <typename bq >
+bs<bq> cs(bx<bq> cm, bs<bq> cr, bs<bq> co) {
   bs da = cp(cm);
   return cn(da, cr, co);
 }
-template <typename bq, size_t br> bs<bq, br> cu(bx<bq, br> cm, bs<bq, br> co) {
+template <typename bq > bs<bq> cu(bx<bq> cm, bs<bq> co) {
   cb<decltype(co)> d;
   bs ct = cp(cm);
   return cn(ct, cc(d), co);
 }
-template <typename bq, size_t br> bs<bq, br> cw(bs<bq, br> a, bs<bq, br> b) {
-  for (size_t i = 0; i < br; ++i)
+template <typename bq > bs<bq> cw(bs<bq> a, bs<bq> b) {
+  for (size_t i = 0; i < 1; ++i)
     a.bw[i] += b.bw[i];
   return a;
 }
-template <typename bq, size_t br> bs<bq, br> cv(bs<bq, br> a, bs<bq, br> b) {
-  for (size_t i = 0; i < br; ++i)
+template <typename bq > bs<bq> cv(bs<bq> a, bs<bq> b) {
+  for (size_t i = 0; i < 1; ++i)
     a.bw[i] -= b.bw[i];
   return a;
 }
-template <typename bq, size_t br>
-bs<bq, br> operator-(bs<bq, br> a, bs<bq, br> b) {
+template <typename bq >
+bs<bq> operator-(bs<bq> a, bs<bq> b) {
   return cv(a, b);
 }
-template <typename bq, size_t br>
-bs<bq, br> operator+(bs<bq, br> a, bs<bq, br> b) {
+template <typename bq >
+bs<bq> operator+(bs<bq> a, bs<bq> b) {
   return cw(a, b);
 }
-template <typename bq, size_t br> bs<bq, br> cx(bs<bq, br> a, bs<bq, br> b) {
-  for (size_t i = 0; i < br; ++i)
+template <typename bq > bs<bq> cx(bs<bq> a, bs<bq> b) {
+  for (size_t i = 0; i < 1; ++i)
     a.bw[i] = b.bw[i];
   return a;
 }
-template <typename bq, size_t br>
-bs<bq, br> operator*(bs<bq, br> a, bs<bq, br> b) {
+template <typename bq >
+bs<bq> operator*(bs<bq> a, bs<bq> b) {
   return cx(a, b);
 }
-template <typename bq, size_t br>
-bx<bq, br> operator==(bs<bq, br> a, bs<bq, br> b) {
-  bx<bq, br> m;
-  for (size_t i = 0; i < br; ++i)
+template <typename bq>
+bx<bq> operator==(bs<bq> a, bs<bq> b) {
+  bx<bq> m;
+  for (size_t i = 0; i < 1; ++i)
     m.bits[i] = bx<int>::z(a.bw[i] == b.bw[i]);
   return m;
 }
-template <typename bq, size_t br> bq cy(bs<bq, br> u) { return u.bw[0]; }
+template <typename bq > bq cy(bs<bq> u) { return u.bw[0]; }
 template <class bi> using bj = decltype(cc(bi()));
 template <class bk> bk bl(bk a, bk b) { return a + b; }
 template <class bk> bk bm(bk a, bk b) { return a - b; }
