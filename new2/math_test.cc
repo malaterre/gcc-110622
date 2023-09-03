@@ -1,36 +1,36 @@
 #include <math.h>
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
-template <size_t az, typename ba, typename bh> void bn(ba bo, bh by) {
-  __builtin_memcpy(by, static_cast<void *>(bo), az);
+template <size_t az, typename ba, typename bb> void bh(ba bn, bb bo) {
+  __builtin_memcpy(bo, static_cast<void *>(bn), az);
 }
-template <typename ba, typename bh> void cz(ba *bo, bh by) {
-  bn<sizeof(ba)>(bo, by);
+template <typename ba, typename bb> void bv(ba *bn, bb bo) {
+  bh<sizeof(ba)>(bn, bo);
 }
-template <typename db> struct z {
-  using dc = db;
-  template <typename dd> using de = z<dd>;
+template <typename by> struct z {
+  using cz = by;
+  template <typename db> using dc = z<db>;
 };
-template <class df> using dg = typename df::dc;
-template <class dc, class df> using de = typename df::template de<dc>;
-template <class df> using dh = de<uint32_t, df>;
+template <class dd> using de = typename dd::cz;
+template <class cz, class dd> using dc = typename dd::template dc<cz>;
+template <class dd> using df = dc<uint32_t, dd>;
 template <typename bq, size_t> struct bs {
   using bt = bq;
   bq bw[sizeof(bq)]{};
 };
 template <typename bq, size_t = sizeof(bq)> struct bx {
-  static int bv(bool b) { return b ? ~int{} : 0; }
+  static int dg(bool b) { return b ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
 template <class ca> using cb = z<typename ca::bt>;
-template <class bz> bs<dg<bz>, 1> cc(bz) {
-  bs<dg<bz>, 1> u;
+template <class bz> bs<de<bz>, 1> cc(bz) {
+  bs<de<bz>, 1> u;
   return u;
 }
 template <class bz> using cd = decltype(cc(bz()));
 template <class bz, class ce> cd<bz> cf(bz, ce u) {
   cd<bz> cg;
-  cz(&u, &cg);
+  bv(&u, &cg);
   return cg;
 }
 template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
@@ -40,41 +40,39 @@ template <class bz, typename ch> cd<bz> ci(bz d, ch t) {
   return u;
 }
 template <typename bq, size_t br> bs<bq, br> cj(bs<bq, br> a, bs<bq, br> b) {
-  cb<decltype(a)> const d;
-  dh<decltype(d)> const ck;
-  auto au = cf(ck, a);
-  auto bu = cf(ck, b);
+  cb<decltype(a)> d;
+  df<decltype(d)> ck;
+  auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] &= bu.bw[i];
   return cf(d, au);
 }
 template <typename bq, size_t br> bs<bq, br> cl(bs<bq, br> a, bs<bq, br> b) {
-  cb<decltype(a)> const d;
-  dh<decltype(d)> const ck;
-  auto au = cf(ck, a);
-  auto bu = cf(ck, b);
+  cb<decltype(a)> d;
+  df<decltype(d)> ck;
+  auto au = cf(ck, a), bu = cf(ck, b);
   for (size_t i = 0; i < br; ++i)
     au.bw[i] |= bu.bw[i];
   return cf(d, au);
 }
 template <typename bq, size_t br>
 bs<bq, br> cn(bs<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
-  bs const cq = cj(cm, cr);
+  bs cq = cj(cm, cr);
   return cl(cq, co);
 }
 template <typename bq, size_t br> bs<bq, br> cp(bx<bq, br> cm) {
   bs<bq, br> u;
-  cz(&cm, &u);
+  bv(&cm, &u);
   return u;
 }
 template <typename bq, size_t br>
 bs<bq, br> cs(bx<bq, br> cm, bs<bq, br> cr, bs<bq, br> co) {
-  bs const da = cp(cm);
+  bs da = cp(cm);
   return cn(da, cr, co);
 }
 template <typename bq, size_t br> bs<bq, br> cu(bx<bq, br> cm, bs<bq, br> co) {
-  cb<decltype(co)> const d;
-  bs const ct = cp(cm);
+  cb<decltype(co)> d;
+  bs ct = cp(cm);
   return cn(ct, cc(d), co);
 }
 template <typename bq, size_t br> bs<bq, br> cw(bs<bq, br> a, bs<bq, br> b) {
@@ -108,7 +106,7 @@ template <typename bq, size_t br>
 bx<bq, br> operator==(bs<bq, br> a, bs<bq, br> b) {
   bx<bq, br> m;
   for (size_t i = 0; i < br; ++i)
-    m.bits[i] = bx<int>::bv(a.bw[i] == b.bw[i]);
+    m.bits[i] = bx<int>::dg(a.bw[i] == b.bw[i]);
   return m;
 }
 template <typename bq, size_t br> bq cy(bs<bq, br> u) { return u.bw[0]; }
@@ -119,35 +117,33 @@ template <class bk> bk bg(bk a, bk b) { return a * b; }
 template <class bk> auto bp(bk a, bk b) { return a == b; }
 int af, ah;
 template <typename ai> int aj(ai ak, ai actual) {
-  cz(&ak, &af);
-  cz(&actual, &ah);
-  int const aw = ah - ae(af, ah);
+  bv(&ak, &af);
+  bv(&actual, &ah);
+  int aw = ah - ae(af, ah);
   return aw;
 }
 template <class u, class w> w ad(u d, w v) {
-  using ag = dg<u>;
-  w ay = ci(d, ag(1.0));
-  w x = bl(v, ay);
-  w at;
+  using ag = de<u>;
+  w ay = ci(d, ag(1.0)), x = bl(v, ay), at;
   auto au = bp(x, ay);
   auto av = bm(cu(au, x), ay);
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
 template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
-template <size_t> struct bb {
-  static void bc(size_t bd, size_t be) {
-    z<float> const d;
-    size_t const bf = 1;
-    if (bf < bd)
-      return;
-    if (be)
-      y(d);
-  }
-};
+void bc() {
+  size_t bd = 1;
+  size_t be = 1;
+  z<float> d;
+  size_t bf = 1;
+  if (bf < bd)
+    return;
+  if (be)
+    y(d);
+}
 template <class a, class b> a al(b c) {
   a f;
-  bn<sizeof(f)>(&c, &f);
+  bh<sizeof(f)>(&c, &f);
   return f;
 }
 template <class e, class h>
@@ -155,17 +151,16 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   using l = uint32_t;
   l m(k);
   l n = al<l>(i);
-  l const s(4000);
-  l const o[][2]{{m, n}};
+  l s(4000);
+  l o[][2]{{m, n}};
   uint64_t p = 0;
   for (int ao = 0; ao < 1; ++ao) {
-    l const ap = m;
-    l const aq = o[ao][1];
-    l const ar(s);
+    l ap = m;
+    l aq = o[ao][1];
+    l ar(s);
     for (l as = ap; as <= aq; as += ar) {
-      e q = al<e>(as);
-      e ab = an(q);
-      cd<h> const r = ci(d, q);
+      e q = al<e>(as), ab = an(q);
+      cd<h> r = ci(d, q);
       e aa = cy(g(d, r));
       auto ac = aj(aa, ab);
       p = p ?: ac;
@@ -174,4 +169,4 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
-int main() { bb<1>::bc(1, 1); }
+int main() { bc(); }
