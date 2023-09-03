@@ -130,11 +130,7 @@ template <class u, class w> w ad(u d, w v) {
   auto ax = bg(at, av);
   return cs(au, v, ax);
 }
-template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
-void bc() {
-  z<float> d;
-    y(d);
-}
+//template <class h> void y(h d) { am(log1p, ad, d, 0.0f, 1e37f, 3); }
 template <class a, class b> a al(b c) {
   a f;
   bh<sizeof(f)>(&c, &f);
@@ -163,4 +159,9 @@ void am(e an(e), bj<h> g(h, bj<h>), h d, e k, e i, uint64_t j) {
   if (!(p <= j))
     abort();
 }
+void bc() {
+  z<float> d;
+  am(log1p, ad, d, 0.0f, 1e37f, 3); 
+}
+
 int main() { bc(); }
