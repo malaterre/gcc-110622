@@ -4,115 +4,108 @@
 template <size_t ai, typename aj, typename an> void az(aj c, an p2) {
   __builtin_memcpy(p2, c, ai);
 }
-template <typename aj, typename an> void bc(aj *c, an p2) {
+template <typename aj, typename an> void ba(aj *c, an p2) {
   az<sizeof(aj)>(c, p2);
 }
-template <typename bd> struct e {
-  using be = bd;
-  template <typename bf> using bh = e<bf>;
+template <typename bb> struct e {
+  using bc = bb;
+  template <typename bd> using be = e<bd>;
 };
-template <class bk> using bn = typename bk::be;
-template <class be, class bk> using bh = typename bk::template bh<be>;
-template <class bk> using bo = bh<uint32_t, bk>;
-template <typename bq> struct br {
-  using bs = bq;
-  bq bt[sizeof(bq)];
+template <class bf> using bh = typename bf::bc;
+template <class bc, class bf> using be = typename bf::template be<bc>;
+template <class bf> using bk = be<uint32_t, bf>;
+template <typename bn> struct bo {
+  using bq = bn;
+  bn br[sizeof(bn)];
 };
 struct g {
   static int m_fn1(bool c) { return c ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
-template <class bw> using bx = e<typename bw::bs>;
-template <class by> br<bn<by>> bz(by) {
-  br<bn<by>> u;
+template <class bs> using bt = e<typename bs::bq>;
+template <class bv> bo<bh<bv>> bw(bv) {
+  bo<bh<bv>> u;
   return u;
 }
-template <class by> using ca = decltype(bz(by()));
-template <class by, class cb> ca<by> cc(by, cb p2) {
-  ca<by> cd;
-  bc(&p2, &cd);
-  return cd;
+template <class bv> using bx = decltype(bw(bv()));
+template <class bv, class by> bx<bv> bz(bv, by p2) {
+  bx<bv> ca;
+  ba(&p2, &ca);
+  return ca;
 }
-template <class by, typename ce> ca<by> cf(by c, ce p2) {
+template <class bv, typename cb> bx<bv> cc(bv c, cb p2) {
   (void)c;
-  ca<by> u;
-  u.bt[0] = p2;
+  bx<bv> u;
+  u.br[0] = p2;
   return u;
 }
-br<float> cg(br<float> c, br<float> p2) {
-  bx<decltype(c)> d;
-  bo<decltype(d)> ch;
-  auto au = cc(ch, c), bu = cc(ch, p2);
-  for (size_t i = 0; i < 1; ++i)
-    au.bt[i] &= bu.bt[i];
-  return cc(d, au);
+bo<float> cd(bo<float> c, bo<float> p2) {
+  bt<decltype(c)> d;
+  bk<decltype(d)> ce;
+  auto au = bz(ce, c), bu = bz(ce, p2);
+  au.br[0] &= bu.br[0];
+  return bz(d, au);
 }
-br<float> ci(br<float> c, br<float> p2) {
-  bx<decltype(c)> d;
-  bo<decltype(d)> ch;
-  auto au = cc(ch, c), bu = cc(ch, p2);
-  for (size_t i = 0; i < 1; ++i)
-    au.bt[i] |= bu.bt[i];
-  return cc(d, au);
+bo<float> cf(bo<float> c, bo<float> p2) {
+  bt<decltype(c)> d;
+  bk<decltype(d)> ce;
+  auto au = bz(ce, c), bu = bz(ce, p2);
+  au.br[0] |= bu.br[0];
+  return bz(d, au);
 }
-br<float> cj(br<float> c, br<float> p2, br<float> p3) {
-  br cm = cg(c, p2);
-  return ci(cm, p3);
+bo<float> cg(bo<float> c, bo<float> p2, bo<float> p3) {
+  bo ch = cd(c, p2);
+  return cf(ch, p3);
 }
-br<float> cn(g c) {
-  br<float> u;
-  bc(&c, &u);
+bo<float> ci(g c) {
+  bo<float> u;
+  ba(&c, &u);
   return u;
 }
-br<float> cs(g c, br<float> p2, br<float> p3) {
-  br cp = cn(c);
-  return cj(cp, p2, p3);
+bo<float> cj(g c, bo<float> p2, bo<float> p3) {
+  bo ck = ci(c);
+  return cg(ck, p2, p3);
 }
-br<float> z, cq = z;
-br<float> cr(br<float> c) {
-  bx<decltype(c)> d;
-  br t = bz(d);
-  return cj(cq, t, c);
+bo<float> cl;
+bo<float> cr(bo<float> c) {
+  bt<decltype(c)> d;
+  bo t = bw(d);
+  return cg(cl, t, c);
 }
-br<float> ct(br<float> c, br<float> p2) {
-  for (size_t i = 0; i < 1; ++i)
-    c.bt[i] += p2.bt[i];
+bo<float> cm(bo<float> c, bo<float> p2) {
+  c.br[0] += p2.br[0];
   return c;
 }
-br<float> cu(br<float> c, br<float> p2) {
-  for (size_t i = 0; i < 1; ++i)
-    c.bt[i] -= p2.bt[i];
+bo<float> cn(bo<float> c, bo<float> p2) {
+  c.br[0] -= p2.br[0];
   return c;
 }
-br<float> operator-(br<float> c, br<float> p2) { return cu(c, p2); }
-br<float> operator+(br<float> c, br<float> p2) { return ct(c, p2); }
-br<float> cv(br<float> c, br<float> p2) {
-  for (size_t i = 0; i < 1; ++i)
-    c.bt[i] = p2.bt[i];
+bo<float> operator-(bo<float> c, bo<float> p2) { return cn(c, p2); }
+bo<float> operator+(bo<float> c, bo<float> p2) { return cm(c, p2); }
+bo<float> co(bo<float> c, bo<float> p2) {
+  c.br[0] = p2.br[0];
   return c;
 }
-br<float> operator*(br<float> c, br<float> p2) { return cv(c, p2); }
-g operator==(br<float> c, br<float> p2) {
+bo<float> operator*(bo<float> c, bo<float> p2) { return co(c, p2); }
+g operator==(bo<float> c, bo<float> p2) {
   g m;
-  for (size_t i = 0; i < 1; ++i)
-    m.bits[i] = g::m_fn1(c.bt[i] == p2.bt[i]);
+  m.bits[0] = g::m_fn1(c.br[0] == p2.br[0]);
   return m;
 }
-float cw(br<float> c) { return c.bt[0]; }
-template <class bi> using bj = decltype(bz(bi()));
-br<float> bl(br<float> c, br<float> p2) { return c + p2; }
-br<float> bm(br<float> c, br<float> p2) { return c - p2; }
-br<float> bg(br<float> c, br<float> p2) { return c * p2; }
-auto bp(br<float> c, br<float> p2) { return c == p2; }
-int af, ah, cy;
+template <class bi> using bj = decltype(bw(bi()));
+bo<float> bl(bo<float> c, bo<float> p2) { return c + p2; }
+bo<float> bm(bo<float> c, bo<float> p2) { return c - p2; }
+bo<float> bg(bo<float> c, bo<float> p2) { return c * p2; }
+auto bp(bo<float> c, bo<float> p2) { return c == p2; }
+int af, ah;
 template <class u, class w> w ad(u c, w p2) {
-  using ag = bn<u>;
-  w ay = cf(c, ag(1.0)), x = bl(p2, ay), at;
+  using ag = bh<u>;
+  w ay = cc(c, ag(1.0)), x = bl(p2, ay), at;
   auto au = bp(x, ay);
-  br cx = cr(x);
-  auto av = bm(cx, ay);
+  bo cp = cr(x);
+  auto av = bm(cp, ay);
   auto ax = bg(at, av);
-  return cs(au, p2, ax);
+  return cj(au, p2, ax);
 }
 template <class a, class b> a al(b c) {
   a f;
@@ -134,16 +127,13 @@ void am(bj<e<float>> c(e<float>, bj<e<float>>), e<float> p2) {
     l ar(s);
     for (l as = ap; as <= aq; as += ar) {
       float q = al<float>(as), ab(q);
-      ca<e<float>> r = cf(p2, q), cz = c(p2, r);
-      float aa = cw(cz);
-      {
-        float ak = aa, actual = ab;
-        bc(&ak, &af);
-        bc(&actual, &ah);
-        int aw = ah - ae(af, ah);
-        cy = aw;
-      }
-      auto ac = cy;
+      bx<e<float>> r = cc(p2, q), cq = c(p2, r);
+      float aa = cq.br[0];
+      float ak = aa, actual = ab;
+      ba(&ak, &af);
+      ba(&actual, &ah);
+      int aw = ah - ae(af, ah);
+      auto ac = aw;
       p = p ?: ac;
     }
   }
