@@ -11,7 +11,7 @@ template <typename ba> struct e {
   using bb = ba;
   template <typename bc> using bd = e<bc>;
 };
-template <class bb, class be> using bd = typename be::template bd<bb>;
+//template <class bb, class be> using bd = typename be::template bd<bb>;
 template <typename bf> struct bh {
   bf bi[sizeof(bf)];
 };
@@ -36,14 +36,16 @@ template <class bj, typename bt> bn<bj> bs(bj, bt g) {
 }
 bh<float> bw(bh<float> c, bh<float> g) {
   e<float> d;
-  bd<uint32_t, e<float>> bv;
+  //bd<uint32_t, e<float>> bv;
+  e<float>::bd<uint32_t > bv;
   auto au = br(bv, c), bu = br(bv, g);
   au.bi[0] &= bu.bi[0];
   return br(d, au);
 }
 bh<float> by(bh<float> c, bh<float> g) {
   e<float> d;
-  bd<uint32_t, e<float>> bv;
+  //bd<uint32_t, e<float>> bv;
+  e<float>::bd<uint32_t > bv;
   auto au = br(bv, c), bu = br(bv, g);
   au.bi[0] |= bu.bi[0];
   return br(d, au);
