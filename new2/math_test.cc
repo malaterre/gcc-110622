@@ -39,15 +39,15 @@ template <class bv, typename cb> bx<bv> cc(bv c, cb p2) {
   return u;
 }
 bo<float> cd(bo<float> c, bo<float> p2) {
-  bt<bo<float>> d;
-  bk<bt<bo<float>>> ce;
+  e<float> d;
+  bk<e<float>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] &= bu.br[0];
   return bz(d, au);
 }
 bo<float> cf(bo<float> c, bo<float> p2) {
-  bt<bo<float>> d;
-  bk<bt<bo<float>>> ce;
+  e<float> d;
+  bk<e<float>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] |= bu.br[0];
   return bz(d, au);
@@ -67,7 +67,7 @@ bo<float> cj(g c, bo<float> p2, bo<float> p3) {
 }
 bo<float> cl;
 bo<float> cr(bo<float> c) {
-  bt<bo<float>> d;
+  e<float> d;
   bo t = bw(d);
   return cg(cl, t, c);
 }
