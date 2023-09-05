@@ -23,8 +23,8 @@ struct g {
   int bits[sizeof(int)];
 };
 template <class bs> using bt = e<typename bs::bq>;
-template <class bv> bo<bh<bv>> bw(bv) {
-  bo<bh<bv>> u;
+template <class bv> bo<typename bv::bc> bw(bv) {
+  bo<typename bv::bc> u;
   return u;
 }
 template <class bv> using bx = decltype(bw(bv()));
@@ -99,7 +99,7 @@ bo<float> bg(bo<float> c, bo<float> p2) { return c * p2; }
 auto bp(bo<float> c, bo<float> p2) { return c == p2; }
 int af, ah;
 template <class u, class w> w ad(u c, w p2) {
-  using ag = bh<u>;
+  using ag = typename u::bc;
   w ay = cc(c, ag(1.0)), x = bl(p2, ay), at;
   auto au = bp(x, ay);
   bo cp = cr(x);
