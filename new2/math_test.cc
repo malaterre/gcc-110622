@@ -29,7 +29,7 @@ template <class bj, class bo> bn<bj> br(bj, bo g) {
   az(&g, &bq);
   return bq;
 }
-template <class bj, typename bt> bh<bt> bs(bj, bt g) {
+template < typename bt> bh<bt> bs( bt g) {
 //  bn<bj> k;
 	bh<bt> k;
   k.bi[0] = g;
@@ -94,9 +94,9 @@ bh<float> bm(bh<float> c, bh<float> g) { return c - g; }
 bh<float> bg(bh<float> c, bh<float> g) { return c * g; }
 auto bp(bh<float> c, bh<float> g) { return c == g; }
 int af, ah;
-template <class k, class s> s ad(k c, s g) {
+template <class k, class s> s ad(k , s g) {
   using ag = typename k::bb;
-  s ay = bs(c, ag(1.0)), u = bl(g, ay), at;
+  s ay = bs( ag(1.0)), u = bl(g, ay), at;
   auto au = bp(u, ay);
   bh ch = cf(u);
   auto av = bm(ch, ay);
@@ -115,7 +115,7 @@ void am(bh<float> c(e<float>, bh<float>), e<float> g) {
   l as = 528484000;
   float q = al<float>(as), ab(q);
   //bn<e<float>> r = bs(g, q), ci = c(g, r);
-  bh<float> r = bs(g, q), ci = c(g, r);
+  bh<float> r = bs( q), ci = c(g, r);
   float aa = ci.bi[0];
   float ak = aa, actual = ab;
   az(&ak, &af);
