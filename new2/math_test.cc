@@ -107,13 +107,14 @@ template <class a, class b> a al(b c) {
   ao<sizeof(f)>(&c, &f);
   return f;
 }
-void am(bn<e<float>> c(e<float>, bn<e<float>>), e<float> g) {
+void am(bh<float> c(e<float>, bh<float>), e<float> g) {
   uint64_t j = 2;
   using l = uint32_t;
   uint64_t p;
   l as = 528484000;
   float q = al<float>(as), ab(q);
-  bn<e<float>> r = bs(g, q), ci = c(g, r);
+  //bn<e<float>> r = bs(g, q), ci = c(g, r);
+  bh<float> r = bs(g, q), ci = c(g, r);
   float aa = ci.bi[0];
   float ak = aa, actual = ab;
   az(&ak, &af);
