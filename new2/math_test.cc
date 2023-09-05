@@ -89,7 +89,6 @@ g operator==(bo<float> c, bo<float> p2) {
   m.bits[0] = g::m_fn1(c.br[0] == p2.br[0]);
   return m;
 }
-template <class bi> using bj = decltype(bw(bi()));
 bo<float> bl(bo<float> c, bo<float> p2) { return c + p2; }
 bo<float> bm(bo<float> c, bo<float> p2) { return c - p2; }
 bo<float> bg(bo<float> c, bo<float> p2) { return c * p2; }
@@ -109,7 +108,7 @@ template <class a, class b> a al(b c) {
   az<sizeof(f)>(&c, &f);
   return f;
 }
-void am(bj<e<float>> c(e<float>, bj<e<float>>), e<float> p2) {
+void am(bx<e<float>> c(e<float>, bx<e<float>>), e<float> p2) {
   float k = 0.0f, i = 1e37f;
   uint64_t j = 2;
   using l = uint32_t;
