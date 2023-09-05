@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
@@ -105,17 +106,18 @@ template <class a, class b> a al(b c) {
 }
 void am(bh<float> c(e<float>, bh<float>) ) {
  e<float> p2 ;
-  uint64_t j = 2;
   uint32_t as = 528484000;
   float q = al<float>(as), ab(q);
   bh r = bs(q), ci = c(p2, r);
-  float aa = ci.bi[0];
-  float ak = aa, actual = ab;
+  float ak = ci.bi[0];
+  printf("1: %g %d %d\n", ak, af, ah);
   az(&ak, &af);
-  az(&actual, &ah);
+  printf("2: %g %d %d\n", ak, af, ah);
+  az(&ab, &ah);
+  printf("3: %g %d %d\n", ak, af, ah);
   int aw = ah - ae(af, ah);
   uint64_t  p = aw;
-  if (!(p <= j))
+  if (!(p <= 2))
     abort();
 }
 int main() {
