@@ -1,12 +1,6 @@
 #include <math.h>
 #include <stdint.h>
 #define ae(a, b) a < b ? 0 : b
-template <size_t ai, typename aj, typename an> void az(aj c, an p2) {
-  __builtin_memcpy(p2, c, ai);
-}
-template <typename aj, typename an> void ba(aj *c, an p2) {
-  az<sizeof(aj)>(c, p2);
-}
 template <typename bb> struct e {
   using bc = bb;
   template <typename bd> using be = e<bd>;
