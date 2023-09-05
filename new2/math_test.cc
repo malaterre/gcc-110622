@@ -12,7 +12,6 @@ template <typename bb> struct e {
   template <typename bd> using be = e<bd>;
 };
 template <class bc, class bf> using be = typename bf::template be<bc>;
-template <class bf> using bk = be<uint32_t, bf>;
 template <typename bn> struct bo {
   using bq = bn;
   bn br[sizeof(bn)];
@@ -21,7 +20,6 @@ struct g {
   static int m_fn1(bool c) { return c ? ~int{} : 0; }
   int bits[sizeof(int)];
 };
-template <class bs> using bt = e<typename bs::bq>;
 template <class bv> bo<typename bv::bc> bw(bv) {
   bo<typename bv::bc> u;
   return u;
@@ -40,14 +38,14 @@ template <class bv, typename cb> bx<bv> cc(bv c, cb p2) {
 }
 bo<float> cd(bo<float> c, bo<float> p2) {
   e<float> d;
-  bk<e<float>> ce;
+  be<uint32_t, e<float>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] &= bu.br[0];
   return bz(d, au);
 }
 bo<float> cf(bo<float> c, bo<float> p2) {
   e<float> d;
-  bk<e<float>> ce;
+  be<uint32_t, e<float>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] |= bu.br[0];
   return bz(d, au);
