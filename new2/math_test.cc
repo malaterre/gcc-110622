@@ -106,9 +106,8 @@ template <class a, class b> a al(b c) {
 void am(bh<float> c(e<float>, bh<float>) ) {
  e<float> p2 ;
   uint64_t j = 2;
-  using l = uint32_t;
   uint64_t p;
-  l as = 528484000;
+  uint32_t as = 528484000;
   float q = al<float>(as), ab(q);
   bh r = bs(q), ci = c(p2, r);
   float aa = ci.bi[0];
