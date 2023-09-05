@@ -106,7 +106,6 @@ template <class a, class b> a al(b c) {
 void am(bh<float> c(e<float>, bh<float>) ) {
  e<float> p2 ;
   uint64_t j = 2;
-  uint64_t p;
   uint32_t as = 528484000;
   float q = al<float>(as), ab(q);
   bh r = bs(q), ci = c(p2, r);
@@ -115,7 +114,7 @@ void am(bh<float> c(e<float>, bh<float>) ) {
   az(&ak, &af);
   az(&actual, &ah);
   int aw = ah - ae(af, ah);
-  p = aw;
+  uint64_t  p = aw;
   if (!(p <= j))
     abort();
 }
