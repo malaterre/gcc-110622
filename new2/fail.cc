@@ -35,12 +35,6 @@ template <class bv, class by> bx<bv> bz(bv, by p2) {
   ba(&p2, &ca);
   return ca;
 }
-template <class bv, typename cb> bx<bv> cc(bv c, cb p2) {
-  (void)c;
-  bx<bv> u;
-  u.br[0] = p2;
-  return u;
-}
 bo cd(bo c, bo p2) {
   bt<decltype(c)> d;
   bk<decltype(d)> ce;
