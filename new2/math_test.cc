@@ -29,8 +29,9 @@ template <class bj, class bo> bn<bj> br(bj, bo g) {
   az(&g, &bq);
   return bq;
 }
-template <class bj, typename bt> bn<bj> bs(bj, bt g) {
-  bn<bj> k;
+template <class bj, typename bt> bh<bt> bs(bj, bt g) {
+//  bn<bj> k;
+	bh<bt> k;
   k.bi[0] = g;
   return k;
 }
