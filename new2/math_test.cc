@@ -11,7 +11,6 @@ template <typename bb> struct e {
   using bc = bb;
   template <typename bd> using be = e<bd>;
 };
-template <class bf> using bh = typename bf::bc;
 template <class bc, class bf> using be = typename bf::template be<bc>;
 template <class bf> using bk = be<uint32_t, bf>;
 template <typename bn> struct bo {
@@ -40,15 +39,15 @@ template <class bv, typename cb> bx<bv> cc(bv c, cb p2) {
   return u;
 }
 bo<float> cd(bo<float> c, bo<float> p2) {
-  bt<decltype(c)> d;
-  bk<decltype(d)> ce;
+  bt<bo<float>> d;
+  bk<bt<bo<float>>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] &= bu.br[0];
   return bz(d, au);
 }
 bo<float> cf(bo<float> c, bo<float> p2) {
-  bt<decltype(c)> d;
-  bk<decltype(d)> ce;
+  bt<bo<float>> d;
+  bk<bt<bo<float>>> ce;
   auto au = bz(ce, c), bu = bz(ce, p2);
   au.br[0] |= bu.br[0];
   return bz(d, au);
@@ -68,7 +67,7 @@ bo<float> cj(g c, bo<float> p2, bo<float> p3) {
 }
 bo<float> cl;
 bo<float> cr(bo<float> c) {
-  bt<decltype(c)> d;
+  bt<bo<float>> d;
   bo t = bw(d);
   return cg(cl, t, c);
 }
