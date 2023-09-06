@@ -94,20 +94,22 @@ bh<float> ad(e<float>, bh<float> p2) {
   auto ax = bg(at, av);
   return cc(au, p2, ax);
 }
-template <class a, class b> a al(b c) {
-  a f;
-  ao<sizeof(f)>(&c, &f);
-  return f;
+float al_f;
+float al(int c) {
+  ao<sizeof(al_f)>(&c, &al_f);
+  return al_f;
 }
 int main_af;
+float main_q = al(528484000);
+float main_ab = main_q;
+bh<float> main_r = bs(main_q);
 int main() {
-  int ah, as = 528484000;
+  int ah;
   e<float> p2;
-  float q = al<float>(as), ab(q);
-  bh<float> r = bs(q), ci = ad(p2, r);
+  bh<float> ci = ad(p2, main_r);
   float ak = ci.bi[0];
   az(&ak, &main_af);
-  az(&ab, &ah);
+  az(&main_ab, &ah);
   int aw = ah - ae(main_af, ah);
   uint64_t p = aw;
   if (!(p <= 2))
