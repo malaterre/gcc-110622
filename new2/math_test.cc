@@ -7,7 +7,7 @@ template <size_t ai, typename aj, typename an> void ao(aj c, an p2) {
 template <typename aj, typename an> void az(aj *c, an p2) {
   ao<sizeof(aj)>(c, p2);
 }
-template <typename> struct e {};
+struct e {};
 template <typename bf> struct bh {
   bf bi[sizeof(bf)];
 };
@@ -15,11 +15,7 @@ int m_fn1(bool c) { return c ? ~int{} : 0; }
 struct g {
   int bits[sizeof(int)];
 };
-bh<float> bk(e<float>) {
-  bh<float> i;
-  return i;
-}
-template <typename T1, typename T2> bh<T1> br( T2 p2) {
+template <typename T1, typename T2> bh<T1> br(T2 p2) {
   bh<T1> bq;
   az(&p2, &bq);
   return bq;
@@ -30,15 +26,14 @@ bh<float> bs(float c) {
   return i;
 }
 bh<float> bw(bh<float> c, bh<float> p2) {
-//  e<uint32_t> bv;
-  auto au = br<uint32_t>( c), bu = br<uint32_t>( p2);
+  auto au = br<uint32_t>(c), bu = br<uint32_t>(p2);
   au.bi[0] &= bu.bi[0];
-  return br<float>( au);
+  return br<float>(au);
 }
 bh<float> by(bh<float> c, bh<float> p2) {
-  auto au = br<uint32_t>( c), bu = br<uint32_t>( p2);
+  auto au = br<uint32_t>(c), bu = br<uint32_t>(p2);
   au.bi[0] |= bu.bi[0];
-  return br<float>( au);
+  return br<float>(au);
 }
 bh<float> bx(bh<float> c, bh<float> p2, bh<float> k) {
   bh<float> ca = bw(c, p2);
@@ -54,8 +49,7 @@ bh<float> cc(g c, bh<float> p2, bh<float> k) {
   return bx(cb, p2, k);
 }
 bh<float> cf(bh<float> c) {
-//  e<float> d;
-  bh<float> o; // = bk(d);
+  bh<float> o;
   return bx(c, o, c);
 }
 bh<float> cd(bh<float> c, bh<float> p2) {
@@ -79,7 +73,7 @@ g equal(bh<float> c, bh<float> p2) {
   return m;
 }
 bh<float> ad_ay = bs(1.0);
-bh<float> ad(e<float>, bh<float> p2) {
+bh<float> ad(e, bh<float> p2) {
   bh<float> u = plus(p2, ad_ay), at;
   auto au = equal(u, ad_ay);
   bh<float> ch = cf(u);
@@ -97,8 +91,8 @@ float main_q = al(528484000);
 float main_ab = main_q;
 bh<float> main_r = bs(main_q);
 int main() {
-  int ah{};
-  e<float> p2{};
+  int ah;
+  e p2;
   bh<float> ci = ad(p2, main_r);
   float ak = ci.bi[0];
   az(&ak, &main_af);
