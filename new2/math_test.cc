@@ -45,7 +45,7 @@ bh<float> by(bh<float> c, bh<float> p2) {
   return br(d, au);
 }
 bh<float> bx(bh<float> c, bh<float> p2, bh<float> k) {
-  bh ca = bw(c, p2);
+  bh<float> ca = bw(c, p2);
   return by(ca, k);
 }
 bh<float> bz(g c) {
@@ -54,12 +54,12 @@ bh<float> bz(g c) {
   return i;
 }
 bh<float> cc(g c, bh<float> p2, bh<float> k) {
-  bh cb = bz(c);
+  bh<float> cb = bz(c);
   return bx(cb, p2, k);
 }
 bh<float> cf(bh<float> c) {
   e<float> d;
-  bh o = bk(d);
+  bh<float> o = bk(d);
   return bx(c, o, c);
 }
 bh<float> cd(bh<float> c, bh<float> p2) {
@@ -85,15 +85,14 @@ g operator==(bh<float> c, bh<float> p2) {
 bh<float> bl(bh<float> c, bh<float> p2) { return c + p2; }
 bh<float> bm(bh<float> c, bh<float> p2) { return c - p2; }
 bh<float> bg(bh<float> c, bh<float> p2) { return c * p2; }
-auto bp(bh<float> c, bh<float> p2) { return c == p2; }
+g bp(bh<float> c, bh<float> p2) { return c == p2; }
 bh<float> ad(e<float>, bh<float> p2) {
-  //  using ag = typename i::bb;
   bh<float> ay = bs(float(1.0)), u = bl(p2, ay), at;
 #ifdef DOPRINT
   printf("au0: %g %g \n", u.bi[0], ay.bi[0]);
 #endif
   auto au = bp(u, ay);
-  bh ch = cf(u);
+  bh<float> ch = cf(u);
   auto av = bm(ch, ay);
   auto ax = bg(at, av);
   return cc(au, p2, ax);
@@ -108,7 +107,7 @@ void am(bh<float> c(e<float>, bh<float>)) {
   e<float> p2;
   uint32_t as = 528484000;
   float q = al<float>(as), ab(q);
-  bh r = bs(q), ci = c(p2, r);
+  bh<float> r = bs(q), ci = c(p2, r);
   float ak = ci.bi[0];
   az(&ak, &af);
   az(&ab, &ah);
