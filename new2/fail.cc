@@ -5,19 +5,13 @@ template <typename bb> struct e {
   using bc = bb;
   template <typename bd> using be = e<bd>;
 };
-template <class bf> using bh = typename bf::bc;
 template <class bc, class bf> using be = typename bf::template be<bc>;
 template <class bf> using bk = be<uint32_t, bf>;
-/*template <typename bn>*/ struct bo {
+struct bo {
   using bq = float;
   float br[sizeof(float)];
 };
-//template <> struct bo<double> { };
 
-struct g {
-  static int m_fn1(bool c) { return c ? ~int{} : 0; }
-  int bits[sizeof(int)];
-};
 template <class bs> using bt = e<typename bs::bq>;
 template <class bv> bo bw(bv) {
   bo u;
