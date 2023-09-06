@@ -19,7 +19,7 @@ bh<float> bk(e<float>) {
   bh<float> i;
   return i;
 }
-template <typename T1, typename T2> bh<T1> br(e<T1>, T2 p2) {
+template <typename T1, typename T2> bh<T1> br( T2 p2) {
   bh<T1> bq;
   az(&p2, &bq);
   return bq;
@@ -30,18 +30,15 @@ bh<float> bs(float c) {
   return i;
 }
 bh<float> bw(bh<float> c, bh<float> p2) {
-  e<float> d;
-  e<uint32_t> bv;
-  auto au = br(bv, c), bu = br(bv, p2);
+//  e<uint32_t> bv;
+  auto au = br<uint32_t>( c), bu = br<uint32_t>( p2);
   au.bi[0] &= bu.bi[0];
-  return br(d, au);
+  return br<float>( au);
 }
 bh<float> by(bh<float> c, bh<float> p2) {
-  e<float> d;
-  e<uint32_t> bv;
-  auto au = br(bv, c), bu = br(bv, p2);
+  auto au = br<uint32_t>( c), bu = br<uint32_t>( p2);
   au.bi[0] |= bu.bi[0];
-  return br(d, au);
+  return br<float>( au);
 }
 bh<float> bx(bh<float> c, bh<float> p2, bh<float> k) {
   bh<float> ca = bw(c, p2);
@@ -57,8 +54,8 @@ bh<float> cc(g c, bh<float> p2, bh<float> k) {
   return bx(cb, p2, k);
 }
 bh<float> cf(bh<float> c) {
-  e<float> d;
-  bh<float> o = bk(d);
+//  e<float> d;
+  bh<float> o; // = bk(d);
   return bx(c, o, c);
 }
 bh<float> cd(bh<float> c, bh<float> p2) {
@@ -100,8 +97,8 @@ float main_q = al(528484000);
 float main_ab = main_q;
 bh<float> main_r = bs(main_q);
 int main() {
-  int ah;
-  e<float> p2;
+  int ah{};
+  e<float> p2{};
   bh<float> ci = ad(p2, main_r);
   float ak = ci.bi[0];
   az(&ak, &main_af);
