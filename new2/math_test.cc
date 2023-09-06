@@ -69,29 +69,25 @@ bh<float> ce(bh<float> c, bh<float> p2) {
   c.bi[0] -= p2.bi[0];
   return c;
 }
-bh<float> operator-(bh<float> c, bh<float> p2) { return ce(c, p2); }
-bh<float> operator+(bh<float> c, bh<float> p2) { return cd(c, p2); }
 bh<float> cg(bh<float> c, bh<float> p2) {
   c.bi[0] = p2.bi[0];
   return c;
 }
-bh<float> operator*(bh<float> c, bh<float> p2) { return cg(c, p2); }
-g operator==(bh<float> c, bh<float> p2) {
+bh<float> plus(bh<float> c, bh<float> p2) { return cd(c, p2); }
+bh<float> minus(bh<float> c, bh<float> p2) { return ce(c, p2); }
+bh<float> mult(bh<float> c, bh<float> p2) { return cg(c, p2); }
+g equal(bh<float> c, bh<float> p2) {
   g m;
   m.bits[0] = m_fn1(c.bi[0] == p2.bi[0]);
   return m;
 }
-bh<float> bl(bh<float> c, bh<float> p2) { return c + p2; }
-bh<float> bm(bh<float> c, bh<float> p2) { return c - p2; }
-bh<float> bg(bh<float> c, bh<float> p2) { return c * p2; }
-g bp(bh<float> c, bh<float> p2) { return c == p2; }
 bh<float> ad_ay = bs(1.0);
 bh<float> ad(e<float>, bh<float> p2) {
-  bh<float> u = bl(p2, ad_ay), at;
-  auto au = bp(u, ad_ay);
+  bh<float> u = plus(p2, ad_ay), at;
+  auto au = equal(u, ad_ay);
   bh<float> ch = cf(u);
-  auto av = bm(ch, ad_ay);
-  auto ax = bg(at, av);
+  auto av = minus(ch, ad_ay);
+  auto ax = mult(at, av);
   return cc(au, p2, ax);
 }
 float al_f;
