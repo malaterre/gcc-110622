@@ -19,9 +19,9 @@ template <class bj> bh<typename bj::bb> bk(bj) {
   bh<typename bj::bb> i{};
   return i;
 }
-template <class bj> using bn = decltype(bk(bj()));
-template <class bj, class bo> bn<bj> br(bj, bo p2) {
-  bn<bj> bq;
+//template <class bj> using bn = decltype(bk(bj()));
+template <typename T1, typename T2> bh<T1> br(e<T1>, bh<T2> p2) {
+  bh<T1> bq;
   az(&p2, &bq);
   return bq;
 }
