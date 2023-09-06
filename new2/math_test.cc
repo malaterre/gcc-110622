@@ -1,6 +1,6 @@
-#include <stdio.h>
 #include <math.h>
 #include <stdint.h>
+#include <stdio.h>
 #define ae(a, b) a < b ? 0 : b
 template <size_t ai, typename aj, typename an> void ao(aj c, an p2) {
   __builtin_memcpy(p2, c, ai);
@@ -8,12 +8,8 @@ template <size_t ai, typename aj, typename an> void ao(aj c, an p2) {
 template <typename aj, typename an> void az(aj *c, an p2) {
   ao<sizeof(aj)>(c, p2);
 }
-template <typename ba> struct e {
-  using bb = ba;
-};
-template <typename bf> struct bh {
-  bf bi[sizeof(bf)];
-};
+template <typename ba> struct e { using bb = ba; };
+template <typename bf> struct bh { bf bi[sizeof(bf)]; };
 struct g {
   static int m_fn1(bool c) { return c ? ~int{} : 0; }
   int bits[sizeof(int)];
@@ -89,7 +85,6 @@ bh<float> bl(bh<float> c, bh<float> p2) { return c + p2; }
 bh<float> bm(bh<float> c, bh<float> p2) { return c - p2; }
 bh<float> bg(bh<float> c, bh<float> p2) { return c * p2; }
 auto bp(bh<float> c, bh<float> p2) { return c == p2; }
-int af, ah;
 template <class i, class n> n ad(i, n p2) {
   using ag = typename i::bb;
   n ay = bs(ag(1.0)), u = bl(p2, ay), at;
@@ -107,22 +102,18 @@ template <class a, class b> a al(b c) {
   ao<sizeof(f)>(&c, &f);
   return f;
 }
-void am(bh<float> c(e<float>, bh<float>) ) {
- e<float> p2 ;
+void am(bh<float> c(e<float>, bh<float>)) {
+  int af = 0, ah = 0;
+  e<float> p2;
   uint32_t as = 528484000;
   float q = al<float>(as), ab(q);
   bh r = bs(q), ci = c(p2, r);
   float ak = ci.bi[0];
-  printf("1: %g %d %d\n", ak, af, ah);
   az(&ak, &af);
-  printf("2: %g %d %d\n", ak, af, ah);
   az(&ab, &ah);
-  printf("3: %g %d %d\n", ak, af, ah);
   int aw = ah - ae(af, ah);
-  uint64_t  p = aw;
+  uint64_t p = aw;
   if (!(p <= 2))
     abort();
 }
-int main() {
-  am(ad );
-}
+int main() { am(ad); }
