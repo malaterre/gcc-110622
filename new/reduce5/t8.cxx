@@ -1,208 +1,322 @@
+typedef int a;
+typedef long long b;
+typedef long long c;
+namespace {
+typedef int e;
+}
 extern "C" {
-typedef long a;
+double log1p(double);
+typedef b f;
 void exit(int);
 }
-template <typename af> struct ai {
-  using b = af;
+namespace g {
+template <typename h, h> struct j {};
+using k = j<bool, false>;
+template <typename af, typename, template <typename> class> struct ai {
+  using l = af;
 };
-template <typename af, template <typename> class> using ab = ai<af>;
 template <typename af, template <typename> class aj>
-using ac = typename ab<af, aj>::b;
-template <typename, typename> struct ag;
-template <template <typename> class ah, typename ad, typename c, typename... ae>
-struct ag<ah<c, ae...>, ad> {
-  using b = ah<ad>;
+using ab = ai<af, void, aj>;
+template <typename af, template <typename> class aj>
+using ac = typename ab<af, aj>::l;
+template <typename> struct ad {
+  typedef e ae;
 };
+template <typename, typename> struct ag;
+template <template <typename> class ah, typename ak, typename h, typename... av>
+struct ag<ah<h, av...>, ak> {
+  using l = ah<ak>;
+};
+} // namespace g
+namespace al {
 template <typename am, typename> class an {
   am ao;
+  typedef g::ad<am> ap;
 
 public:
-  an(am r) : ao(r) {}
-  a operator*() { return *ao; }
+  typedef typename ap::ae ae;
+  an(am aq) : ao(aq) {}
+  f operator*() { return *ao; }
   an operator++() {
     ++ao;
     return *this;
   }
-  am ak() { return ao; }
+  am ar() { return ao; }
 };
-template <typename al, typename ap, typename aq>
-bool operator!=(an<al, aq> r, an<ap, aq> t) {
-  return r.ak() != t.ak();
+template <typename as, typename at, typename au>
+bool operator!=(an<as, au> aw, an<at, au> ay) {
+  return aw.ar() != ay.ar();
 }
-template <int ar, typename as, typename at> void au(as r, at t) {
-  __builtin_memcpy(t, r, ar);
+template <typename am, typename au>
+typename an<am, a>::ae operator-(an<am, au> aw, an<am, au> ay) {
+  return aw.ar() - ay.ar();
 }
-class av {
+} // namespace al
+typedef c ax;
+namespace {
+a ba(ax m) { return __builtin_ctzll(m); }
+template <a bb, typename be, typename bf> void bg(be bh, bf bi) {
+  __builtin_memcpy(bi, bh, bb);
+}
+template <typename be, typename bf> void bj(be *bh, bf bi) {
+  bg<sizeof(be)>(bh, bi);
+}
+} // namespace
+namespace g {
+template <typename h> class bk {
 public:
-  typedef int aw;
-  int *allocate(a) { return static_cast<int *>(operator new(sizeof(int))); }
+  typedef h bm;
+  typedef a bn;
+  h *allocate(bn) { return static_cast<h *>(operator new(sizeof(h))); }
 };
-template <typename> using ax = av;
-template <typename> class allocator : public ax<int> {};
-struct e {
-  struct ay : ag<allocator<int>, int> {};
-  template <typename c> using ba = typename c::bb;
+template <typename h> using bo = bk<h>;
+template <typename h> class allocator : public bo<h> {};
+struct n {
+  template <typename h, typename ak> struct bq : ag<h, ak> {};
+  template <typename h> using bp = typename h::bs;
 };
-template <typename, typename> using bd = e::ay::b;
-template <typename be> struct bf : e {
-  using bg = ac<typename be::aw *, ba>;
-  template <typename c> using bh = bd<be, c>;
-  static bg allocate() {
-    a bi = 0;
-    be bj;
-    return bj.allocate(bi);
-  }
-  template <typename c> static auto bk(c) {}
+template <typename br, typename ak> using bu = typename n::bq<br, ak>::l;
+template <typename br> struct bt : n {
+  typedef typename br::bm bm;
+  using bw = ac<bm *, bp>;
+  template <typename bv, typename> struct bz {
+    using l = typename bv::bn;
+  };
+  using bn = typename bz<br, e>::l;
+  template <typename h> using bx = bu<br, h>;
+  static bw allocate(br by, bn cc) { return by.allocate(cc); }
+  template <typename h> static auto ca(h) {}
 };
-template <typename be> struct bl : bf<be> {
-  template <typename> struct az {
-    typedef typename bf<be>::bh<int> bm;
+} // namespace g
+namespace al {
+template <typename br> struct cb : g::bt<br> {
+  typedef g::bt<br> cf;
+  template <typename h> struct az {
+    typedef typename cf::bx<h> cd;
   };
 };
-template <typename, typename> struct bn {
-  typedef bl<allocator<int>>::az<int>::bm bo;
-  typedef bl<bo>::bg bg;
-  struct h {
-    bg bu;
-    bg bp;
-    h() : bp() {}
-  } bq;
-  bg br(int r) { return r ? bl<bo>::allocate() : bg(); }
-};
-template <typename, typename = int> class bs : bn<int, int> {
-public:
-  typedef an<bg, int> bt;
-  bt begin() { return bq.bu; }
-  bt end() { return bq.bp; }
-  void f() {
-    if (bq.bp)
-      ++bq.bp;
-    else
-      g(0);
+} // namespace al
+namespace g {
+template <typename h, typename br> struct ce {
+  typedef typename al::cb<br>::az<h>::cd ci;
+  typedef typename al::cb<ci>::bw bw;
+  struct o {
+    bw cg;
+    bw ch;
+    o() : ch() {}
+  };
+  struct : ci, o {
+  } cl;
+  bw cj(a cc) {
+    typedef al::cb<ci> ck;
+    return cc ? ck::allocate(cl, cc) : bw();
   }
-  template <typename...> void g(bt);
 };
-template <typename c, typename be>
-template <typename...>
-void bs<c, be>::g(bt) {
-  int bv(1);
-  bg bw;
-  bg k;
-  int i = 0;
-  bg j(br(bv));
-  bg n(j);
+template <typename h, typename br = allocator<h>> class co : ce<h, br> {
+  typedef ce<h, br> cp;
+  typedef typename cp::ci ci;
+  typedef al::cb<ci> p;
+
+public:
+  typedef h bm;
+  typedef typename cp::bw bw;
+  typedef al::an<bw, co> cm;
+  typedef a bn;
+  static constexpr bool cn(k) { return false; }
+  static constexpr bool q() { return cn({}); }
+  cm begin() { return this->cl.cg; }
+  cm end() { return this->cl.ch; }
+  void r(bm) {
+    if (this->cl.ch)
+      ++this->cl.ch;
+    else
+      s(end());
+  }
+  template <typename... cs> void s(cm, cs &&...);
+  bn ct(bn cc, const char *) {
+    bn cq(cc);
+    return cq;
+  }
+};
+template <typename h, typename br>
+template <typename... cs>
+void co<h, br>::s(cm u, cs &&...) {
+  bn cq = ct(1, "");
+  bw cr;
+  bw w;
+  bn x = u - begin();
+  bw y(this->cj(cq));
+  bw z(y);
   try {
-    bl<bo>::bk(i);
-    if constexpr (0)
-      k = bw;
+    p::ca(x);
+    if constexpr (q())
+      w = cr;
   } catch (...) {
   }
-  bq.bu = bq.bp = n;
+  this->cl.cg = this->cl.ch = z;
 }
-bs<a> bx() {
-  bs<a> by;
-  for (a bz(11); bz; bz = bz - 1)
-    by.f();
-  return by;
-}
-struct ca {
-  int ch() { return 15 + 1; }
-};
-struct {
-  typedef void(cb)();
-  template <cb *cc[]> static void cd() {
-    ca ce;
-    cc[ce.ch()]();
+} // namespace g
+namespace hwy {
+//void SetSupportedTargetsForTest(f);
+g::co<f> cu() {
+  g::co<f> cv;
+  for (f cw(11); cw; cw = cw - 1) {
+    f cx = 0;
+    cv.r(cx);
   }
-} v;
-void l() {}
-void cf() {}
-void m() {}
-struct cg {
-  static constexpr int co = 0;
+  return cv;
+}
+struct cy {
+  a cz() { return ba(1 << (15 + 1)); }
 };
-template <typename, int, int> using u = cg;
-template <typename, int> struct ci {
-  long cj[sizeof(long)];
-};
-template <class o> ci<o, o::co> x(o);
-template <class o> using p = decltype(x(o()));
-template <typename bc, int ck> long cl(ci<bc, ck> r) { return r.cj[0]; }
-struct ct;
-template <int, int q, int cm> struct cn {
-  static void cw(int, int) {
-    u<long, q, cm> d;
-    ct()(double(), d);
+template <typename da> struct db {
+  typedef da(dc)();
+  template <dc *dd[]> static da de() {
+    cy df;
+    dd[df.cz()]();
   }
 };
-template <int cm> class A {
+template <typename da> db<da> dg(da());
+namespace bd {
+template <typename bc, typename dh = bc> dh di(c dj, bc actual) {
+  dh dk, dl;
+  bj(&dj, &dk);
+  bj(&actual, &dl);
+  dh dm(dl);
+  return dm;
+}
+} // namespace bd
+namespace dn {
+void TestAllLog1p() {}
+} // namespace dn
+namespace N_SSSE3 {
+void TestAllLog1p() {}
+} // namespace N_SSSE3
+namespace N_SSE4 {
+void TestAllLog1p() {}
+} // namespace N_SSE4
+namespace N_EMU128 {
+template <typename, a, int> struct Simd {
+  static constexpr a kPrivateLanes = 0;
+};
+namespace bd {
+template <typename, a, int> struct ClampNAndPow2 {
+  using l = Simd<c, 0, 0>;
+};
+template <typename, int kPow2> struct ScalableTagChecker {
+  using l = typename ClampNAndPow2<c, 0, kPow2>::l;
+};
+template <typename, a, int kPow2> struct CappedTagChecker {
+  static constexpr a N = 0;
+  using l = typename ClampNAndPow2<c, N, kPow2>::l;
+};
+} // namespace bd
+template <typename, int kPow2 = 0>
+using ScalableTag = typename bd::ScalableTagChecker<c, kPow2>::l;
+template <typename, a kLimit, int kPow2>
+using CappedTag = typename bd::CappedTagChecker<c, kLimit, kPow2>::l;
+template <class D> a MaxLanes(D) { return D::kPrivateLanes; }
+template <class D> a Lanes(D) { return D::kPrivateLanes; }
+template <typename, a> struct Vec128 {
+  c raw[sizeof(c)];
+};
+template <class D> Vec128<D, D::kPrivateLanes> Zero(D);
+template <class D> using VFromD = decltype(Zero(D()));
+template <class D, typename T2> VFromD<D> Set(D d, T2 t) {
+  VFromD<D> v;
+  for (a i = 0; MaxLanes(d);)
+    v.raw[i] = t;
+  return v;
+}
+template <typename bc, a N> c GetLane(Vec128<bc, N> v) { return v.raw[0]; }
+template <class D, class V> V CallLog1p(D, V m) { return m; }
+namespace bd {
+template <typename bc, a, a kMinArg, class Test, int kPow2>
+struct ForeachCappedR {
+  static void Do(a, a) {
+    CappedTag<c, kMinArg, kPow2> d;
+    Test()(bc(), d);
+  }
+};
+} // namespace bd
+template <class Test, int kPow2> class ForExtendableVectors {
 public:
   template <typename bc> void operator()(bc) {
-    constexpr int s(sizeof(long));
-    int cp = 0;
-    constexpr int cq = s;
-    constexpr int q{};
-    cn<cq, q, cm>::cw(1, cp);
+    constexpr a kMaxCapped(sizeof(c));
+    a max_lanes = Lanes(ScalableTag<c>());
+    constexpr a kMul = kMaxCapped;
+    constexpr a kMinArg{};
+    bd::ForeachCappedR<bc, kMul, kMinArg, Test, kPow2>::Do(1, max_lanes);
   }
 };
-class {
+template <class Test> class ForPartialVectors {
 public:
-  void operator()(double r) { A<0>()(r); }
-} cr;
-void cs() { cr(double()); }
-template <class db, class cu> db cv(cu r) {
-  db dg;
-  au<sizeof(dg)>(&r, &dg);
-  return dg;
+  template <typename bc> void operator()(bc t) {
+    ForExtendableVectors<Test, 0>()(t);
+  }
+};
+template <class Func> void ForFloatTypes(Func func) { func(double()); }
+template <class Out, class In> Out BitCast(In in) {
+  Out out;
+  bg<sizeof(out)>(&in, &out);
+  return out;
 }
-long cx;
-template <class bc, class o> void cy(o, bc t) {
-  using cz = long long;
-  cz da(cx);
-  cz w = cv<cz>(t);
-  int dk = 1;
-  cz dc[]{da, w};
-  cz y = da;
-  cz z(4000);
-  for (int dd = 0; dd < dk; ++dd) {
-    cz de = y, stop = dc[1], df(stop / z);
-    for (cz value_bits = de; value_bits <= stop; value_bits += df) {
-      bc aa = cv<bc>(value_bits), dh(aa);
-      p<o> di;
-      long actual = cl(di);
-      auto dj(dh);
-      if (dj == 5.526720574244119e-20 && actual == 0)
+template <class bc, class D>
+void TestMath(const char *, bc(bc), D(D, D), D d, c min, bc bl, ax) {
+  using UintT = c;
+  UintT min_bits(min);
+  UintT max_bits = BitCast<UintT>(bl);
+  int range_count = 1;
+  UintT ranges[][2]{min_bits, max_bits};
+  ax max_ulp;
+  UintT kSamplesPerRange(4000);
+  for (int range_index = 0; range_index < range_count; ++range_index) {
+    UintT start = ranges[range_index][0];
+    UintT stop = ranges[range_index][1];
+    UintT step(stop / kSamplesPerRange);
+    for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
+      bc aa = BitCast<bc>(value_bits);
+      c actual = GetLane(Set(d, aa));
+      bc dj(aa);
+      auto dm = hwy::bd::di(actual, dj);
+      max_ulp = max_ulp;
+      if (dm == 5.526720574244119e-20 && actual == 0)
         exit(42);
     }
   }
 }
-struct ct {
-  template <class bc, class o> void operator()(bc, o t) {
-    cy(t, bc(1.79769313486231570814527423731704357e308L));
+struct TestLog1p {
+  template <class bc, class D> void operator()(bc, D d) {
+    TestMath("", log1p, CallLog1p, d, 0.0,
+             bc(1.79769313486231570814527423731704357e308L), 2);
   }
 };
-void Trans_NS_N_EMU128_TestAllLog1p() { cs(); }
-decltype(&Trans_NS_N_EMU128_TestAllLog1p) dl[]{decltype(v)::cd<dl>,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               nullptr,
-                                               m,
-                                               cf,
-                                               nullptr,
-                                               l,
-                                               Trans_NS_N_EMU128_TestAllLog1p};
-void dm() {
-  for (a dn : bx()) {
-    (void)dn;
-    (*dl)();
+void TestAllLog1p() { ForFloatTypes(ForPartialVectors<TestLog1p>()); }
+} // namespace N_EMU128
+decltype(&N_EMU128::TestAllLog1p) TestAllLog1pHighwayDispatchTable[]{
+    decltype(dg(N_EMU128::TestAllLog1p))::de<TestAllLog1pHighwayDispatchTable>,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    N_SSE4::TestAllLog1p,
+    N_SSSE3::TestAllLog1p,
+    nullptr,
+    dn::TestAllLog1p,
+    N_EMU128::TestAllLog1p};
+void Run() {
+  for (f target : cu()) {
+    //SetSupportedTargetsForTest(target);
+    (void)target;
+    (*TestAllLog1pHighwayDispatchTable)();
   }
 }
-int main() { dm(); }
+} // namespace hwy
+int main() { hwy::Run(); }
