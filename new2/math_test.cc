@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -85,9 +86,9 @@ bh<float> bl(bh<float> c, bh<float> p2) { return c + p2; }
 bh<float> bm(bh<float> c, bh<float> p2) { return c - p2; }
 bh<float> bg(bh<float> c, bh<float> p2) { return c * p2; }
 auto bp(bh<float> c, bh<float> p2) { return c == p2; }
-template <class i, class n> n ad(i, n p2) {
-  using ag = typename i::bb;
-  n ay = bs(ag(1.0)), u = bl(p2, ay), at;
+bh<float> ad(e<float>, bh<float> p2) {
+  //  using ag = typename i::bb;
+  bh<float> ay = bs(float(1.0)), u = bl(p2, ay), at;
 #ifdef DOPRINT
   printf("au0: %g %g \n", u.bi[0], ay.bi[0]);
 #endif
