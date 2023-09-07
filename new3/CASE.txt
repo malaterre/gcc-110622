@@ -1,0 +1,29 @@
+(gdb)
+#7  0x56580b93 in hwy::N_EMU128::TestLog1p::operator()<double, hwy::N_EMU128::Simd<double, 1u, 0> > (d=..., this=<optimized out>) at ./hwy/contrib/math/math_test.cc:257
+257     DEFINE_MATH_TEST(Log1p,
+(gdb)
+#8  0x566061da in void testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>(testing::Test*, void (testing::Test::*)(), char const*) ()
+(gdb) down
+#7  0x56580b93 in hwy::N_EMU128::TestLog1p::operator()<double, hwy::N_EMU128::Simd<double, 1u, 0> > (d=..., this=<optimized out>) at ./hwy/contrib/math/math_test.cc:257
+257     DEFINE_MATH_TEST(Log1p,
+(gdb) down
+#6  0x56580977 in hwy::N_EMU128::TestMath<double, hwy::N_EMU128::Simd<double, 1u, 0> >(char const*, double (*)(double), decltype (Zero((hwy::N_EMU128::Simd<double, 1u, 0>)())) (*)(hwy::N_EMU128::Simd<double, 1u, 0>, decltype (Zero((hwy::N_EMU128::Simd<double, 1u, 0>)()))), hwy::N_EMU128::Simd<double, 1u, 0>, double, double, unsigned long long) (name=name@entry=0x5660a3ef "Log1p", fx1=<optimized out>,
+    fxN=fxN@entry=0x565980e0 <hwy::N_EMU128::CallLog1p<hwy::N_EMU128::Simd<double, 1u, 0>, hwy::N_EMU128::Vec128<double, 1u> >(hwy::N_EMU128::Simd<double, 1u, 0>, hwy::N_EMU128::Vec128<double, 1u>)>,
+    min=<optimized out>, max=<optimized out>, max_error_ulp=<optimized out>, d=...) at ./hwy/contrib/math/math_test.cc:144
+144       HWY_ASSERT(max_ulp <= max_error_ulp);
+(gdb) up
+#7  0x56580b93 in hwy::N_EMU128::TestLog1p::operator()<double, hwy::N_EMU128::Simd<double, 1u, 0> > (d=..., this=<optimized out>) at ./hwy/contrib/math/math_test.cc:257
+257     DEFINE_MATH_TEST(Log1p,
+(gdb) list
+252       std::log,   CallLog,   +FLT_MIN,   +FLT_MAX,    1,
+253       std::log,   CallLog,   +DBL_MIN,   +DBL_MAX,    1)
+254     DEFINE_MATH_TEST(Log10,
+255       std::log10, CallLog10, +FLT_MIN,   +FLT_MAX,    2,
+256       std::log10, CallLog10, +DBL_MIN,   +DBL_MAX,    2)
+257     DEFINE_MATH_TEST(Log1p,
+258       std::log1p, CallLog1p, +0.0f,      +1e37f,      3,  // NEON is 3 instead of 2
+259       std::log1p, CallLog1p, +0.0,       +DBL_MAX,    2)
+260     DEFINE_MATH_TEST(Log2,
+261       std::log2,  CallLog2,  +FLT_MIN,   +FLT_MAX,    2,
+(gdb) quit
+A debugging session is active.
