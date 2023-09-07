@@ -1,0 +1,23 @@
+950: f64: Log1p(5.52672e-20) expected 5.52672e-20 actual 0 ulp 4.31904e+18 max ulp 2
+950: f64: Log1p(8.30092e-20) expected 8.30092e-20 actual 0 ulp 4.32134e+18 max ulp 2
+950: f64: Log1p(1.13082e-19) expected 1.13082e-19 actual 0 ulp 4.32365e+18 max ulp 2
+950: f64: Log1p(1.68566e-19) expected 1.68566e-19 actual 0 ulp 4.32595e+18 max ulp 2
+950: f64: Log1p(2.3126e-19) expected 2.3126e-19 actual 0 ulp 4.32826e+18 max ulp 2
+950: f64: Log1p(3.42228e-19) expected 3.42228e-19 actual 0 ulp 4.33056e+18 max ulp 2
+950: f64: Log1p(4.72712e-19) expected 4.72712e-19 actual 0 ulp 4.33287e+18 max ulp 2
+950: f64: Log1p(6.94648e-19) expected 6.94648e-19 actual 0 ulp 4.33517e+18 max ulp 2
+950: f64: Log1p(9.65807e-19) expected 9.65807e-19 actual 0 ulp 4.33748e+18 max ulp 2
+950: f64: Log1p(1.40968e-18) expected 1.40968e-18 actual 0 ulp 4.33978e+18 max ulp 2
+950: f64: Log1p(1.97238e-18) expected 1.97238e-18 actual 0 ulp 4.34209e+18 max ulp 2
+950: f64: Log1p(2.86013e-18) expected 2.86013e-18 actual 0 ulp 4.34439e+18 max ulp 2
+950: f64: Log1p(4.02629e-18) expected 4.02629e-18 actual 0 ulp 4.3467e+18 max ulp 2
+950: f64: Log1p(5.80178e-18) expected 5.80178e-18 actual 0 ulp 4.349e+18 max ulp 2
+950: f64: Log1p(8.21565e-18) expected 8.21565e-18 actual 0 ulp 4.35131e+18 max ulp 2
+950: f64: Log1p(1.17666e-17) expected 1.17666e-17 actual 0 ulp 4.35361e+18 max ulp 2
+950: f64: Log1p(1.67574e-17) expected 1.67574e-17 actual 0 ulp 4.35592e+18 max ulp 2
+950: f64: Log1p(2.38594e-17) expected 2.38594e-17 actual 0 ulp 4.35822e+18 max ulp 2
+950: f64: Log1p(3.41671e-17) expected 3.41671e-17 actual 0 ulp 4.36052e+18 max ulp 2
+950: f64: Log1p(4.8371e-17) expected 4.8371e-17 actual 0 ulp 4.36283e+18 max ulp 2
+950: f64: Log1p(6.96387e-17) expected 6.96387e-17 actual 0 ulp 4.36513e+18 max ulp 2
+950: f64: Log1p(9.80466e-17) expected 9.80466e-17 actual 0 ulp 4.36744e+18 max ulp 2
+950: f64: Log1p max_ulp 4.36744e+18
