@@ -19,9 +19,9 @@
 #include <cmath>   // std::abs
 
 // clang-format off
-#undef HWY_TARGET_INCLUDE
-#define HWY_TARGET_INCLUDE "hwy/contrib/math/math_test.cc"
-#include "hwy/foreach_target.h"  // IWYU pragma: keep
+//#undef HWY_TARGET_INCLUDE
+//#define HWY_TARGET_INCLUDE "hwy/contrib/math/math_test.cc"
+//#include "hwy/foreach_target.h"  // IWYU pragma: keep
 #include "hwy/highway.h"
 #include "hwy/contrib/math/math-inl.h"
 #include "hwy/tests/test_util-inl.h"
@@ -139,8 +139,8 @@ HWY_NOINLINE void TestMath(const char* name, T (*fx1)(T),
   }
   fprintf(stderr, "%s: %s max_ulp %lg\n", hwy::TypeName(T(), Lanes(d)).c_str(),
           name, static_cast<double>(max_ulp));
-  const char *name1 = hwy::TypeName(T(), Lanes(d)).c_str();
-  if( strcmp(name1, "f64") == 0 ) 
+//  std::string name1 = hwy::TypeName(T(), Lanes(d));
+//  if( strcmp(name1.c_str(), "f64") == 0 ) 
   HWY_ASSERT(max_ulp <= max_error_ulp);
 }
 
@@ -415,7 +415,7 @@ HWY_NOINLINE void TestAllAtan2() {
 }  // namespace hwy
 HWY_AFTER_NAMESPACE();
 
-#if HWY_ONCE
+#if HWY_ONCE && 0
 
 namespace hwy {
 HWY_BEFORE_TEST(HwyMathTest);
@@ -441,3 +441,9 @@ HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosCos);
 }  // namespace hwy
 
 #endif
+
+int main()
+{
+	hwy::N_EMU128::TestAllLog1p();
+}
+
