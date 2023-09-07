@@ -444,6 +444,10 @@ HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosCos);
 
 int main()
 {
-	hwy::N_EMU128::TestAllLog1p();
+//	hwy::N_EMU128::TestAllLog1p();
+	double b1{};
+	hwy::N_EMU128::Simd<double, 1u, 0> b2{};
+ hwy::N_EMU128::TestLog1p testLog1p;
+  testLog1p.operator()(b1, b2);
 }
 
