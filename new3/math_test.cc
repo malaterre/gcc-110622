@@ -1,5 +1,6 @@
-#include "hwy/highway.h"
-#include "gtest/gtest.h"
+#include "hwy/ops/emu128-inl.h"
+#include "hwy/ops/generic_ops-inl.h"
+#include "gtest/gtest_pred_impl.h"
 namespace hwy {
 template <typename T, typename TU = MakeUnsigned<T>>
 TU ComputeUlpDelta(T expected, T actual) {
