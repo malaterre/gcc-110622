@@ -1,6 +1,15 @@
 #include "hwy/highway.h"
+#include "gtest/gtest.h"
 namespace hwy {
-namespace HWY_NAMESPACE {
+template <typename T, typename TU = MakeUnsigned<T>>
+TU ComputeUlpDelta(T expected, T actual) {
+  TU ux, uy;
+  CopySameSize(&expected, &ux);
+  CopySameSize(&actual, &uy);
+  TU ulp = uy - HWY_MIN(ux, uy);
+  return ulp;
+}
+namespace N_EMU128 {
 void CallAcos();
 void CallAcosh();
 void CallAsin();
@@ -22,12 +31,9 @@ template <class> struct LogImpl {
                Set(di64, 1023));
   }
   template <class D, class V> V LogPoly(D d, V x) {
-    V k0 = Set(d, 0.6666666666666735130), k1 = Set(d, 0.3999999999940941908),
-      k2 = Set(d, 0.2857142874366239149), k3 = Set(d, 0.2222219843214978396),
-      k4 = Set(d, 0.1818357216161805012), k5 = Set(d, 0.1531383769920937332),
-      k6 = Set(d, 0.1479819860511658591), x2 = Mul(x, x), x4 = Mul(x2, x2);
-    return MulAdd(MulAdd(MulAdd(MulAdd(k6, x4, k4), x4, k2), x4, k0), x2,
-                  Mul(MulAdd(MulAdd(k5, x4, k3), x4, k1), x4));
+    V k0 = Set(d, 0.6666666666666735130), k1, k2, k3, k4, k5, k6, x2 = x, x4;
+    MulAdd(MulAdd(k5, x4, k3), x4, k1);
+    return MulAdd(MulAdd(MulAdd(MulAdd(k6, x4, k4), x4, k2), x4, k0), x2, x4);
   }
 };
 template <class D, class V, int> V Log(V x) {
@@ -37,7 +43,7 @@ template <class D, class V, int> V Log(V x) {
   bool kIsF32 = 0;
   V kLn2Hi = Set(d, 0.693147180369123816490),
     kLn2Lo = Set(d, 1.90821492927058770002e-10), kOne = Set(d, 1.0), kMinNormal,
-    kScale, exp;
+    kScale, exp, z;
   using TI = MakeSigned<T>;
   Rebind<TI, D> di;
   using VI = decltype(Zero(di));
@@ -56,26 +62,18 @@ template <class D, class V, int> V Log(V x) {
   V y = Or(And(x, BitCast(d, kLowerBits)),
            BitCast(d, Add(And(exp_bits, kManMask), kMagic)));
   V ym1 = Sub(y, kOne);
-  V z = Div(ym1, Add(y, kOne));
-  return MulSub(
-      exp, kLn2Hi,
-      Sub(MulSub(z, Sub(ym1, impl.LogPoly(d, z)), Mul(exp, kLn2Lo)), ym1));
+  return MulSub(exp, kLn2Hi,
+                Sub(MulSub(z, impl.LogPoly(d, z), Mul(exp, kLn2Lo)), ym1));
 }
 template <class D, class V> V Log1p(D d, V x) {
   using T = TFromD<D>;
-  V kOne = Set(d, T(1.0)), y = Add(x, kOne);
+  V kOne = Set(d, T(1.0)), y = Add(x, kOne),
+    __trans_tmp_1 = Log<D, V, false>(y);
   auto is_pole = Eq(y, kOne);
   auto divisor = Sub(y, kOne);
-  V __trans_tmp_1 = Log<D, V, false>(y);
   auto non_pole = Mul(__trans_tmp_1, Div(x, divisor));
   return IfThenElse(is_pole, x, non_pole);
 }
-} // namespace HWY_NAMESPACE
-} // namespace hwy
-#include "hwy/tests/hwy_gtest.h"
-#include "hwy/tests/test_util.h"
-namespace hwy {
-namespace N_EMU128 {
 template <class Out, class In> Out BitCast(In in) {
   Out out;
   CopyBytes<sizeof(out)>(&in, &out);
@@ -98,7 +96,7 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
       T value = BitCast<T> HWY_MIN(value_bits, stop);
       T actual = GetLane(fxN(d, Set(d, value)));
       T expected = fx1(value);
-      auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
+      auto ulp = ComputeUlpDelta(actual, expected);
       max_ulp = HWY_MAX(max_ulp, ulp);
       fprintf(stderr, name, max_error_ulp);
     }
