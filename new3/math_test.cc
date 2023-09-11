@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <condition_variable>
+#include <float.h>
 #include <iostream>
+#include <math.h>
 #define HWY_STR_IMPL(macro) #macro
 #define HWY_STR() HWY_STR_IMPL()
 #define HWY_MIN(a, b) (a < b ? a : b)
@@ -32,7 +34,6 @@ template <typename From, typename To>
 static void CopySameSize(From *from, To to) {
   CopyBytes<sizeof(From)>(from, to);
 }
-#include <math.h>
 template <class V> using VecArg = V;
 namespace detail {
 size_t ScaleByPower(size_t, int);
@@ -231,7 +232,6 @@ template <class V> auto Lt(V b) {
   V a;
   return a < b;
 }
-#include <float.h>
 template <typename T, typename TU = MakeUnsigned<T>>
 TU ComputeUlpDelta(T expected, T actual) {
   TU ux, uy;
