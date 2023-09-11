@@ -326,29 +326,22 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     template <class T, class D> void operator()(T, D d) {                      \
       TestMath(HWY_STR(), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);       \
     }                                                                          \
-  };
+  }
 double kNearOneD, main_b1;
 uint64_t Cos64ULP;
-DEFINE_MATH_TEST(, , , , , , acos, CallAcos, 1.0, 1.0, 2)
-DEFINE_MATH_TEST(Acosh, , , , , , acosh, CallAcosh, 1.0, DBL_MAX, 3)
-    DEFINE_MATH_TEST(Asin, , , , , , asin, CallAsin, 1.0, 1.0, 2)
-        DEFINE_MATH_TEST(Asinh, , , , , , asinh, CallAsinh, DBL_MAX, DBL_MAX,
-                         3) DEFINE_MATH_TEST(Atan, , , , , , atan, CallAtan,
-                                             DBL_MAX, DBL_MAX, 3)
-            DEFINE_MATH_TEST(Atanh, , , , , , atanh, CallAtanh, kNearOneD,
-                             kNearOneD, 3) DEFINE_MATH_TEST(Cos, , , , , , cos,
-                                                            CallCos, 39000.0,
-                                                            39000.0, Cos64ULP)
-                DEFINE_MATH_TEST(Exp, , , , , , exp, CallExp, DBL_MAX, 104.0, 1)
-                    DEFINE_MATH_TEST(Expm1, , , , , , expm1, CallExpm1, DBL_MAX,
-                                     104.0, 4)
-                        DEFINE_MATH_TEST(Log, , , , , , log, CallLog, DBL_MIN,
-                                         DBL_MAX, 1)
-                            DEFINE_MATH_TEST(Log10, , , , , , log10, CallLog10,
-                                             DBL_MIN, DBL_MAX, 2)
-                                DEFINE_MATH_TEST(Log1p, , , , , , log1p,
-                                                 CallLog1p, 0.0, DBL_MAX,
-                                                 2) int main() {
+//DEFINE_MATH_TEST(, , , , , , acos, CallAcos, 1.0, 1.0, 2);
+//DEFINE_MATH_TEST(Acosh, , , , , , acosh, CallAcosh, 1.0, DBL_MAX, 3);
+//DEFINE_MATH_TEST(Asin, , , , , , asin, CallAsin, 1.0, 1.0, 2);
+//DEFINE_MATH_TEST(Asinh, , , , , , asinh, CallAsinh, DBL_MAX, DBL_MAX, 3);
+//DEFINE_MATH_TEST(Atan, , , , , , atan, CallAtan, DBL_MAX, DBL_MAX, 3);
+//DEFINE_MATH_TEST(Atanh, , , , , , atanh, CallAtanh, kNearOneD, kNearOneD, 3);
+//DEFINE_MATH_TEST(Cos, , , , , , cos, CallCos, 39000.0, 39000.0, Cos64ULP);
+//DEFINE_MATH_TEST(Exp, , , , , , exp, CallExp, DBL_MAX, 104.0, 1);
+//DEFINE_MATH_TEST(Expm1, , , , , , expm1, CallExpm1, DBL_MAX, 104.0, 4);
+//DEFINE_MATH_TEST(Log, , , , , , log, CallLog, DBL_MIN, DBL_MAX, 1);
+//DEFINE_MATH_TEST(Log10, , , , , , log10, CallLog10, DBL_MIN, DBL_MAX, 2);
+DEFINE_MATH_TEST(Log1p, , , , , , log1p, CallLog1p, 0.0, DBL_MAX, 2);
+int main() {
   Simd<double, 1, 0> b2;
   TestLog1p testLog1p;
   testLog1p(main_b1, b2);
