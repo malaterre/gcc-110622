@@ -1,14 +1,66 @@
-#include "hwy/ops/shared-inl.h"
-namespace hwy {
-namespace HWY_NAMESPACE {
+#include <assert.h>
+#include <condition_variable>
+#include <iostream>
+#define HWY_STR_IMPL(macro) #macro
+#define HWY_STR() HWY_STR_IMPL()
+#define HWY_MIN(a, b) (a < b ? a : b)
+#define HWY_MAX(a, b) a ? a : b
+template <size_t> struct SizeTag {};
+template <typename> struct Relations {
+  using Unsigned = uint64_t;
+  enum { is_float };
+};
+template <> struct Relations<double> {
+  using Unsigned = uint64_t;
+  using Signed = int64_t;
+  enum { is_signed = 1, is_float = 1 };
+};
+template <typename T> using MakeUnsigned = typename Relations<T>::Unsigned;
+template <typename T> using MakeSigned = typename Relations<T>::Signed;
+template <typename T, class R = Relations<T>>
+auto TypeTag() -> SizeTag<(R::is_signed + R::is_float) << 8> {
+  return SizeTag<R::is_signed + R::is_float << 8>();
+}
+template <typename T, class R = Relations<T>> auto IsFloatTag() {
+  return SizeTag < R::is_float ? 512 : 1024 > ();
+}
+template <size_t kBytes, typename From, typename To>
+static void CopyBytes(From from, To to) {
+  __builtin_memcpy(static_cast<void *>(to), from, kBytes);
+}
+template <typename From, typename To>
+static void CopySameSize(From *from, To to) {
+  CopyBytes<sizeof(From)>(from, to);
+}
+#include <math.h>
+template <class V> using VecArg = V;
+namespace detail {
+size_t ScaleByPower(size_t, int);
+}
+template <typename Lane, size_t N, int> struct Simd {
+  using T = Lane;
+  static constexpr size_t kWhole = N;
+  static constexpr int kFrac = 0;
+  static constexpr size_t kPrivateLanes =
+      HWY_MAX(1, detail::ScaleByPower(kWhole, kFrac));
+  template <typename> static constexpr int RebindPow2() { return 0; }
+  template <int, size_t> static constexpr size_t NewN() { return 0; }
+  template <typename NewT>
+  using Rebind =
+      Simd<NewT, NewN<RebindPow2<NewT>(), kPrivateLanes>(), RebindPow2<NewT>()>;
+};
+template <class D> using TFromD = typename D::T;
+#define HWY_MAX_LANES_D(D) D::kPrivateLanes
+template <class D> size_t MaxLanes(D) { return HWY_MAX_LANES_D(D); }
+template <class T, class D> using Rebind = typename D::template Rebind<T>;
+template <class D> using RebindToUnsigned = Rebind<MakeUnsigned<D>, D>;
 template <typename T, size_t N> struct Vec128 {
   using PrivateT = T;
   static constexpr size_t kPrivateN = N;
-  T raw[16 / sizeof(T)]{};
+  T raw[sizeof(T)]{};
 };
 template <typename T, size_t = sizeof(T)> struct Mask128 {
   static int FromBool(bool b) { return b; }
-  int bits[sizeof(int)];
 };
 template <class V> using DFromV = Simd<typename V::PrivateT, V::kPrivateN, 0>;
 template <class D> Vec128<TFromD<D>, HWY_MAX_LANES_D(D)> Zero(D);
@@ -24,16 +76,9 @@ template <class D, typename T2> VFromD<D> Set(D d, T2 t) {
     v.raw[i] = t;
   return v;
 }
-template <typename T, size_t N> void Not(Vec128<T, N> v) {
-  DFromV<decltype(v)> d;
-  RebindToUnsigned<decltype(d)> du;
-  using TU = TFromD<decltype(du)>;
-  VFromD<decltype(d)> vu;
-  for (size_t i = 0; i; ++i)
-    vu.raw[i] = TU();
-}
 template <typename T, size_t N>
-HWY_API Vec128<T, N> And(Vec128<T, N> a, Vec128<T, N> b) {
+inline __attribute__((always_inline)) Vec128<T, N> And(Vec128<T, N> a,
+                                                       Vec128<T, N> b) {
   DFromV<decltype(a)> d;
   RebindToUnsigned<decltype(d)> du;
   auto au = BitCast(du, a), bu = BitCast(du, b);
@@ -41,13 +86,12 @@ HWY_API Vec128<T, N> And(Vec128<T, N> a, Vec128<T, N> b) {
     au.raw[i] &= bu.raw[i];
   return BitCast(d, au);
 }
-template <typename T, size_t N>
-HWY_API Vec128<T, N> AndNot(Vec128<T, N> a, Vec128<T, N> b) {
-  Not(a);
+template <typename T, size_t N> Vec128<T, N> AndNot(Vec128<T, N> b) {
   return b;
 }
 template <typename T, size_t N>
-HWY_API Vec128<T, N> Or(Vec128<T, N> a, Vec128<T, N> b) {
+inline __attribute__((always_inline)) Vec128<T, N> Or(Vec128<T, N> a,
+                                                      Vec128<T, N> b) {
   DFromV<decltype(a)> d;
   RebindToUnsigned<decltype(d)> du;
   auto au = BitCast(du, a), bu = BitCast(du, b);
@@ -56,9 +100,10 @@ HWY_API Vec128<T, N> Or(Vec128<T, N> a, Vec128<T, N> b) {
   return BitCast(d, au);
 }
 template <typename T, size_t N>
-HWY_API Vec128<T, N> IfVecThenElse(Vec128<T, N> mask, Vec128<T, N> yes,
-                                   Vec128<T, N> no) {
-  return And(mask, yes), AndNot(mask, no);
+Vec128<T, N> IfVecThenElse(Vec128<T, N> mask, Vec128<T, N> yes,
+                           Vec128<T, N> no) {
+  And(mask, yes);
+  return AndNot(no);
 }
 template <typename T, size_t N> Vec128<T, N> VecFromMask(Mask128<T, N> mask) {
   Vec128<T, N> v;
@@ -66,9 +111,9 @@ template <typename T, size_t N> Vec128<T, N> VecFromMask(Mask128<T, N> mask) {
   return v;
 }
 template <typename T, size_t N>
-HWY_API Vec128<T, N> IfThenElse(Mask128<T, N> mask, Vec128<T, N> yes,
-                                Vec128<T, N> no) {
-  return IfVecThenElse(VecFromMask(mask), yes, no);
+Vec128<T, N> IfThenElse(Mask128<T, N> mask, Vec128<T, N> yes, Vec128<T, N> no) {
+  Vec128<T, N> __trans_tmp_9 = VecFromMask(mask);
+  return IfVecThenElse(__trans_tmp_9, yes, no);
 }
 template <int kBits, typename T, size_t N>
 Vec128<T, N> ShiftRight(Vec128<T, N> v) {
@@ -78,7 +123,7 @@ Vec128<T, N> ShiftRight(Vec128<T, N> v) {
 }
 namespace detail {
 template <typename T, size_t N>
-Vec128<T, N> Add(NonFloatTag, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Add(SizeTag<1024>, Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i) {
     uint64_t a64(a.raw[i]);
     uint64_t b64(b.raw[i]);
@@ -87,7 +132,7 @@ Vec128<T, N> Add(NonFloatTag, Vec128<T, N> a, Vec128<T, N> b) {
   return a;
 }
 template <typename T, size_t N>
-Vec128<T, N> Sub(NonFloatTag, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Sub(SizeTag<1024>, Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i) {
     uint64_t a64(a.raw[i]);
     uint64_t b64(b.raw[i]);
@@ -96,13 +141,13 @@ Vec128<T, N> Sub(NonFloatTag, Vec128<T, N> a, Vec128<T, N> b) {
   return a;
 }
 template <typename T, size_t N>
-Vec128<T, N> Add(FloatTag, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Add(SizeTag<512>, Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] += b.raw[i];
   return a;
 }
 template <typename T, size_t N>
-Vec128<T, N> Sub(FloatTag, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Sub(SizeTag<512>, Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] -= b.raw[i];
   return a;
@@ -110,15 +155,17 @@ Vec128<T, N> Sub(FloatTag, Vec128<T, N> a, Vec128<T, N> b) {
 } // namespace detail
 template <typename T, size_t N>
 Vec128<T, N> operator-(Vec128<T, N> a, Vec128<T, N> b) {
-  return detail::Sub(IsFloatTag<T>(), a, b);
+  auto __trans_tmp_13 = IsFloatTag<T>();
+  return detail::Sub(__trans_tmp_13, a, b);
 }
 template <typename T, size_t N>
 Vec128<T, N> operator+(Vec128<T, N> a, Vec128<T, N> b) {
-  return detail::Add(IsFloatTag<T>(), a, b);
+  auto __trans_tmp_14 = IsFloatTag<T>();
+  return detail::Add(__trans_tmp_14, a, b);
 }
 namespace detail {
 template <typename T, size_t N>
-Vec128<T, N> Mul(FloatTag, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Mul(SizeTag<512>, Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] *= b.raw[i];
   return a;
@@ -133,11 +180,6 @@ Vec128<T, N> operator/(Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] = a.raw[i] / b.raw[i];
   return a;
-}
-template <typename T, size_t N>
-Vec128<T, N> MulAdd(Vec128<T, N> mul, Vec128<T, N> x, Vec128<T, N> add) {
-  Vec128<T, N> __trans_tmp_2 = mul * x;
-  return __trans_tmp_2 + add;
 }
 template <typename T, size_t N>
 Vec128<T, N> MulSub(Vec128<T, N> mul, Vec128<T, N> x, Vec128<T, N> sub) {
@@ -162,7 +204,7 @@ Mask128<T, N> operator<(Vec128<T, N> a, Vec128<T, N> b) {
 }
 namespace detail {
 template <typename TFrom, typename ToT, size_t N, int kPow2>
-Vec128<ToT, N> ConvertTo(NonFloatTag, Simd<ToT, N, kPow2>,
+Vec128<ToT, N> ConvertTo(SizeTag<1024>, Simd<ToT, N, kPow2>,
                          Vec128<TFrom, N> from) {
   Vec128<ToT, N> ret;
   for (size_t i = 0; i < N; ++i)
@@ -172,7 +214,8 @@ Vec128<ToT, N> ConvertTo(NonFloatTag, Simd<ToT, N, kPow2>,
 } // namespace detail
 template <class DTo, typename TFrom, size_t N>
 VFromD<DTo> ConvertTo(DTo d, Vec128<TFrom, N> from) {
-  return detail::ConvertTo(IsFloatTag<TFrom>(), d, from);
+  auto __trans_tmp_15 = IsFloatTag<TFrom>();
+  return detail::ConvertTo(__trans_tmp_15, d, from);
 }
 template <typename T, size_t N> T GetLane(Vec128<T, N> v) { return v.raw[0]; }
 template <class D> using Vec = decltype(Zero(D()));
@@ -188,10 +231,7 @@ template <class V> auto Lt(V b) {
   V a;
   return a < b;
 }
-} // namespace HWY_NAMESPACE
-} // namespace hwy
-#include "gtest/internal/gtest-internal.h"
-namespace hwy {
+#include <float.h>
 template <typename T, typename TU = MakeUnsigned<T>>
 TU ComputeUlpDelta(T expected, T actual) {
   TU ux, uy;
@@ -200,7 +240,6 @@ TU ComputeUlpDelta(T expected, T actual) {
   TU ulp = uy - HWY_MIN(ux, uy);
   return ulp;
 }
-namespace N_EMU128 {
 void CallAcos();
 void CallAcosh();
 void CallAsin();
@@ -213,55 +252,45 @@ void CallExpm1();
 void CallLog();
 void CallLog10();
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
-template <class> struct LogImpl {
+struct LogImpl {
   template <class D, class V>
   Vec<Rebind<int64_t, D>> Log2p1NoSubnormal(D, V x) {
     Rebind<int64_t, D> di64, du64;
-    return Sub(BitCast(di64, ShiftRight<52>(BitCast(du64, x))),
-               Set(di64, 1023));
-  }
-  template <class D, class V> V LogPoly(D d, V x) {
-    V k0 = Set(d, 0.6666666666666735130), k1, k2, k3, k4, k5, k6, x2 = x, x4;
-    MulAdd(MulAdd(k5, x4, k3), x4, k1);
-    return MulAdd(MulAdd(MulAdd(MulAdd(k6, x4, k4), x4, k2), x4, k0), x2, x4);
+    return Sub(ShiftRight<52>(BitCast(du64, x)), Set(di64, 1023));
   }
 };
 template <class D, class V, int> V Log(V x) {
   D d;
-  using T = TFromD<D>;
-  LogImpl<T> impl;
+  LogImpl impl;
   bool kIsF32 = 0;
   V kLn2Hi = Set(d, 0.693147180369123816490),
     kLn2Lo = Set(d, 1.90821492927058770002e-10), kOne = Set(d, 1.0), kMinNormal,
-    kScale, exp, z;
-  using TI = MakeSigned<T>;
-  Rebind<TI, D> di;
+    kScale, exp, z, __trans_tmp_12;
+  Rebind<MakeSigned<TFromD<D>>, D> di;
   using VI = decltype(Zero(di));
-  VI kLowerBits = Set(di, 4294967295);
-  VI kMagic = Set(di, 4604544269498187776);
-  VI kExpMask = Set(di, 4607182418800017408);
-  VI kExpScale;
-  VI kManMask = Set(di, kIsF32 ? 5 : 4503595332403200);
-  VI exp_bits;
+  VI kLowerBits = Set(di, 4294967295), kMagic = Set(di, 4604544269498187776),
+     kExpMask = Set(di, 4607182418800017408), kExpScale,
+     kManMask = Set(di, kIsF32 ? 5 : 4503595332403200), exp_bits,
+     exp_scale = kExpScale;
   auto is_denormal = Lt(kMinNormal);
   IfThenElse(is_denormal, kScale, x);
-  VI exp_scale = kExpScale;
   Add(exp_scale, impl.Log2p1NoSubnormal(d, exp_bits));
   exp_bits = Add(BitCast(di, x), Sub(kExpMask, kMagic));
   exp = ConvertTo(d, impl.Log2p1NoSubnormal(d, exp_bits));
-  V y = Or(And(x, BitCast(d, kLowerBits)),
-           BitCast(d, Add(And(exp_bits, kManMask), kMagic)));
+  VFromD<D> __trans_tmp_10 = BitCast(d, kLowerBits),
+            __trans_tmp_11 = BitCast(d, Add(And(exp_bits, kManMask), kMagic));
+  V y = Or(And(x, __trans_tmp_10), __trans_tmp_11);
   V ym1 = Sub(y, kOne);
-  return MulSub(exp, kLn2Hi,
-                Sub(MulSub(z, impl.LogPoly(d, z), Mul(exp, kLn2Lo)), ym1));
+  V __trans_tmp_6 = Mul(exp, kLn2Lo);
+  V __trans_tmp_5 = Sub(MulSub(z, __trans_tmp_12, __trans_tmp_6), ym1);
+  return MulSub(exp, kLn2Hi, __trans_tmp_5);
 }
 template <class D, class V> V Log1p(D d, V x) {
-  using T = TFromD<D>;
-  V kOne = Set(d, T(1.0)), y = Add(x, kOne),
-    __trans_tmp_1 = Log<D, V, false>(y);
+  V kOne = Set(d, 1.0), y = Add(x, kOne), __trans_tmp_1 = Log<D, V, false>(y);
   auto is_pole = Eq(kOne);
   auto divisor = Sub(y, kOne);
-  auto non_pole = Mul(__trans_tmp_1, Div(x, divisor));
+  V __trans_tmp_7 = Div(x, divisor);
+  auto non_pole = Mul(__trans_tmp_1, __trans_tmp_7);
   return IfThenElse(is_pole, x, non_pole);
 }
 template <class Out, class In> Out BitCast(In in) {
@@ -273,25 +302,23 @@ template <class T, class D>
 void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
               T min, T max, uint64_t max_error_ulp) {
   using UintT = MakeUnsigned<T>;
-  UintT min_bits(min);
-  UintT max_bits = BitCast<UintT>(max);
+  UintT min_bits(min), max_bits = BitCast<UintT>(max), kSamplesPerRange(4000);
   UintT ranges[][2]{{min_bits, max_bits}};
   uint64_t max_ulp = 0;
-  UintT kSamplesPerRange(4000);
   for (int range_index = 0; range_index < 1; ++range_index) {
-    UintT start = ranges[range_index][0];
-    UintT stop = ranges[range_index][1];
-    UintT step(stop / kSamplesPerRange);
+    UintT start = min_bits, stop = ranges[range_index][1],
+          step(stop / kSamplesPerRange);
     for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
       T value = BitCast<T> HWY_MIN(value_bits, stop);
-      T actual = GetLane(fxN(d, Set(d, value)));
+      VFromD<D> __trans_tmp_8 = Set(d, value);
+      T actual = GetLane(fxN(d, __trans_tmp_8));
       T expected = fx1(value);
       auto ulp = ComputeUlpDelta(actual, expected);
       max_ulp = HWY_MAX(max_ulp, ulp);
       fprintf(stderr, name, max_error_ulp);
     }
   }
-  HWY_ASSERT(max_ulp <= max_error_ulp);
+  assert(max_ulp <= max_error_ulp);
 }
 #define DEFINE_MATH_TEST(NAME, F32x1, F32xN, F32_MIN, F32_MAX, F32_ERROR,      \
                          F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)            \
@@ -300,7 +327,7 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
       TestMath(HWY_STR(), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);       \
     }                                                                          \
   };
-double kNearOneD;
+double kNearOneD, main_b1;
 uint64_t Cos64ULP;
 DEFINE_MATH_TEST(, , , , , , acos, CallAcos, 1.0, 1.0, 2)
 DEFINE_MATH_TEST(Acosh, , , , , , acosh, CallAcosh, 1.0, DBL_MAX, 3)
@@ -320,12 +347,9 @@ DEFINE_MATH_TEST(Acosh, , , , , , acosh, CallAcosh, 1.0, DBL_MAX, 3)
                             DEFINE_MATH_TEST(Log10, , , , , , log10, CallLog10,
                                              DBL_MIN, DBL_MAX, 2)
                                 DEFINE_MATH_TEST(Log1p, , , , , , log1p,
-                                                 CallLog1p, 0.0, DBL_MAX, 2)
-} // namespace N_EMU128
-} // namespace hwy
-int main() {
-  double b1{};
-  hwy::N_EMU128::Simd<double, 1, 0> b2;
-  hwy::N_EMU128::TestLog1p testLog1p;
-  testLog1p(b1, b2);
+                                                 CallLog1p, 0.0, DBL_MAX,
+                                                 2) int main() {
+  Simd<double, 1, 0> b2;
+  TestLog1p testLog1p;
+  testLog1p(main_b1, b2);
 }
