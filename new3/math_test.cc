@@ -240,17 +240,6 @@ TU ComputeUlpDelta(T expected, T actual) {
   TU ulp = uy - HWY_MIN(ux, uy);
   return ulp;
 }
-void CallAcos();
-void CallAcosh();
-void CallAsin();
-void CallAsinh();
-void CallAtan();
-void CallAtanh();
-void CallCos();
-void CallExp();
-void CallExpm1();
-void CallLog();
-void CallLog10();
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
 struct LogImpl {
   template <class D, class V>
@@ -327,19 +316,7 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
       TestMath(HWY_STR(), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);       \
     }                                                                          \
   }
-double kNearOneD, main_b1;
-uint64_t Cos64ULP;
-//DEFINE_MATH_TEST(, , , , , , acos, CallAcos, 1.0, 1.0, 2);
-//DEFINE_MATH_TEST(Acosh, , , , , , acosh, CallAcosh, 1.0, DBL_MAX, 3);
-//DEFINE_MATH_TEST(Asin, , , , , , asin, CallAsin, 1.0, 1.0, 2);
-//DEFINE_MATH_TEST(Asinh, , , , , , asinh, CallAsinh, DBL_MAX, DBL_MAX, 3);
-//DEFINE_MATH_TEST(Atan, , , , , , atan, CallAtan, DBL_MAX, DBL_MAX, 3);
-//DEFINE_MATH_TEST(Atanh, , , , , , atanh, CallAtanh, kNearOneD, kNearOneD, 3);
-//DEFINE_MATH_TEST(Cos, , , , , , cos, CallCos, 39000.0, 39000.0, Cos64ULP);
-//DEFINE_MATH_TEST(Exp, , , , , , exp, CallExp, DBL_MAX, 104.0, 1);
-//DEFINE_MATH_TEST(Expm1, , , , , , expm1, CallExpm1, DBL_MAX, 104.0, 4);
-//DEFINE_MATH_TEST(Log, , , , , , log, CallLog, DBL_MIN, DBL_MAX, 1);
-//DEFINE_MATH_TEST(Log10, , , , , , log10, CallLog10, DBL_MIN, DBL_MAX, 2);
+double main_b1;
 DEFINE_MATH_TEST(Log1p, , , , , , log1p, CallLog1p, 0.0, DBL_MAX, 2);
 int main() {
   Simd<double, 1, 0> b2;
