@@ -23,7 +23,9 @@ template <typename T, class R = Relations<T>>
 auto TypeTag() -> SizeTag<(R::is_signed + R::is_float) << 8> {
   return SizeTag<R::is_signed + R::is_float << 8>();
 }
-template <typename T, class R = Relations<T>> auto IsFloatTag() {
+template <typename T, class R = Relations<T>> constexpr auto IsFloatTag() ->
+  SizeTag < R::is_float ? 512 : 1024 > 
+{
   return SizeTag < R::is_float ? 512 : 1024 > ();
 }
 template <size_t kBytes, typename From, typename To>
@@ -224,12 +226,10 @@ template <class V> V Add(V a, V b) { return a + b; }
 template <class V> V Sub(V a, V b) { return a - b; }
 template <class V> V Mul(V a, V b) { return a * b; }
 template <class V> V Div(V a, V b) { return a / b; }
-template <class V> auto Eq(V b) {
-  V a;
+template <class V> auto Eq(V a, V b) -> decltype(a==b) {
   return a == b;
 }
-template <class V> auto Lt(V b) {
-  V a;
+template <class V> auto Lt(V a, V b) -> decltype(a==b) {
   return a < b;
 }
 template <typename T, typename TU = MakeUnsigned<T>>
@@ -261,7 +261,7 @@ template <class D, class V, int> V Log(V x) {
      kExpMask = Set(di, 4607182418800017408), kExpScale,
      kManMask = Set(di, kIsF32 ? 5 : 4503595332403200), exp_bits,
      exp_scale = kExpScale;
-  auto is_denormal = Lt(kMinNormal);
+  auto is_denormal = Lt(x, kMinNormal);
   IfThenElse(is_denormal, kScale, x);
   Add(exp_scale, impl.Log2p1NoSubnormal(d, exp_bits));
   exp_bits = Add(BitCast(di, x), Sub(kExpMask, kMagic));
@@ -276,7 +276,7 @@ template <class D, class V, int> V Log(V x) {
 }
 template <class D, class V> V Log1p(D d, V x) {
   V kOne = Set(d, 1.0), y = Add(x, kOne), __trans_tmp_1 = Log<D, V, false>(y);
-  auto is_pole = Eq(kOne);
+  auto is_pole = Eq(y, kOne);
   auto divisor = Sub(y, kOne);
   V __trans_tmp_7 = Div(x, divisor);
   auto non_pole = Mul(__trans_tmp_1, __trans_tmp_7);
