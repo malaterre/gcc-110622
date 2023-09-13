@@ -121,7 +121,7 @@ HWY_NOINLINE void TestMath(const char* name, T (*fx1)(T),
       const T expected = fx1(value);
 
       // Skip small inputs and outputs on armv7, it flushes subnormals to zero.
-#if HWY_TARGET <= HWY_NEON_WITHOUT_AES && HWY_ARCH_ARM_V7
+#if HWY_TARGET <= HWY_NEON_WITHOUT_AES && HWY_ARCH_ARM_V7 && 0
       if ((std::abs(value) < 1e-37f) || (std::abs(expected) < 1e-37f)) {
         continue;
       }
@@ -130,7 +130,7 @@ HWY_NOINLINE void TestMath(const char* name, T (*fx1)(T),
       const auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
       max_ulp = HWY_MAX(max_ulp, ulp);
       if (ulp > max_error_ulp) {
-        fprintf(stderr, "%s: %s(%lg) expected %lg actual %lg ulp %lg max ulp %u\n",
+        fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
                 hwy::TypeName(T(), Lanes(d)).c_str(), name, value, expected,
                 actual, static_cast<double>(ulp),
                 static_cast<uint32_t>(max_error_ulp));
