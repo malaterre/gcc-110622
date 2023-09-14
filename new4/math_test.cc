@@ -26,8 +26,9 @@ template <class D> using TFromD = typename D::T;
 template <class D> size_t MaxLanes(D) { return HWY_MAX_LANES_D(D); }
 } // namespace N_EMU128
 } // namespace hwy
-#include "gtest/internal/gtest-internal.h"
+#include "gtest/internal/gtest-type-util.h"
 #include <cmath>
+#include <float.h>
 char TypeName_string100[1];
 namespace hwy {
 namespace N_EMU128 {
