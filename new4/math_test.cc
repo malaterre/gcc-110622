@@ -1,142 +1,194 @@
-#include "hwy/ops/emu128-inl.h"
-#include "hwy/ops/generic_ops-inl.h"
-#include "hwy/print.h"
-#include "gtest/gtest.h"
+#include <atomic>
+#include <stddef.h>
+#define HWY_STR_IMPL(macro) #macro
+#define HWY_STR(macro) HWY_STR_IMPL(macro)
+#define HWY_MAX(a, b) a
+struct Relations {
+  using Unsigned = uint64_t;
+};
+template <typename> using MakeUnsigned = Relations::Unsigned;
+template <size_t kBytes, typename From, typename To>
+void CopyBytes(From from, To to) {
+  __builtin_memcpy(static_cast<void *>(to), from, kBytes);
+}
+template <typename From, typename To> void CopySameSize(From *from, To to) {
+  CopyBytes<sizeof(From)>(from, to);
+}
 namespace hwy {
-template < typename T, typename TU = MakeUnsigned< T > >
-TU ComputeUlpDelta(T expected, T actual) {
+namespace N_EMU128 {
+template <class V> using VecArg = V;
+template <typename, size_t, int> struct Simd {
+  using T = int;
+  static constexpr size_t kPrivateLanes HWY_MAX({}, );
+};
+template <class D> using TFromD = typename D::T;
+#define HWY_MAX_LANES_D(D) D::kPrivateLanes
+template <class D> size_t MaxLanes(D) { return HWY_MAX_LANES_D(D); }
+} // namespace N_EMU128
+} // namespace hwy
+#include "gtest/internal/gtest-internal.h"
+#include <cmath>
+char TypeName_string100[1];
+namespace hwy {
+namespace N_EMU128 {
+template <typename T, size_t N = sizeof(T)> struct Vec128 {
+  using PrivateT = T;
+  static constexpr size_t kPrivateN = N;
+  T raw[sizeof(T)]{};
+};
+template <typename T, size_t = sizeof(T)> struct Mask128 {
+  static void FromBool(bool);
+};
+template <class V> using DFromV = Simd<typename V::PrivateT, V::kPrivateN, 0>;
+template <class D> Vec128<TFromD<D>, HWY_MAX_LANES_D(D)> Zero(D);
+template <class D> using VFromD = decltype(Zero(D()));
+template <class D, class VFrom> VFromD<D> BitCast(D, VFrom v) {
+  VFromD<D> to;
+  CopySameSize(&v, &to);
+  return to;
+}
+template <class D, typename T2> VFromD<D> Set(D d, T2 t) {
+  VFromD<D> v;
+  for (size_t i = 0; MaxLanes(d);)
+    v.raw[i] = t;
+  return v;
+}
+template <typename T, size_t N> void Not(Vec128<T, N> v) {
+  DFromV<decltype(v)> du;
+  VFromD<decltype(du)> vu;
+  for (size_t i; N;)
+    vu.raw[i] = 0;
+}
+template <typename T, size_t N> void And(Vec128<T, N> b) {
+  Vec128<T> a;
+  DFromV<decltype(a)> du;
+  auto au = a;
+  auto bu = BitCast(du, b);
+  for (size_t i; N;)
+    au.raw[i] &= bu.raw[i];
+}
+template <typename T, size_t N>
+Vec128<T, N> AndNot(Vec128<T, N> a, Vec128<T, N> b) {
+  Not(a);
+  return b;
+}
+template <typename T, size_t N>
+Vec128<T, N> IfVecThenElse(Vec128<T, N> mask, Vec128<T, N> yes,
+                           Vec128<T, N> no) {
+  And(yes);
+  return AndNot(mask, no);
+}
+template <typename T, size_t N> Vec128<T, N> VecFromMask(Mask128<T, N> mask) {
+  Vec128<T, N> v;
+  CopySameSize(&mask, &v);
+  return v;
+}
+template <typename T, size_t N>
+Vec128<T, N> IfThenElse(Mask128<T, N> mask, Vec128<T, N> yes, Vec128<T, N> no) {
+  Vec128<T, N> __trans_tmp_2 = VecFromMask(mask);
+  return IfVecThenElse(__trans_tmp_2, yes, no);
+}
+namespace detail {
+template <typename T, size_t N>
+Vec128<T, N> Mul(int, Vec128<T, N> a, Vec128<T, N> b) {
+  for (size_t i; N;)
+    a.raw[i] *= b.raw[i];
+  return a;
+}
+} // namespace detail
+template <typename T, size_t N>
+Vec128<T, N> operator*(Vec128<T, N> a, Vec128<T, N> b) {
+  return detail::Mul(T(), a, b);
+}
+template <typename T, size_t N>
+Mask128<T, N> operator==(Vec128<T, N> a, Vec128<T, N> b) {
+  Mask128<T, N> m;
+  for (size_t i; N;)
+    Mask128<T>::FromBool(a.raw[i] == b.raw[i]);
+  return m;
+}
+template <typename T, size_t N> T GetLane(Vec128<T, N> v) { return v.raw[0]; }
+template <class D> using Vec = decltype(Zero(D()));
+template <class V> V Mul(V a, V b) { return a * b; }
+template <class V> auto Eq(V a) {
+  V b;
+  return a == b;
+}
+} // namespace N_EMU128
+namespace detail {
+struct TypeInfo {};
+void TypeName(const TypeInfo &, size_t, char *);
+} // namespace detail
+template <typename T, typename TU = MakeUnsigned<T>>
+TU ComputeUlpDelta(T actual) {
+  T expected;
   TU ux, uy;
   CopySameSize(&expected, &ux);
   CopySameSize(&actual, &uy);
-  TU ulp = HWY_MAX(ux, uy) - 0;
+  TU ulp(uy);
   return ulp;
 }
-template < typename T > std::string TypeName(T, size_t N) {
-  char string100[1];
-  detail::TypeName(detail::MakeTypeInfo< T >(), N, string100);
-  return string100;
+template <typename T> std::string TypeName(T, size_t N) {
+  detail::TypeInfo __trans_tmp_13;
+  TypeName(__trans_tmp_13, N, TypeName_string100);
+  return TypeName_string100;
 }
-namespace HWY_NAMESPACE {
-template < class D, class V > V CallLog1p(D d, VecArg< V > x) {
-  return Log1p(d, x);
-}
-namespace impl {
-template < class > struct LogImpl {
-  template < class D, class V >
-  Vec< Rebind< int64_t, D > > Log2p1NoSubnormal(D, V );
-  template < class D, class V > V LogPoly(D d, V x) {
-    V k0 = Set(d, 0.6666666666666735130);
-    V k1 = Set(d, 0.3999999999940941908);
-    V k2 = Set(d, 0.2857142874366239149);
-    V k3 = Set(d, 0.2222219843214978396);
-    V k4 = Set(d, 0.1818357216161805012);
-    V k5 = Set(d, 0.1531383769920937332);
-    V k6 = Set(d, 0.1479819860511658591);
-    V x2 = Mul(x, x);
-    V x4 = Mul(x2, x2);
-    MulAdd(MulAdd(k5, x4, k3), x4, k1);
-    return MulAdd(MulAdd(MulAdd(MulAdd(k6, x4, k4), x4, k2), x4, k0), x2,
-                  ((x4)));
-  }
-};
-template < class D, class V, int kAllowSubnormals > V Log() {
-  V x;
-  D d;
-  using T = TFromD< D >;
-  impl::LogImpl< T > impl;
-  bool kIsF32 = 0;
-  V kLn2Hi = Set(d, 0 ? static_cast< T >(0.69313812256f)
-                      : static_cast< T >(0.693147180369123816490));
-  V kLn2Lo = Set(d, 0 ? static_cast< T >(9.0580006145e-6f)
-                      : static_cast< T >(1.90821492927058770002e-10));
-  V kOne = Set(d, static_cast< T >(1.0));
-  V kMinNormal = Set(d, 0 ? static_cast< T >(1.175494351e-38f)
-                          : static_cast< T >(2.2250738585072014e-308));
-  V kScale = Set(d, 0 ? static_cast< T >(3.355443200e+7f)
-                      : static_cast< T >(1.8014398509481984e+16));
-  using TI = MakeSigned< T >;
-  Rebind< TI, D > di;
-  using VI = decltype(Zero(di));
-  VI kLowerBits = Set(di, kIsF32 ? static_cast< TI >(0x00000000L)
-                                 : static_cast< TI >(0xFFFFFFFFLL));
-  VI kMagic = Set(di, kIsF32 ? static_cast< TI >(0x3F3504F3L)
-                             : static_cast< TI >(0x3FE6A09E00000000LL));
-  VI kExpMask = Set(di, kIsF32 ? static_cast< TI >(0x3F800000L)
-                               : static_cast< TI >(0x3FF0000000000000LL));
-  VI kExpScale =
-      Set(di, kIsF32 ? static_cast< TI >(25) : static_cast< TI >(54));
-  VI kManMask = Set(di, kIsF32 ? static_cast< TI >(0x7FFFFFL)
-                               : static_cast< TI >(0xFFFFF00000000LL));
-  VI exp_bits;
-  V exp;
-  if (kAllowSubnormals == true) {
-    auto is_denormal = Lt(x, kMinNormal);
-    x = IfThenElse(is_denormal, Mul(x, kScale), x);
-    VI exp_scale =
-        BitCast(di, IfThenElseZero(is_denormal, BitCast(d, kExpScale)));
-    exp = ConvertTo(d, Add(exp_scale, impl.Log2p1NoSubnormal(d, 0)));
-  }
-  exp_bits = (Sub(kExpMask, kMagic));
-  And(x, BitCast(d, kLowerBits));
-  V y = (BitCast(d, Add(And(exp_bits, kManMask), kMagic)));
-  V ym1 = Sub(y, kOne);
-  V z = Div(ym1, Add(y, kOne));
-  MulSub(z, Sub(ym1, impl.LogPoly(d, z)), Mul(exp, kLn2Lo));
-  return MulSub(exp, kLn2Hi, (ym1));
-}
-} // namespace impl
-template < class D, class V > V Log1p(D d, V x) {
-  using T = TFromD< D >;
-  V kOne = Set(d, static_cast< T >(1.0));
-  V y = Add(x, kOne);
-  auto is_pole = Eq(y, kOne);
-  auto divisor = (kOne);
-  V __trans_tmp_1 = impl::Log< D, V, false >();
-  auto non_pole = Mul(__trans_tmp_1, Div(x, divisor));
+namespace N_EMU128 {
+template <class D, class V> V CallLog1p(D d, V x) {
+  V kOne = Set(d, 0), y, __trans_tmp_1;
+  auto is_pole = Eq(y);
+  auto divisor(kOne);
+  V __trans_tmp_11(divisor);
+  auto non_pole = Mul(__trans_tmp_1, __trans_tmp_11);
   return IfThenElse(is_pole, x, non_pole);
 }
-template < class Out, class In > Out BitCast(In in) {
+template <class Out, class In> Out BitCast(In in) {
   Out out;
-  CopyBytes< sizeof(out) >(&in, &out);
+  CopyBytes<sizeof(out)>(&in, &out);
   return out;
 }
-template < class T, class D >
-void TestMath(const char *name, T(fx1)(T), Vec< D >(fxN)(D, VecArg< Vec< D > >),
-              D d, T min, T max, uint64_t max_error_ulp) {
-  using UintT = MakeUnsigned< T >;
-  UintT min_bits = BitCast< UintT >(min);
-  UintT max_bits = BitCast< UintT >(max);
-  int range_count = 1;
+template <class T, class D>
+void TestMath(const char *name, T(fx1)(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
+              T min, T max, uint64_t max_error_ulp) {
+  using UintT = MakeUnsigned<T>;
+  UintT min_bits(min);
+  UintT max_bits = BitCast<UintT>(max);
   UintT ranges[][2]{{min_bits, max_bits}};
-  uint64_t max_ulp = 0;
-  UintT kSamplesPerRange = static_cast< UintT >((4000));
-  for (int range_index = 0; range_index < range_count; ++range_index) {
-    UintT start = ranges[range_index][0];
+  uint64_t max_ulp;
+  UintT kSamplesPerRange(4000);
+  for (int range_index = 0; range_index < 1; ++range_index) {
+    UintT start = min_bits;
     UintT stop = ranges[range_index][1];
-    UintT step HWY_MAX(1, ((stop - start) / kSamplesPerRange));
+    UintT step(stop / kSamplesPerRange);
     for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
-      T value = BitCast< T >(HWY_MIN(HWY_MAX(start, value_bits), stop));
-      T actual = GetLane(fxN(d, Set(d, value)));
-      T expected = fx1(value);
-      auto ulp = hwy::ComputeUlpDelta(actual, expected);
-      max_ulp = HWY_MAX(max_ulp, ulp);
-      if (ulp > max_error_ulp)
-        fprintf(
-            stderr,
-            "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
-            hwy::TypeName(T(), 0).c_str(), name, value, expected, actual,
-            static_cast< double >(ulp), static_cast< uint32_t >(max_error_ulp));
+      T value = BitCast<T>(value_bits), expected = fx1(value);
+      VFromD<D> __trans_tmp_12;
+      T actual = GetLane(fxN(d, __trans_tmp_12));
+      auto ulp = ComputeUlpDelta(expected);
+      max_ulp = HWY_MAX(max_ulp, );
+      int __trans_tmp_14(max_error_ulp);
+      fprintf(stderr,
+              "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp "
+              "%u\n",
+              TypeName(T(), 0).c_str(), name, value, expected, actual,
+              double(ulp), __trans_tmp_14);
     }
   }
 }
-#define DEFINE_MATH_TEST_FUNC() void TestAll##NAME();
-#define DEFINE_MATH_TEST(NAME, F32x1, F32xN, F32_MIN, F32_MAX, F32_ERROR,                               F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)              struct Test##NAME {                                                              template < class T, class D > void operator()(T, D d) {                          TestMath(HWY_STR(NAME), F64x1, F64xN, d, static_cast< T >(F64_MIN),                     static_cast< T >(F64_MAX), F64_ERROR);                              }                                                                            };                                                                             DEFINE_MATH_TEST_FUNC()
-DEFINE_MATH_TEST(Log1p, , , , , , ::log1p, CallLog1p, 0.0, DBL_MAX, 2);
-} // namespace HWY_NAMESPACE
+#define DEFINE_MATH_TEST_FUNC() ;
+#define DEFINE_MATH_TEST(NAME, F32x1, F32xN, F32_MIN, F32_MAX, F32_ERROR,      \
+                         F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)            \
+  struct Test##NAME {                                                          \
+    template <class T, class D> void operator()(T, D d) {                      \
+      TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);   \
+    }                                                                          \
+  } DEFINE_MATH_TEST_FUNC()
+DEFINE_MATH_TEST(Log1p, , , , , , log1p, CallLog1p, 0.0, DBL_MAX, 2)
+} // namespace N_EMU128
 } // namespace hwy
+double main_b1;
 int main() {
-  double b1{};
-  hwy::N_EMU128::Simd< double, 1u, 0 > b2;
+  hwy::N_EMU128::Simd<double, 1, 0> b2;
   hwy::N_EMU128::TestLog1p testLog1p;
-  testLog1p.operator()(b1, b2);
+  testLog1p(main_b1, b2);
 }
