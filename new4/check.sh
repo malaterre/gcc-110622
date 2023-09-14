@@ -29,10 +29,11 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 ( ulimit -t 10; ./fails )
-if test "$?" = "0"; then
+if ! test "$?" = "0"; then
   exit 1
 fi
-exit 0
+./fails 2>&1 | grep --fixed-strings 'Log1p(9.8046570862201476e-17) expected 9.8046570862201476e-17 actual 0 ulp 4.3674389221364828e+18 max ulp 2'
+#exit 0
 
 # gcc '-DHWY_DISABLED_TARGETS=(HWY_SSE4|HWY_SSSE3|HWY_SSE2)' -E -P math_test.cc
 
