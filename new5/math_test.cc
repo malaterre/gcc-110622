@@ -1,7 +1,22 @@
 #include "hwy/contrib/math/math-inl.h"
-#include "hwy/tests/hwy_gtest.h"
-#include "hwy/tests/test_util.h"
+#include "hwy/print.h"
+#include "gtest/gtest.h"
 namespace hwy {
+template <typename T, typename TU = MakeUnsigned<T>>
+TU ComputeUlpDelta(T actual) {
+  T expected;
+  TU ux, uy;
+  CopySameSize(&expected, &ux);
+  CopySameSize(&actual, &uy);
+  TU ulp(uy);
+  return ulp;
+}
+template <typename T> std::string TypeName(T) {
+  int N = 0;
+  char string100[1];
+  TypeName(detail::MakeTypeInfo<T>(), N, string100);
+  return string100;
+}
 namespace HWY_NAMESPACE {
 template <class Out, class In> Out BitCast(In in) {
   Out out;
@@ -25,13 +40,13 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     T value = BitCast<T> HWY_MIN(value_bits, stop);
     T actual = GetLane(fxN(d, Set(d, value)));
     T expected = fx1(value);
-    auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
+    auto ulp = ComputeUlpDelta(expected);
     max_ulp = HWY_MAX(max_ulp, ulp);
     int __trans_tmp_1(max_error_ulp);
     fprintf(stderr,
             "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
-            TypeName(T(), 0).c_str(), name, value, expected, actual,
-            double(ulp), __trans_tmp_1);
+            TypeName(T()).c_str(), name, value, expected, actual, double(ulp),
+            __trans_tmp_1);
   }
 }
 #define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)      \
