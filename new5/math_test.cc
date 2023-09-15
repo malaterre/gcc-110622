@@ -36,14 +36,14 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     }
   }
 }
-#define DEFINE_MATH_TEST(NAME, F32x1, F32xN, F32_MIN, F32_MAX, F32_ERROR,      \
+#define DEFINE_MATH_TEST(NAME, \
                          F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)            \
   struct Test##NAME {                                                          \
     template <class T, class D> void operator()(T, D d) {                      \
       TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);   \
     }                                                                          \
   }
-                                DEFINE_MATH_TEST(Log1p, , , , , , log1p,
+                                DEFINE_MATH_TEST(Log1p,  log1p,
                                                  CallLog1p, 0.0, DBL_MAX, 2);
 } // namespace HWY_NAMESPACE
 } // namespace hwy
