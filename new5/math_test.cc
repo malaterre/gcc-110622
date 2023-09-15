@@ -16,7 +16,8 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
   UintT ranges[][2]{{min_bits, max_bits}};
   uint64_t max_ulp = 0;
   UintT kSamplesPerRange(4000);
-  for (int range_index = 0; range_index < 1; ++range_index) {
+  //for (int range_index = 0; range_index < 1; ++range_index) {
+  int range_index = 0; {
     UintT start = ranges[range_index][0];
     UintT stop = ranges[range_index][1];
     UintT step(stop / kSamplesPerRange);
@@ -42,8 +43,6 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
       TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);   \
     }                                                                          \
   }
-double kNearOneD;
-uint64_t Cos64ULP;
                                 DEFINE_MATH_TEST(Log1p, , , , , , log1p,
                                                  CallLog1p, 0.0, DBL_MAX, 2);
 } // namespace HWY_NAMESPACE
