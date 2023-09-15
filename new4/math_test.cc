@@ -150,7 +150,6 @@ void TestMath(const char *name, T(fx1)(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
   UintT min_bits(min);
   UintT max_bits = BitCast<UintT>(max);
   UintT ranges[][2]{{min_bits, max_bits}};
-  uint64_t max_ulp;
   UintT kSamplesPerRange(4000);
   int range_index = 0;
   UintT start = min_bits;
@@ -161,7 +160,6 @@ void TestMath(const char *name, T(fx1)(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     VFromD<D> __trans_tmp_12;
     T actual = GetLane(fxN(d, __trans_tmp_12));
     auto ulp = ComputeUlpDelta(expected);
-    max_ulp = HWY_MAX(max_ulp, );
     int __trans_tmp_14(max_error_ulp);
     fprintf(stderr,
             "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp "
