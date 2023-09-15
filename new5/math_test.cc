@@ -1,5 +1,6 @@
 #include "hwy/contrib/math/math-inl.h"
-#include "hwy/tests/test_util-inl.h"
+#include "hwy/tests/hwy_gtest.h"
+#include "hwy/tests/test_util.h"
 namespace hwy {
 namespace HWY_NAMESPACE {
 template <class Out, class In> Out BitCast(In in) {
@@ -16,40 +17,35 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
   UintT ranges[][2]{{min_bits, max_bits}};
   uint64_t max_ulp = 0;
   UintT kSamplesPerRange(4000);
-  //for (int range_index = 0; range_index < 1; ++range_index) {
-  int range_index = 0; {
-    UintT start = ranges[range_index][0];
-    UintT stop = ranges[range_index][1];
-    UintT step(stop / kSamplesPerRange);
-    for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
-      T value = BitCast<T> HWY_MIN(value_bits, stop);
-      T actual = GetLane(fxN(d, Set(d, value)));
-      T expected = fx1(value);
-      auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
-      max_ulp = HWY_MAX(max_ulp, ulp);
-      int __trans_tmp_1(max_error_ulp);
-      fprintf(
-          stderr,
-          "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
-          TypeName(T(), 0).c_str(), name, value, expected, actual, double(ulp),
-          __trans_tmp_1);
-    }
+  int range_index = 0;
+  UintT start = ranges[range_index][0];
+  UintT stop = ranges[range_index][1];
+  UintT step(stop / kSamplesPerRange);
+  for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
+    T value = BitCast<T> HWY_MIN(value_bits, stop);
+    T actual = GetLane(fxN(d, Set(d, value)));
+    T expected = fx1(value);
+    auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
+    max_ulp = HWY_MAX(max_ulp, ulp);
+    int __trans_tmp_1(max_error_ulp);
+    fprintf(stderr,
+            "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
+            TypeName(T(), 0).c_str(), name, value, expected, actual,
+            double(ulp), __trans_tmp_1);
   }
 }
-#define DEFINE_MATH_TEST(NAME, \
-                         F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)            \
+#define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)      \
   struct Test##NAME {                                                          \
     template <class T, class D> void operator()(T, D d) {                      \
       TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);   \
     }                                                                          \
   }
-                                DEFINE_MATH_TEST(Log1p,  log1p,
-                                                 CallLog1p, 0.0, DBL_MAX, 2);
+DEFINE_MATH_TEST(Log1p, log1p, CallLog1p, 0.0, DBL_MAX, 2);
 } // namespace HWY_NAMESPACE
 } // namespace hwy
+double main_b1;
 int main() {
-  double b1{};
   hwy::N_EMU128::Simd<double, 1, 0> b2;
   hwy::N_EMU128::TestLog1p testLog1p;
-  testLog1p(b1, b2);
+  testLog1p(main_b1, b2);
 }
