@@ -1,5 +1,7 @@
 #include <atomic>
-#include <stddef.h>
+#include <cmath>
+#include <float.h>
+#include <iostream>
 #define HWY_STR_IMPL(macro) #macro
 #define HWY_STR(macro) HWY_STR_IMPL(macro)
 #define HWY_MAX(a, b) a
@@ -14,6 +16,7 @@ void CopyBytes(From from, To to) {
 template <typename From, typename To> void CopySameSize(From *from, To to) {
   CopyBytes<sizeof(From)>(from, to);
 }
+char TypeName_string100[1];
 namespace hwy {
 namespace N_EMU128 {
 template <class V> using VecArg = V;
@@ -24,14 +27,6 @@ template <typename, size_t, int> struct Simd {
 template <class D> using TFromD = typename D::T;
 #define HWY_MAX_LANES_D(D) D::kPrivateLanes
 template <class D> size_t MaxLanes(D) { return HWY_MAX_LANES_D(D); }
-} // namespace N_EMU128
-} // namespace hwy
-#include <cmath>
-#include <float.h>
-#include <iostream>
-char TypeName_string100[1];
-namespace hwy {
-namespace N_EMU128 {
 template <typename T, size_t N = sizeof(T)> struct Vec128 {
   using PrivateT = T;
   static constexpr size_t kPrivateN = N;
@@ -157,23 +152,22 @@ void TestMath(const char *name, T(fx1)(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
   UintT ranges[][2]{{min_bits, max_bits}};
   uint64_t max_ulp;
   UintT kSamplesPerRange(4000);
-  for (int range_index = 0; range_index < 1; ++range_index) {
-    UintT start = min_bits;
-    UintT stop = ranges[range_index][1];
-    UintT step(stop / kSamplesPerRange);
-    for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
-      T value = BitCast<T>(value_bits), expected = fx1(value);
-      VFromD<D> __trans_tmp_12;
-      T actual = GetLane(fxN(d, __trans_tmp_12));
-      auto ulp = ComputeUlpDelta(expected);
-      max_ulp = HWY_MAX(max_ulp, );
-      int __trans_tmp_14(max_error_ulp);
-      fprintf(stderr,
-              "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp "
-              "%u\n",
-              TypeName(T(), 0).c_str(), name, value, expected, actual,
-              double(ulp), __trans_tmp_14);
-    }
+  int range_index = 0;
+  UintT start = min_bits;
+  UintT stop = ranges[range_index][1];
+  UintT step(stop / kSamplesPerRange);
+  for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
+    T value = BitCast<T>(value_bits), expected = fx1(value);
+    VFromD<D> __trans_tmp_12;
+    T actual = GetLane(fxN(d, __trans_tmp_12));
+    auto ulp = ComputeUlpDelta(expected);
+    max_ulp = HWY_MAX(max_ulp, );
+    int __trans_tmp_14(max_error_ulp);
+    fprintf(stderr,
+            "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp "
+            "%u\n",
+            TypeName(T(), 0).c_str(), name, value, expected, actual,
+            double(ulp), __trans_tmp_14);
   }
 }
 #define DEFINE_MATH_TEST_FUNC() ;
