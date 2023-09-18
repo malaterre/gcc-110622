@@ -1,6 +1,6 @@
 #include "hwy/contrib/math/math-inl.h"
-#include "gtest/internal/gtest-port.h"
 #include <float.h>
+#include <iostream>
 char TypeName_string100[1];
 namespace hwy {
 template <typename T, typename TU = MakeUnsigned<T>>
