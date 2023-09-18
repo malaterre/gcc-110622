@@ -12,7 +12,7 @@ template <class Out, class In> Out BitCast(In in) {
 }
 template <class T, class D>
 void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
-              T min, T max, uint64_t max_error_ulp) {
+              T min, T max ) {
   using UintT = MakeUnsigned<T>;
   UintT min_bits(min);
   UintT max_bits = BitCast<UintT>(max);
@@ -26,18 +26,17 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     T value = BitCast<T> HWY_MIN(value_bits, stop);
     T actual = GetLane(fxN(d, Set(d, value)));
     T expected = fx1(value);
-    (void)max_error_ulp;
     fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g \n",
             TypeName(T()).c_str(), name, value, expected, actual);
   }
 }
-#define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)      \
+#define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX )      \
   struct Test##NAME {                                                          \
     template <class T, class D> void operator()(T, D d) {                      \
-      TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX, F64_ERROR);   \
+      TestMath(HWY_STR(NAME), F64x1, F64xN, d, F64_MIN, F64_MAX );   \
     }                                                                          \
   }
-DEFINE_MATH_TEST(Log1p, log1p, CallLog1p, 0.0, DBL_MAX, 2);
+DEFINE_MATH_TEST(Log1p, log1p, CallLog1p, 0.0, DBL_MAX );
 } // namespace HWY_NAMESPACE
 } // namespace hwy
 double main_b1;
