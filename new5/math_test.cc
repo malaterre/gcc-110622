@@ -3,15 +3,6 @@
 #include <iostream>
 char TypeName_string100[1];
 namespace hwy {
-template <typename T, typename TU = MakeUnsigned<T>>
-TU ComputeUlpDelta(T actual) {
-  T expected;
-  TU ux, uy;
-  CopySameSize(&expected, &ux);
-  CopySameSize(&actual, &uy);
-  TU ulp(uy);
-  return ulp;
-}
 template <typename T> std::string TypeName(T) { return TypeName_string100; }
 namespace HWY_NAMESPACE {
 template <class Out, class In> Out BitCast(In in) {
@@ -35,11 +26,9 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     T value = BitCast<T> HWY_MIN(value_bits, stop);
     T actual = GetLane(fxN(d, Set(d, value)));
     T expected = fx1(value);
-    auto ulp = ComputeUlpDelta(expected);
-    fprintf(stderr,
-            "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
-            TypeName(T()).c_str(), name, value, expected, actual, double(ulp),
-            int(max_error_ulp));
+    (void)max_error_ulp;
+    fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g \n",
+            TypeName(T()).c_str(), name, value, expected, actual);
   }
 }
 #define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)      \
