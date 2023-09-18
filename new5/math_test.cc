@@ -26,7 +26,7 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
   UintT min_bits(min);
   UintT max_bits = BitCast<UintT>(max);
   UintT ranges[][2]{{min_bits, max_bits}};
-  uint64_t max_ulp = 0;
+//  uint64_t max_ulp = 0;
   UintT kSamplesPerRange(4000);
   int range_index = 0;
   UintT start = ranges[range_index][0];
@@ -37,12 +37,12 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     T actual = GetLane(fxN(d, Set(d, value)));
     T expected = fx1(value);
     auto ulp = ComputeUlpDelta(expected);
-    max_ulp = HWY_MAX(max_ulp, ulp);
-    int __trans_tmp_1(max_error_ulp);
+//    max_ulp = HWY_MAX(max_ulp, ulp);
+//    int __trans_tmp_1(max_error_ulp);
     fprintf(stderr,
             "%s: %s(%.17g) expected %.17g actual %.17g ulp %.17g max ulp %u\n",
-            TypeName(T()).c_str(), name, value, expected, actual, double(ulp),
-            __trans_tmp_1);
+            TypeName(T()).c_str(), name, value, expected, actual, double(ulp), int(max_error_ulp)
+            );
   }
 }
 #define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX, F64_ERROR)      \
