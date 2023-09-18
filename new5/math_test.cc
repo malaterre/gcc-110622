@@ -1,6 +1,6 @@
 #include "hwy/contrib/math/math-inl.h"
-#include "hwy/print.h"
-#include "gtest/gtest.h"
+#include "gtest/gtest-param-test.h"
+char TypeName_string100[1];
 namespace hwy {
 template <typename T, typename TU = MakeUnsigned<T>>
 TU ComputeUlpDelta(T actual) {
@@ -11,12 +11,7 @@ TU ComputeUlpDelta(T actual) {
   TU ulp(uy);
   return ulp;
 }
-template <typename T> std::string TypeName(T) {
-  int N = 0;
-  char string100[1];
-  TypeName(detail::MakeTypeInfo<T>(), N, string100);
-  return string100;
-}
+template <typename T> std::string TypeName(T) { return TypeName_string100; }
 namespace HWY_NAMESPACE {
 template <class Out, class In> Out BitCast(In in) {
   Out out;
