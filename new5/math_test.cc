@@ -14,9 +14,9 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
   UintT min_bits(min);
   UintT max_bits;
   CopyBytes<sizeof max_bits>(&max, &max_bits);
-  UintT ranges[2]{min_bits, max_bits};
+  UintT ranges[]{min_bits, max_bits};
   UintT kSamplesPerRange(4000);
-  UintT start = ranges[0];
+  UintT start = 0;
   UintT stop = ranges[1];
   UintT step(stop / kSamplesPerRange);
   for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
