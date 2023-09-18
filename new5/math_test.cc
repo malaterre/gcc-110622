@@ -14,11 +14,10 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
   UintT min_bits(min);
   UintT max_bits;
   CopyBytes<sizeof max_bits>(&max, &max_bits);
-  UintT ranges[][2]{{min_bits, max_bits}};
+  UintT ranges[2]{min_bits, max_bits};
   UintT kSamplesPerRange(4000);
-  int range_index = 0;
-  UintT start = ranges[range_index][0];
-  UintT stop = ranges[range_index][1];
+  UintT start = ranges[0];
+  UintT stop = ranges[1];
   UintT step(stop / kSamplesPerRange);
   for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
     T value = BitCast<T>(value_bits), actual = GetLane(fxN(d, Set(d, value))),
