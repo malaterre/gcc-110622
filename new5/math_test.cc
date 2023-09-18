@@ -1,5 +1,6 @@
 #include "hwy/contrib/math/math-inl.h"
-#include "gtest/internal/gtest-param-util.h"
+#include "gtest/internal/gtest-type-util.h"
+#include <float.h>
 char TypeName_string100[1];
 namespace hwy {
 template <typename T, typename TU = MakeUnsigned<T>>
