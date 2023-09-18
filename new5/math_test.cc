@@ -1,10 +1,8 @@
 #include "hwy/contrib/math/math-inl.h"
 #include <float.h>
 #include <iostream>
-char TypeName_string100[1];
 namespace hwy {
-template <typename T> std::string TypeName(T) { return TypeName_string100; }
-namespace HWY_NAMESPACE {
+namespace N_EMU128 {
 template <class Out, class In> Out BitCast(In in) {
   Out out;
   CopyBytes<sizeof(out)>(&in, &out);
@@ -26,8 +24,8 @@ void TestMath(const char *name, T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d,
     T value = BitCast<T> HWY_MIN(value_bits, stop);
     T actual = GetLane(fxN(d, Set(d, value)));
     T expected = fx1(value);
-    fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g \n",
-            TypeName(T()).c_str(), name, value, expected, actual);
+    fprintf(stderr, "%s(%.17g) expected %.17g actual %.17g \n",
+             name, value, expected, actual);
   }
 }
 #define DEFINE_MATH_TEST(NAME, F64x1, F64xN, F64_MIN, F64_MAX )      \
