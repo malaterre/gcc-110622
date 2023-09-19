@@ -6,28 +6,29 @@ void CopyBytes(From from, To to) {
 template < typename From, typename To > void CopySameSize(From *from, To to) {
   CopyBytes< sizeof(From) >(from, to);
 }
-long Or_au_0_0;
-template < class V > using VecArg = V;
-template < typename Lane > struct Simd {
+
+template < typename Lane, int N > struct Simd {
   using T = Lane;
-  static constexpr int kPrivateLanes = 1;
-  template < typename NewT > using Rebind = Simd< NewT >;
+  static constexpr int kPrivateLanes = N;
+  template < typename NewT > using Rebind = Simd< NewT, 0 >;
 };
 template < class D > using TFromD = typename D::T;
-int MaxLanes(Simd< double >) { return Simd< double >::kPrivateLanes; }
+template < class D > unsigned MaxLanes(D) {
+  return D::kPrivateLanes;
+}
 template < class T, class D > using Rebind = typename D::Rebind< T >;
 template < class D > using RebindToUnsigned = Rebind< MakeUnsigned< D >, D >;
-template < typename T, int > struct Vec128 {
+template < typename T, unsigned N > struct Vec128 {
   using PrivateT = T;
+  static constexpr int kPrivateN = N;
   T raw[sizeof(T)];
 };
-template < int = sizeof(int) > struct Mask128 {
-  static  int  FromBool(bool b) {
-    return b ? ~ int {} : 0;
-  }
-  MakeUnsigned< int > bits[sizeof(int)];
+template < unsigned = sizeof(int) > struct Mask128 {
+  using Raw = MakeUnsigned< int >;
+  static Raw FromBool(bool b) { return b ? ~Raw{} : 0; }
+  Raw bits[sizeof(int)];
 };
-template < class V > using DFromV = Simd< typename V::PrivateT >;
+template < class V > using DFromV = Simd< typename V::PrivateT, V::kPrivateN >;
 template < class D > Vec128< TFromD< D >, 1 > Zero(D);
 template < class D > using VFromD = decltype(Zero(D()));
 template < class D, class VFrom > VFromD< D > BitCast(D, VFrom v) {
@@ -35,33 +36,34 @@ template < class D, class VFrom > VFromD< D > BitCast(D, VFrom v) {
   CopySameSize(&v, &to);
   return to;
 }
-VFromD< Simd< double > > Set(Simd< double > d, double t) {
-  VFromD< Simd< double > > v;
-  for (int i = 0; i < MaxLanes(d); ++i)
+VFromD< Simd< double, 1 > > Set(Simd< double, 1 > d,
+                                          double t) {
+  VFromD< Simd< double, 1 > > v;
+  for (unsigned i = 0; i < MaxLanes(d); ++i)
     v.raw[i] = t;
   return v;
 }
-template < int N >
-Vec128< double, 1 > And(Vec128< double, 1 > a, Vec128< double, N > b) {
+template < typename T, unsigned N >
+Vec128< T, 1 > And(Vec128< T, 1 > a, Vec128< T, N > b) {
   DFromV< decltype(a) > d;
   RebindToUnsigned< decltype(d) > du;
   auto au = BitCast(du, a);
   auto bu = BitCast(du, b);
-  for (int i = 0; i < N; ++i)
+  for (unsigned i = 0; i < N; ++i)
     au.raw[i] &= bu.raw[i];
   return BitCast(d, au);
 }
-template < int N >
-Vec128< double, 1 > Or(Vec128< double, 1 > a, Vec128< double, N > b) {
+template < typename T, unsigned N >
+Vec128< T, 1 > Or(Vec128< T, 1 > a, Vec128< T, N > b) {
   DFromV< decltype(a) > d;
   RebindToUnsigned< decltype(d) > du;
-  auto au = a;
+  auto au = BitCast(du, a);
   auto bu = BitCast(du, b);
-  for (int i = 0; i;)
-    Or_au_0_0 |= bu.raw[i];
-  return au;
+  for (unsigned i = 0; i;)
+    au.raw[i] |= bu.raw[i];
+  return  a;
 }
-template < int N >
+template < unsigned N >
 Vec128< double, 1 > IfVecThenElse(Vec128< double, 1 > mask,
                                   Vec128< double, 1 > yes,
                                   Vec128< double, N > no) {
@@ -69,73 +71,89 @@ Vec128< double, 1 > IfVecThenElse(Vec128< double, 1 > mask,
   Vec128< double, 1 > __trans_tmp_3(no);
   return Or(__trans_tmp_2, __trans_tmp_3);
 }
-template < int N > Vec128< double, 1 > VecFromMask(Mask128< N > mask) {
+template < unsigned N > Vec128< double, 1 > VecFromMask(Mask128< N > mask) {
   Vec128< double, 1 > v;
   CopySameSize(&mask, &v);
   return v;
 }
-template < int N >
+template < unsigned N >
 Vec128< double, 1 > IfThenElse(Mask128< 1 > mask, Vec128< double, 1 > yes,
                                Vec128< double, N > no) {
   Vec128< double, 1 > __trans_tmp_4 = VecFromMask(mask);
   return IfVecThenElse(__trans_tmp_4, yes, no);
 }
 namespace detail {
-template < int N >
-Vec128< double, 1 > Add(Vec128< double, 1 > a, Vec128< double, N > b) {
-  for (int i = 0; i < N; ++i)
+template < unsigned N >
+Vec128< double, 1 > Add( Vec128< double, 1 > a, Vec128< double, N > b) {
+  for (unsigned i = 0; i < N; ++i)
     a.raw[i] += b.raw[i];
   return a;
 }
-} template < int N >
-Vec128< double, 1 > operator+(Vec128< double, 1 > a, Vec128< double, N > b) {
-  return detail::Add(a, b);
+template < unsigned N >
+Vec128< double, 1 > Sub(Vec128< double, 1 > a, Vec128< double, N > b) {
+  for (unsigned i = 0; i;)
+    a.raw[i] -= b.raw[i];
+  return a;
 }
-template < int N >
-Mask128< 1 > operator==(Vec128< double, 1 > a, Vec128< double, N > b) {
+} template < unsigned N >
+Vec128< double, 1 > operator-(Vec128< double, N > a,
+                                                Vec128< double, 1 > b) {
+  return detail::Sub(a, b);
+}
+template < unsigned N >
+Vec128< double, 1 > operator+(Vec128< double, N > a, Vec128< double, 1 > b) {
+  return detail::Add( a, b);
+}
+template < unsigned N >
+Mask128< 1 > operator==(Vec128< double, N > a, Vec128< double, 1 > b) {
   Mask128< 1 > m;
-  for (int i = 0; i < N; ++i)
+  for (unsigned i = 0; i < N; ++i)
     m.bits[i] = Mask128<>::FromBool(a.raw[i] == b.raw[i]);
   return m;
 }
-template < int N > double GetLane(Vec128< double, N > v) { return v.raw[0]; }
-Vec128<double, 1> Add_b;
-Vec128< double, 1 > Add(Vec128< double, 1 > a) {
-  return a + Add_b;
+template < unsigned N > double GetLane(Vec128< double, N > v) {
+  return v.raw[0];
 }
-Vec128< double, 1 > Sub(Vec128< double, 1 > a) { return a; }
-Mask128< 1 > __trans_tmp_22;
-auto Eq(Vec128< double, 1 > a, Vec128< double, 1 > b)
-    -> decltype(__trans_tmp_22) {
-  return a == b;
+Vec128< double, 1 > Add(Vec128< double, 1 > a, Vec128< double, 1 > b) {
+  return a + b;
 }
-template < class D >
-Vec128< double, 1 > CallLog1p(D d, VecArg< Vec128< double, 1 > > x) {
-  return Log1p(d, x);
+template < class V > V Sub(V a, V b) { return a - b; }
+Vec128<double, 1> Eq_b;
+auto Eq(Vec128< double, 1 > a)
+    -> decltype(a == Eq_b) {
+  return a == Eq_b;
 }
-Vec128< double, 1 > Log1p(Simd< double > d, Vec128< double, 1 > x) {
+Vec128< double, 1 > CallLog1p(Simd< double, 1 > d,
+                                        Vec128< double, 1 > x) {
   Vec128< double, 1 > kOne = Set(d, 1.0);
-  Vec128< double, 1 > y = Add(x);
-  auto is_pole = Eq(y, kOne);
-  Vec128< double, 1 > __trans_tmp_20;
-  auto divisor = Sub(__trans_tmp_20);
-  Vec128< double, 1 > __trans_tmp_19(divisor);
-  auto non_pole(__trans_tmp_19);
+  Vec128< double, 1 > y = Add(x, kOne);
+  auto is_pole = Eq(y);
+  Vec128< double, 1 > __trans_tmp_18;
+  auto divisor = Sub(__trans_tmp_18, kOne);
+  Vec128< double, 1 > __trans_tmp_17(divisor);
+  auto non_pole(__trans_tmp_17);
   return IfThenElse(is_pole, x, non_pole);
 }
-extern "C" {
+ extern "C" {
 typedef int FILE;
 extern FILE *stderr;
 int fprintf(FILE *, const char *...);
 }
 double BitCast_out;
-void TestMath(Simd< double > d, long long start, long long stop) {
+double TestMath___trans_tmp_19;
+void TestMath(Simd< double, 1 > d, long long start,
+              unsigned long long stop) {
+  
   long long step(stop / 4000);
-  for (long long value_bits = start; value_bits <= stop; value_bits += step) {
-    long long in = value_bits;
-    CopyBytes< sizeof(BitCast_out) >(&in, &BitCast_out);
-    double value = BitCast_out, actual = GetLane(CallLog1p(d, Set(d, value))),
-           expected(value);
+  for (unsigned long long value_bits = start; value_bits <= stop;
+       value_bits += step) {
+    
+      long long in = value_bits;
+      CopyBytes< sizeof(BitCast_out) >(&in, &BitCast_out);
+      TestMath___trans_tmp_19 = BitCast_out;
+    
+    double value = TestMath___trans_tmp_19,
+           actual = GetLane(CallLog1p(d, Set(d, value))), expected(value);
     fprintf(stderr,
             "%"
             "ll"
@@ -145,6 +163,6 @@ void TestMath(Simd< double > d, long long start, long long stop) {
   }
 }
 int main() {
-  Simd< double > b2;
+  Simd< double, 1 > b2;
   TestMath(b2, 4318952042648305665, 4368493837572636672);
 }
