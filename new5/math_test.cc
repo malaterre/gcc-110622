@@ -26,16 +26,9 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
             expected, actual);
   }
 }
-struct TestLog1p {
-  template <class T, class D> void operator()(T, D d) {
-    TestMath(log1p, CallLog1p, d, 0.0, DBL_MAX);
-  }
-};
 } // namespace N_EMU128
 } // namespace hwy
-double main_b1;
 int main() {
   hwy::N_EMU128::Simd<double, 1, 0> b2;
-  hwy::N_EMU128::TestLog1p testLog1p;
-  testLog1p(main_b1, b2);
+  TestMath(log1p, hwy::N_EMU128::CallLog1p, b2, 0.0, DBL_MAX);
 }
