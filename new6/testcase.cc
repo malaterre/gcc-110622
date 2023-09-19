@@ -1,3 +1,4 @@
+#include <cstdio>
 template < typename > using MakeUnsigned = long long;
 template < int kBytes, typename From, typename To >
 void CopyBytes(From from, To to) {
@@ -16,7 +17,7 @@ template < class D > using TFromD = typename D::T;
 template < class D > __attribute__(()) unsigned MaxLanes(D) {
   return D::kPrivateLanes;
 }
-template < class T, class D > using Rebind = typename D::Rebind< T >;
+template < class T, class D > using Rebind = typename D::template Rebind< T >;
 template < class D > using RebindToUnsigned = Rebind< MakeUnsigned< D >, D >;
 template < typename T, unsigned N = sizeof(T) > struct Vec128 {
   using PrivateT = T;
@@ -133,10 +134,6 @@ Vec128< double, 1 > CallLog1p(Simd< double, 1 > d,
   auto non_pole(__trans_tmp_17);
   return IfThenElse(is_pole, x, non_pole);
 }
-} extern "C" {
-typedef int FILE;
-extern FILE *stderr;
-int fprintf(FILE *, const char *...);
 }
 double BitCast_out;
 void TestMath(N_EMU128::Simd< double, 1 > d, long long start,
