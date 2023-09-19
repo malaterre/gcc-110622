@@ -15,8 +15,8 @@ template <class D> void TestMath(D d) {
     double value = BitCast<double>(value_bits),
            actual = GetLane(CallLog1p(d, Set(d, value))),
            expected = log1p(value);
-    fprintf(stderr, "%" PRIu64 " - Log1p(%.17g) expected %.17g actual %.17g \n", value_bits, value,
-            expected, actual);
+    fprintf(stderr, "%" PRIu64 " - Log1p(%.17g) expected %.17g actual %.17g %a\n", value_bits, value,
+            expected, actual, actual);
   }
 }
 } // namespace hwy
