@@ -9,7 +9,8 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class T, class D>
-void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d ) {
+//void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d ) {
+void TestMath( D d ) {
 //  using UintT = MakeUnsigned<T>;
 //  UintT min_bits(min);
 //  UintT max_bits;
@@ -21,8 +22,8 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d ) {
   stop = 0x7fefffffffffffff;
   uint64_t step(stop / kSamplesPerRange);
   for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
-    T value = BitCast<T>(value_bits), actual = GetLane(fxN(d, Set(d, value))),
-      expected = fx1(value);
+    T value = BitCast<T>(value_bits), actual = GetLane(CallLog1p(d, Set(d, value))),
+      expected = log1p(value);
     fprintf(stderr, "Log1p(%.17g) expected %.17g actual %.17g \n", value,
             expected, actual);
   }
@@ -31,5 +32,6 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d ) {
 } // namespace hwy
 int main() {
   hwy::N_EMU128::Simd<double, 1, 0> b2;
-  hwy::N_EMU128::TestMath<double>(log1p, hwy::N_EMU128::CallLog1p, b2 );
+  //hwy::N_EMU128::TestMath<double>(log1p, hwy::N_EMU128::CallLog1p, b2 );
+  hwy::N_EMU128::TestMath<double>( b2 );
 }
