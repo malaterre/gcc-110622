@@ -31405,7 +31405,7 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class D> void TestMath(D d) {
-  uint64_t kSamplesPerRange=4000 , start = 1, stop = 9218868437227405311;
+  uint64_t kSamplesPerRange=4000 , start = 0, stop = 9218868437227405311;
   uint64_t step(stop / kSamplesPerRange);
   for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
     double value = BitCast<double>(value_bits),

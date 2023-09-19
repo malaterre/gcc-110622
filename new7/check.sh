@@ -10,7 +10,7 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 ./works > /tmp/works.txt 2>&1
-cmp /tmp/works.txt /home/mathieu/Perso/gcc-110622/new6/works.txt
+cmp /tmp/works.txt /home/mathieu/Perso/gcc-110622/new7/works.txt
 if ! test "$?" = "0"; then
   exit 1
 fi
@@ -33,7 +33,7 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 ./fails > /tmp/fails.txt 2>&1
-cmp /tmp/fails.txt /home/mathieu/Perso/gcc-110622/new6/fails.txt
+cmp /tmp/fails.txt /home/mathieu/Perso/gcc-110622/new7/fails.txt
 if ! test "$?" = "0"; then
   exit 1
 fi
