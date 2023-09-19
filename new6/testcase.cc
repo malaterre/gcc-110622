@@ -60,7 +60,8 @@ Vec128< T, 1 > Or(Vec128< T, 1 > a, Vec128< T, N > b) {
   RebindToUnsigned< decltype(d) > du;
   auto au = BitCast(du, a);
   auto bu = BitCast(du, b);
-  for (unsigned i = 0; i;)
+  //for (unsigned i = 0; i;)
+  unsigned i = 0;
     au.raw[i] |= bu.raw[i];
   return BitCast(d, a);
 }
@@ -92,7 +93,8 @@ Vec128< double, 1 > Add(int, Vec128< double, 1 > a, Vec128< double, N > b) {
 }
 template < unsigned N >
 Vec128< double, 1 > Sub(Vec128< double, 1 > a, Vec128< double, N > b) {
-  for (unsigned i = 0; i;)
+  //for (unsigned i = 0; i;)
+	unsigned i = 0;
     a.raw[i] -= b.raw[i];
   return a;
 }

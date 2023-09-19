@@ -1,7 +1,7 @@
 #!/bin/sh
 set -x
 input=testcase.cc
-g++ -std=c++11 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -g -m32 -fexcess-precision=fast -O1 -o works $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
+g++ -std=c++11 -g -m32 -fexcess-precision=fast -O1 -o works $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
 if ! test "$?" = "0"; then
   exit 1
 fi
@@ -15,7 +15,16 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 
-g++ -std=c++11 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
+clang++-16 -std=c++11 -fsanitize=memory -o works0 $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
+if ! test "$?" = "0"; then
+  exit 1
+fi
+( ulimit -t 10; ./works0 )
+if ! test "$?" = "0"; then
+  exit 1
+fi
+
+g++ -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
 if ! test "$?" = "0"; then
   exit 1
 fi
