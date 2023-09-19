@@ -1,6 +1,6 @@
 #!/bin/sh
 set -x
-input=testcase.cc
+input=math_test.cc
 g++ -std=c++11 -g -m32 -fexcess-precision=fast -O1 -o works $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
 if ! test "$?" = "0"; then
   exit 1
