@@ -1,24 +1,24 @@
 template < typename > using MakeUnsigned = long long;
 template < int kBytes, typename From, typename To >
 void CopyBytes(From from, To to) {
-  __builtin_memcpy(to, from, kBytes);
+  __builtin_memcpy(to, static_cast< void * >(from), kBytes);
 }
 template < typename From, typename To > void CopySameSize(From *from, To to) {
   CopyBytes< sizeof(From) >(from, to);
 }
-
+namespace N_EMU128 {
 template < typename Lane, int N > struct Simd {
   using T = Lane;
-  static constexpr int kPrivateLanes = N;
+  static constexpr int kPrivateLanes = ((20) ? (N) : 0);
   template < typename NewT > using Rebind = Simd< NewT, 0 >;
 };
 template < class D > using TFromD = typename D::T;
-template < class D > unsigned MaxLanes(D) {
+template < class D > __attribute__(()) unsigned MaxLanes(D) {
   return D::kPrivateLanes;
 }
 template < class T, class D > using Rebind = typename D::Rebind< T >;
 template < class D > using RebindToUnsigned = Rebind< MakeUnsigned< D >, D >;
-template < typename T, unsigned N > struct Vec128 {
+template < typename T, unsigned N = sizeof(T) > struct Vec128 {
   using PrivateT = T;
   static constexpr int kPrivateN = N;
   T raw[sizeof(T)];
@@ -61,7 +61,7 @@ Vec128< T, 1 > Or(Vec128< T, 1 > a, Vec128< T, N > b) {
   auto bu = BitCast(du, b);
   for (unsigned i = 0; i;)
     au.raw[i] |= bu.raw[i];
-  return  a;
+  return BitCast(d, a);
 }
 template < unsigned N >
 Vec128< double, 1 > IfVecThenElse(Vec128< double, 1 > mask,
@@ -84,7 +84,7 @@ Vec128< double, 1 > IfThenElse(Mask128< 1 > mask, Vec128< double, 1 > yes,
 }
 namespace detail {
 template < unsigned N >
-Vec128< double, 1 > Add( Vec128< double, 1 > a, Vec128< double, N > b) {
+Vec128< double, 1 > Add(int, Vec128< double, 1 > a, Vec128< double, N > b) {
   for (unsigned i = 0; i < N; ++i)
     a.raw[i] += b.raw[i];
   return a;
@@ -96,13 +96,13 @@ Vec128< double, 1 > Sub(Vec128< double, 1 > a, Vec128< double, N > b) {
   return a;
 }
 } template < unsigned N >
-Vec128< double, 1 > operator-(Vec128< double, N > a,
+__attribute__(()) Vec128< double, 1 > operator-(Vec128< double, N > a,
                                                 Vec128< double, 1 > b) {
   return detail::Sub(a, b);
 }
 template < unsigned N >
 Vec128< double, 1 > operator+(Vec128< double, N > a, Vec128< double, 1 > b) {
-  return detail::Add( a, b);
+  return detail::Add(double(), a, b);
 }
 template < unsigned N >
 Mask128< 1 > operator==(Vec128< double, N > a, Vec128< double, 1 > b) {
@@ -117,42 +117,40 @@ template < unsigned N > double GetLane(Vec128< double, N > v) {
 Vec128< double, 1 > Add(Vec128< double, 1 > a, Vec128< double, 1 > b) {
   return a + b;
 }
-template < class V > V Sub(V a, V b) { return a - b; }
-Vec128<double, 1> Eq_b;
-auto Eq(Vec128< double, 1 > a)
-    -> decltype(a == Eq_b) {
-  return a == Eq_b;
+template < class V > __attribute__(()) V Sub(V a, V b) { return a - b; }
+auto Eq(Vec128< double, 1 > a, Vec128< double, 1 > b)
+    -> decltype(a == b) {
+  return a == b;
 }
 Vec128< double, 1 > CallLog1p(Simd< double, 1 > d,
                                         Vec128< double, 1 > x) {
   Vec128< double, 1 > kOne = Set(d, 1.0);
   Vec128< double, 1 > y = Add(x, kOne);
-  auto is_pole = Eq(y);
+  auto is_pole = Eq(y, kOne);
   Vec128< double, 1 > __trans_tmp_18;
   auto divisor = Sub(__trans_tmp_18, kOne);
   Vec128< double, 1 > __trans_tmp_17(divisor);
   auto non_pole(__trans_tmp_17);
   return IfThenElse(is_pole, x, non_pole);
 }
- extern "C" {
+} extern "C" {
 typedef int FILE;
 extern FILE *stderr;
 int fprintf(FILE *, const char *...);
 }
 double BitCast_out;
-double TestMath___trans_tmp_19;
-void TestMath(Simd< double, 1 > d, long long start,
+void TestMath(N_EMU128::Simd< double, 1 > d, long long start,
               unsigned long long stop) {
-  
+  double __trans_tmp_19;
   long long step(stop / 4000);
   for (unsigned long long value_bits = start; value_bits <= stop;
        value_bits += step) {
-    
+    {
       long long in = value_bits;
       CopyBytes< sizeof(BitCast_out) >(&in, &BitCast_out);
-      TestMath___trans_tmp_19 = BitCast_out;
-    
-    double value = TestMath___trans_tmp_19,
+      __trans_tmp_19 = BitCast_out;
+    }
+    double value = __trans_tmp_19,
            actual = GetLane(CallLog1p(d, Set(d, value))), expected(value);
     fprintf(stderr,
             "%"
@@ -163,6 +161,6 @@ void TestMath(Simd< double, 1 > d, long long start,
   }
 }
 int main() {
-  Simd< double, 1 > b2;
+  N_EMU128::Simd< double, 1 > b2;
   TestMath(b2, 4318952042648305665, 4368493837572636672);
 }
