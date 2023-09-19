@@ -1,7 +1,7 @@
 #include "hwy/contrib/math/math-inl.h"
-#include <iostream>
+#include <cstdint>
 #include <inttypes.h>
-#include <string>
+#include <cstdio>
 
 namespace hwy {
 template <class Out, class In> Out BitCast(In in) {
@@ -22,10 +22,9 @@ template <class D> void TestMath(D d, uint64_t start, uint64_t stop) {
   }
 }
 } // namespace hwy
-int main(int argc, char *argv[]) {
-	(void)argc;
-  hwy::N_EMU128::Simd<long double, 1, 0> b2;
-  uint64_t start =  std::stoull(argv[1]);
-  uint64_t stop = std::stoull (argv[2]);
+int main(int , char *[]) {
+  hwy::N_EMU128::Simd<double, 1, 0> b2;
+  uint64_t start =  4318952042648305665;
+  uint64_t stop = 4368493837572636672;
   hwy::TestMath(b2, start, stop);
 }
