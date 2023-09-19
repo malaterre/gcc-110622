@@ -26,11 +26,13 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
             expected, actual);
   }
 }
-struct TestLog1p {
-  template <class T, class D> void operator()(T, D d) {
-    TestMath(log1p, CallLog1p, d, 0.0, DBL_MAX);
+#define DEFINE_MATH_TEST(F64x1, F64xN, F64_MIN, F64_MAX)                       \
+  struct TestLog1p {                                                           \
+    template <class T, class D> void operator()(T, D d) {                      \
+      TestMath(F64x1, F64xN, d, F64_MIN, F64_MAX);                             \
+    }                                                                          \
   }
-};
+DEFINE_MATH_TEST(log1p, CallLog1p, 0.0, DBL_MAX);
 } // namespace N_EMU128
 } // namespace hwy
 double main_b1;
