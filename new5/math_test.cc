@@ -9,17 +9,18 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class T, class D>
-void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
-  using UintT = MakeUnsigned<T>;
-  UintT min_bits(min);
-  UintT max_bits;
-  CopyBytes<sizeof max_bits>(&max, &max_bits);
-  UintT ranges[]{min_bits, max_bits};
-  UintT kSamplesPerRange(4000);
-  UintT start = 0;
-  UintT stop = ranges[1];
-  UintT step(stop / kSamplesPerRange);
-  for (UintT value_bits = start; value_bits <= stop; value_bits += step) {
+void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d ) {
+//  using UintT = MakeUnsigned<T>;
+//  UintT min_bits(min);
+//  UintT max_bits;
+//  CopyBytes<sizeof max_bits>(&max, &max_bits);
+//  UintT ranges[]{min_bits, max_bits};
+  uint64_t kSamplesPerRange(4000);
+  uint64_t start = 0;
+  uint64_t stop; // = ranges[1];
+  stop = 0x7fefffffffffffff;
+  uint64_t step(stop / kSamplesPerRange);
+  for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
     T value = BitCast<T>(value_bits), actual = GetLane(fxN(d, Set(d, value))),
       expected = fx1(value);
     fprintf(stderr, "Log1p(%.17g) expected %.17g actual %.17g \n", value,
@@ -30,5 +31,5 @@ void TestMath(T fx1(T), Vec<D> fxN(D, VecArg<Vec<D>>), D d, T min, T max) {
 } // namespace hwy
 int main() {
   hwy::N_EMU128::Simd<double, 1, 0> b2;
-  TestMath(log1p, hwy::N_EMU128::CallLog1p, b2, 0.0, DBL_MAX);
+  hwy::N_EMU128::TestMath<double>(log1p, hwy::N_EMU128::CallLog1p, b2 );
 }
