@@ -11,6 +11,12 @@ fi
 if ! test "$?" = "0"; then
   exit 1
 fi
+./works > /tmp/works.txt 2>&1
+cmp /tmp/works.txt /home/mathieu/Perso/gcc-110622/new5/works.txt
+if ! test "$?" = "0"; then
+  exit 1
+fi
+
 ./works 2>&1 | grep --fixed-strings 'Log1p(9.8046570862201476e-17) expected 9.8046570862201476e-17 actual 9.8046570862201476e-17'
 if ! test "$?" = "0"; then
   exit 1
@@ -37,6 +43,12 @@ fi
 if ! test "$?" = "0"; then
   exit 1
 fi
+./fails > /tmp/fails.txt 2>&1
+cmp /tmp/fails.txt /home/mathieu/Perso/gcc-110622/new5/fails.txt
+if ! test "$?" = "0"; then
+  exit 1
+fi
+
 ./fails 2>&1 | grep --fixed-strings 'Log1p(9.8046570862201476e-17) expected 9.8046570862201476e-17 actual 0 '
 #exit 0
 
