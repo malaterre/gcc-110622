@@ -1,4 +1,5 @@
 #include "hwy/highway.h"
+#include <cstdio>
 namespace hwy {
 namespace HWY_NAMESPACE {
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
@@ -14,9 +15,8 @@ template <class> struct LogImpl {
   template <class D, class V> V LogPoly(D d, V x) {
     V k0 = Set(d, 0.6666666666666735130), k2 = Set(d, 0.2857142874366239149),
       k3 = Set(d, 0.2222219843214978396), k4 = Set(d, 0.1818357216161805012),
-      k5 = Set(d, 0.1531383769920937332), x2 = Mul(x, x), x4 = Mul(x2, x2);
-    V k1 = Set(d, 0.3999999999940941908);
-    V k6 = Set(d, 0.1479819860511658591);
+      k5 = Set(d, 0.1531383769920937332), x2 = Mul(x, x), x4 = Mul(x2, x2),
+      k1 = Set(d, 0.3999999999940941908), k6 = Set(d, 0.1479819860511658591);
     return MulAdd(MulAdd(MulAdd(MulAdd(k6, x4, k4), x4, k2), x4, k0), x2,
                   Mul(MulAdd(MulAdd(k5, x4, k3), x4, k1), x4));
   }
@@ -65,9 +65,6 @@ template <class D, class V> V Log1p(D d, V x) {
   return IfThenElse(is_pole, x, non_pole);
 }
 } // namespace HWY_NAMESPACE
-} // namespace hwy
-#include <iostream>
-namespace hwy {
 template <class Out, class In> Out BitCast(In in) {
   Out out;
   CopyBytes<sizeof(out)>(&in, &out);
