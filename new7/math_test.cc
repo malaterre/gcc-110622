@@ -159,7 +159,7 @@ inline Vec128<double, 1> MulSub(Vec128<double, 1> mul, Vec128<double, 1> x,
   Vec128<double, 1> __trans_tmp_7 = mul * x;
   return __trans_tmp_7 - sub;
 }
-template <unsigned int N>
+template <unsigned N>
 inline Mask128<1> operator==(Vec128<double, 1> a, Vec128<double, N> b) {
   Mask128<1> m;
   for (unsigned i = 0; i < N; ++i)
@@ -192,18 +192,17 @@ inline Vec128<double, 1> Mul(Vec128<double, 1> a, Vec128<double, 1> b) {
 inline Vec128<double, 1> Div(Vec128<double, 1> a, Vec128<double, 1> b) {
   return a / b;
 }
-Mask128<1> __trans_tmp_45, __trans_tmp_51;
+Mask128<1> __trans_tmp_45;
 auto Eq(Vec128<double, 1> a, Vec128<double, 1> b) -> decltype(__trans_tmp_45) {
   return a == b;
 }
-auto Lt(Vec128<double, 1>, Vec128<double, 1>) -> decltype(__trans_tmp_51);
 template <class D>
 Vec128<double, 1> CallLog1p(D d, VecArg<Vec128<double, 1>> x) {
   return Log1p(d, x);
 }
 struct LogImpl {
   Vec<Rebind<long long, Simd<double, 0>>>
-  Log2p1NoSubnormal(Simd<double, 0>, Vec128<double, 1> x) {
+  Log2p1NoSubnormal(Vec128<double, 1> x) {
     Rebind<long long, Simd<double, 0>> di64;
     Rebind<unsigned long long, Simd<double, 0>> du64;
     Vec128<unsigned long long, 1> __trans_tmp_31 = BitCast(du64, x),
@@ -213,7 +212,8 @@ struct LogImpl {
                          __trans_tmp_41 = BitCast(di64, __trans_tmp_29);
     return Sub(__trans_tmp_41, __trans_tmp_30);
   }
-  Vec128<double, 1> LogPoly(Simd<double, 0> d, Vec128<double, 1> x) {
+  Vec128<double, 1> LogPoly(Vec128<double, 1> x) {
+    Simd<double, 0> d;
     Vec128<double, 1> k0 = Set(d, 0.6666666666666735130),
                       k1 = Set(d, 0.3999999999940941908),
                       k2 = Set(d, 0.2857142874366239149),
@@ -231,7 +231,7 @@ struct LogImpl {
   }
 };
 Vec128<TFromD<Simd<long long, 0>>, 1> __trans_tmp_52;
-template <int kAllowSubnormals>
+template <int>
 inline __attribute__((always_inline)) Vec128<double, 1>
 Log(Vec128<double, 1> x) {
   Simd<double, 0> d;
@@ -248,24 +248,13 @@ Log(Vec128<double, 1> x) {
                                          : 4503595332403200),
                            __trans_tmp_25 = BitCast(di, x),
                            __trans_tmp_40 = Sub(kExpMask, kMagic), exp_bits;
-  if (kAllowSubnormals) {
-#if 0
-    auto is_denormal = Lt(x, kMinNormal);
-    Vec128<double, 1> __trans_tmp_9 = kScale =
-                          IfThenElse(is_denormal, __trans_tmp_9, x),
-                      __trans_tmp_10 = BitCast(d, kExpScale),
-                      __trans_tmp_24(__trans_tmp_10);
-    (void)__trans_tmp_24;
-#else
-    (void)kMinNormal;
-    (void)kScale;
-    (void)kExpScale;
-#endif
-  }
+  (void)kMinNormal;
+  (void)kScale;
+  (void)kExpScale;
   exp_bits = Add(__trans_tmp_25, __trans_tmp_40);
   VFromD<Simd<double, 0>> __trans_tmp_13 = BitCast(d, exp_bits);
   Vec<Rebind<long long, Simd<double, 0>>> __trans_tmp_12 =
-      impl.Log2p1NoSubnormal(d, __trans_tmp_13);
+      impl.Log2p1NoSubnormal(__trans_tmp_13);
   exp = ConvertTo(__trans_tmp_12);
   VFromD<Simd<double, 0>> __trans_tmp_14 = BitCast(d, kLowerBits);
   Vec128<long long, 1> __trans_tmp_48 = And(exp_bits, kManMask);
@@ -276,7 +265,7 @@ Log(Vec128<double, 1> x) {
   Vec128<double, 1> ym1 = Sub(y, kOne);
   Vec128<double, 1> __trans_tmp_16 = Add(y, kOne);
   Vec128<double, 1> z = Div(ym1, __trans_tmp_16);
-  Vec128<double, 1> __trans_tmp_38 = impl.LogPoly(d, z);
+  Vec128<double, 1> __trans_tmp_38 = impl.LogPoly(z);
   Vec128<double, 1> __trans_tmp_18 = Sub(ym1, __trans_tmp_38);
   Vec128<double, 1> __trans_tmp_19 = Mul(exp, kLn2Lo);
   Vec128<double, 1> __trans_tmp_28 = MulSub(z, __trans_tmp_18, __trans_tmp_19);
