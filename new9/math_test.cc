@@ -1,12 +1,11 @@
-#include "hwy/highway.h"
+#if HWY_TARGET == HWY_EMU128
+#include "hwy/ops/emu128-inl.h"
+#endif
+#include "hwy/ops/generic_ops-inl.h"
 #include <cstdio>
-#include <inttypes.h>
-#include <cassert>
-#include <cfenv>
 namespace hwy {
 namespace HWY_NAMESPACE {
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
-namespace impl {
 template <class> struct LogImpl {
   template <class D, class V>
   Vec<Rebind<int64_t, D>> Log2p1NoSubnormal(D, V x) {
@@ -24,12 +23,11 @@ template <class> struct LogImpl {
                   Mul(MulAdd(MulAdd(k5, x4, k3), x4, k1), x4));
   }
 };
-template <class D, class V, bool> HWY_INLINE V Log(D d, V x) {
+template <class D, class V, int> V Log(D d, V x) {
   using T = TFromD<D>;
   LogImpl<T> impl;
-  V kLn2Hi = Set(d, 0.693147180369123816490);
-  V kLn2Lo = Set(d, 1.90821492927058770002e-10);
-  V kOne = Set(d, 1.0);
+  V kLn2Hi = Set(d, 0.693147180369123816490),
+    kLn2Lo = Set(d, 1.90821492927058770002e-10), kOne = Set(d, 1.0);
   using TI = MakeSigned<T>;
   Rebind<TI, D> di;
   using VI = decltype(Zero(di));
@@ -47,47 +45,16 @@ template <class D, class V, bool> HWY_INLINE V Log(D d, V x) {
       exp, kLn2Hi,
       Sub(MulSub(z, Sub(ym1, impl.LogPoly(d, z)), Mul(exp, kLn2Lo)), ym1));
 }
-} // namespace impl
 template <class D, class V> V Log1p(D d, V x) {
   using T = TFromD<D>;
-  V kOne = Set(d, T(1.0));
-  const V y = Add(x, kOne);
-  volatile auto dbg8 = y; (void)dbg8;
-#if HIDESYMPTOM
-  fprintf(stdout, "%.17g\n", y.raw[0] );
+  V kOne = Set(d, T(1.0)), y = Add(x, kOne);
+#ifdef HIDESYMPTOM
+  fprintf(stdout, "%.17g\n", y.raw[0]);
 #endif
   auto is_pole = Eq(y, kOne);
-  //volatile auto dbg7 = is_pole; (void)dbg7;
-//  fprintf(stdout, "%" PRIu64 "\n", is_pole.bits[0] );
-#if 1
   auto divisor = Sub(IfThenZeroElse(is_pole, y), kOne);
-#else
-  volatile auto dbg7 = is_pole;
-  auto tmp1 = IfThenZeroElse(is_pole, y);
-  volatile auto dbg4 = tmp1;
-  volatile auto dbg5 = kOne;
-  auto divisor = Sub(tmp1, kOne);
-  volatile auto dbg6 = divisor;
-  (void)dbg4;
-  (void)dbg5;
-  (void)dbg6;
-  (void)dbg7;
-#endif
-#if 1
-  auto non_pole = Mul(impl::Log<D, V, false>(d, y), Div(x, divisor));
-#else
-  volatile auto dbg3 = y;
-  volatile auto dbg0 = divisor;
-  auto tmp1 = impl::Log<D, V, false>(d, y);
-  auto tmp2 = Div(x, divisor);
-  volatile auto dbg1 = tmp1;
-  volatile auto dbg2 = tmp2;
-  (void)dbg0;
-  (void)dbg1;
-  (void)dbg2;
-  (void)dbg3;
-  auto non_pole = Mul( tmp1, tmp2);
-#endif
+  V __trans_tmp_1 = Log<D, V, false>(d, y);
+  auto non_pole = Mul(__trans_tmp_1, Div(x, divisor));
   return IfThenElse(is_pole, x, non_pole);
 }
 } // namespace HWY_NAMESPACE
@@ -97,28 +64,19 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class D> void TestMath(D d) {
-  //uint64_t kSamplesPerRange = 4000, start = 4318952042648305665 , stop = 9218868437227405311;
   uint64_t kSamplesPerRange = 4000, start = 0, stop = 9218868437227405311;
   uint64_t step(stop / kSamplesPerRange);
   for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
     double value = BitCast<double>(value_bits),
            actual = GetLane(CallLog1p(d, Set(d, value))),
            expected = log1p(value);
-#if 1
     fprintf(stderr,
             "%" PRIu64 " - Log1p(%.17g) expected %.17g actual %.17g %a\n",
             value_bits, value, expected, actual, actual);
-#else
-    (void)actual;
-    (void)expected;
-    assert( actual >= 0.0 );
-#endif
   }
 }
 } // namespace hwy
 int main() {
-//  feenableexcept(FE_INVALID | FE_DIVBYZERO );
-//  feenableexcept( FE_INVALID );
   hwy::N_EMU128::Simd<double, 1, 0> b2;
   hwy::TestMath(b2);
 }
