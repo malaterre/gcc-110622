@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cmath>
 struct SizeTag {};
 template <typename> using MakeUnsigned = long long;
 template <typename> using MakeSigned = long long;
@@ -9,7 +10,6 @@ void CopyBytes(From from, To to) {
 template <typename From, typename To> void CopySameSize(From *from, To to) {
   CopyBytes<sizeof(From)>(from, to);
 }
-extern "C" double log1p(double);
 template <class V> using VecArg = V;
 template <typename Lane, int> struct Simd {
   using T = Lane;
@@ -289,6 +289,9 @@ unsigned long long TestMath_step = TestMath_stop / 4000ULL;
   for (unsigned long long value_bits = TestMath_start; value_bits <= TestMath_stop;
        value_bits += TestMath_step) {
     CopyBytes<sizeof(BitCast_out)>(&value_bits, &TestMath_value);
+#ifdef HIDESYMPTOM
+    fprintf(stdout, "%.17g %a\n", TestMath_value, TestMath_value);
+#endif
     Vec128<double, 1> __trans_tmp_54 = Set(d, TestMath_value),
                       __trans_tmp_53 = CallLog1p(d, __trans_tmp_54);
     double actual = GetLane(__trans_tmp_53), expected = log1p(TestMath_value);
