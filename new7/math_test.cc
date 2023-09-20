@@ -1,3 +1,4 @@
+#include <cstdio>
 struct SizeTag {};
 template <typename> using MakeUnsigned = long long;
 template <typename> using MakeSigned = long long;
@@ -17,7 +18,7 @@ template <typename Lane, int> struct Simd {
 };
 template <class D> using TFromD = typename D::T;
 template <class D> unsigned MaxLanes(D) { return D::kPrivateLanes; }
-template <class T, class D> using Rebind = typename D::Rebind<T>;
+template <class T, class D> using Rebind = typename D::template Rebind<T>;
 template <class D> using RebindToUnsigned = Rebind<MakeUnsigned<D>, D>;
 template <typename T, unsigned> struct Vec128 {
   using PrivateT = T;
@@ -248,11 +249,18 @@ Log(Vec128<double, 1> x) {
                            __trans_tmp_25 = BitCast(di, x),
                            __trans_tmp_40 = Sub(kExpMask, kMagic), exp_bits;
   if (kAllowSubnormals) {
+#if 0
     auto is_denormal = Lt(x, kMinNormal);
     Vec128<double, 1> __trans_tmp_9 = kScale =
                           IfThenElse(is_denormal, __trans_tmp_9, x),
                       __trans_tmp_10 = BitCast(d, kExpScale),
                       __trans_tmp_24(__trans_tmp_10);
+    (void)__trans_tmp_24;
+#else
+    (void)kMinNormal;
+    (void)kScale;
+    (void)kExpScale;
+#endif
   }
   exp_bits = Add(__trans_tmp_25, __trans_tmp_40);
   VFromD<Simd<double, 0>> __trans_tmp_13 = BitCast(d, exp_bits);
@@ -284,11 +292,6 @@ Vec128<double, 1> Log1p(Simd<double, 0> d, Vec128<double, 1> x) {
   Vec128<double, 1> __trans_tmp_39 = Log<false>(y);
   auto non_pole = Mul(__trans_tmp_39, __trans_tmp_21);
   return IfThenElse(is_pole, x, non_pole);
-}
-typedef int FILE;
-extern "C" {
-extern FILE *stderr;
-int fprintf(FILE *, const char *...);
 }
 double BitCast_out, TestMath___trans_tmp_43;
 long TestMath_start;

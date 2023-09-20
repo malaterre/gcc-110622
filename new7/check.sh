@@ -15,14 +15,14 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 
-#clang++-16 -std=c++11 -fsanitize=memory -o works0 $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
-#if ! test "$?" = "0"; then
-#  exit 1
-#fi
-#( ulimit -t 10; ./works0 )
-#if ! test "$?" = "0"; then
-#  exit 1
-#fi
+clang++-16 -std=c++11 -fsanitize=memory -o works0 $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
+if ! test "$?" = "0"; then
+  exit 1
+fi
+( ulimit -t 10; ./works0 )
+if ! test "$?" = "0"; then
+  exit 1
+fi
 
 g++ -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic
 if ! test "$?" = "0"; then
