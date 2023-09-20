@@ -1,5 +1,8 @@
 #include "hwy/highway.h"
 #include <cstdio>
+#include <inttypes.h>
+#include <cassert>
+#include <cfenv>
 namespace hwy {
 namespace HWY_NAMESPACE {
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
@@ -50,8 +53,33 @@ template <class D, class V> V Log1p(D d, V x) {
   V kOne = Set(d, T(1.0));
   const V y = Add(x, kOne);
   auto is_pole = Eq(y, kOne);
+#if 0
   auto divisor = Sub(IfThenZeroElse(is_pole, y), kOne);
+#else
+  auto tmp1 = IfThenZeroElse(is_pole, y);
+  volatile auto dbg4 = tmp1;
+  volatile auto dbg5 = kOne;
+  auto divisor = Sub(tmp1, kOne);
+  volatile auto dbg6 = divisor;
+  (void)dbg4;
+  (void)dbg5;
+  (void)dbg6;
+#endif
+#if 1
   auto non_pole = Mul(impl::Log<D, V, false>(d, y), Div(x, divisor));
+#else
+  volatile auto dbg3 = y;
+  volatile auto dbg0 = divisor;
+  auto tmp1 = impl::Log<D, V, false>(d, y);
+  auto tmp2 = Div(x, divisor);
+  volatile auto dbg1 = tmp1;
+  volatile auto dbg2 = tmp2;
+  (void)dbg0;
+  (void)dbg1;
+  (void)dbg2;
+  (void)dbg3;
+  auto non_pole = Mul( tmp1, tmp2);
+#endif
   return IfThenElse(is_pole, x, non_pole);
 }
 } // namespace HWY_NAMESPACE
@@ -67,13 +95,21 @@ template <class D> void TestMath(D d) {
     double value = BitCast<double>(value_bits),
            actual = GetLane(CallLog1p(d, Set(d, value))),
            expected = log1p(value);
+#if 1
     fprintf(stderr,
             "%" PRIu64 " - Log1p(%.17g) expected %.17g actual %.17g %a\n",
             value_bits, value, expected, actual, actual);
+#else
+    (void)actual;
+    (void)expected;
+    assert( actual >= 0.0 );
+#endif
   }
 }
 } // namespace hwy
 int main() {
+  feenableexcept(FE_INVALID | FE_DIVBYZERO );
+//  feenableexcept( FE_INVALID );
   hwy::N_EMU128::Simd<double, 1, 0> b2;
   hwy::TestMath(b2);
 }
