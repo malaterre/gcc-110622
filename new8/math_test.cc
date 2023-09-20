@@ -24,7 +24,6 @@ template <class> struct LogImpl {
 template <class D, class V, bool> HWY_INLINE V Log(D d, V x) {
   using T = TFromD<D>;
   LogImpl<T> impl;
-  bool kIsF32 = 0;
   V kLn2Hi = Set(d, 0.693147180369123816490);
   V kLn2Lo = Set(d, 1.90821492927058770002e-10);
   V kOne = Set(d, 1.0);
@@ -37,7 +36,7 @@ template <class D, class V, bool> HWY_INLINE V Log(D d, V x) {
   VI kMagic = Set(di, 4604544269498187776);
   VI kExpMask = Set(di, 4607182418800017408);
   VI kExpScale;
-  VI kManMask = Set(di, kIsF32 ? 5 : 4503595332403200);
+  VI kManMask = Set(di,  4503595332403200);
   VI exp_bits;
   V exp;
   auto is_denormal = Lt(x, kMinNormal);
