@@ -282,10 +282,11 @@ Vec128<double, 1> Log1p(Simd<double, 0> d, Vec128<double, 1> x) {
   return IfThenElse(is_pole, x, non_pole);
 }
 double BitCast_out, TestMath_value;
-long TestMath_start;
-long long TestMath_step = 9218868437227405311 / 4000;
+unsigned long long TestMath_start;
+unsigned long long TestMath_stop;
 void TestMath(Simd<double, 0> d) {
-  for (long long value_bits = TestMath_start; value_bits <= 9218868437227405311;
+unsigned long long TestMath_step = TestMath_stop / 4000ULL;
+  for (unsigned long long value_bits = TestMath_start; value_bits <= TestMath_stop;
        value_bits += TestMath_step) {
     CopyBytes<sizeof(BitCast_out)>(&value_bits, &TestMath_value);
     Vec128<double, 1> __trans_tmp_54 = Set(d, TestMath_value),
@@ -296,6 +297,8 @@ void TestMath(Simd<double, 0> d) {
   }
 }
 int main() {
+//TestMath_start = 4318952042648305665;
+TestMath_stop = 9218868437227405311;
   Simd<double, 0> b2;
   TestMath(b2);
 }
