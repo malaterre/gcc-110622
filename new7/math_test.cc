@@ -273,33 +273,26 @@ Log(Vec128<double, 1> x) {
   return MulSub(exp, kLn2Hi, __trans_tmp_17);
 }
 Vec128<double, 1> Log1p(Simd<double, 0> d, Vec128<double, 1> x) {
-  Vec128<double, 1> kOne = Set(d, 1.0), y = Add(x, kOne);
+  Vec128<double, 1> kOne = Set(d, 1.0), y = Add(x, kOne), __trans_tmp_20(y);
   auto is_pole = Eq(y, kOne);
-  Vec128<double, 1> __trans_tmp_20(y);
   auto divisor = Sub(__trans_tmp_20, kOne);
   Vec128<double, 1> __trans_tmp_21 = Div(x, divisor);
   Vec128<double, 1> __trans_tmp_39 = Log<false>(y);
   auto non_pole = Mul(__trans_tmp_39, __trans_tmp_21);
   return IfThenElse(is_pole, x, non_pole);
 }
-double BitCast_out, TestMath___trans_tmp_43;
+double BitCast_out, TestMath_value;
 long TestMath_start;
 long long TestMath_step = 9218868437227405311 / 4000;
 void TestMath(Simd<double, 0> d) {
   for (long long value_bits = TestMath_start; value_bits <= 9218868437227405311;
        value_bits += TestMath_step) {
-    long long in = value_bits;
-    CopyBytes<sizeof(BitCast_out)>(&in, &BitCast_out);
-    TestMath___trans_tmp_43 = BitCast_out;
-    double value = TestMath___trans_tmp_43,
-           actual = GetLane(CallLog1p(d, Set(d, value))),
-           expected = log1p(value);
-    fprintf(stderr,
-            "%"
-            "ll"
-            "u"
-            " - Log1p(%.17g) expected %.17g actual %.17g %a\n",
-            value_bits, value, expected, actual, actual);
+    CopyBytes<sizeof(BitCast_out)>(&value_bits, &TestMath_value);
+    Vec128<double, 1> __trans_tmp_54 = Set(d, TestMath_value),
+                      __trans_tmp_53 = CallLog1p(d, __trans_tmp_54);
+    double actual = GetLane(__trans_tmp_53), expected = log1p(TestMath_value);
+    fprintf(stderr, "%llu - Log1p(%.17g) expected %.17g actual %.17g %a\n",
+            value_bits, TestMath_value, expected, actual, actual);
   }
 }
 int main() {
