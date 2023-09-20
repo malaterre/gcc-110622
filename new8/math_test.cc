@@ -52,10 +52,17 @@ template <class D, class V> V Log1p(D d, V x) {
   using T = TFromD<D>;
   V kOne = Set(d, T(1.0));
   const V y = Add(x, kOne);
+  volatile auto dbg8 = y; (void)dbg8;
+#if HIDESYMPTOM
+  fprintf(stdout, "%.17g\n", y.raw[0] );
+#endif
   auto is_pole = Eq(y, kOne);
-#if 0
+  //volatile auto dbg7 = is_pole; (void)dbg7;
+//  fprintf(stdout, "%" PRIu64 "\n", is_pole.bits[0] );
+#if 1
   auto divisor = Sub(IfThenZeroElse(is_pole, y), kOne);
 #else
+  volatile auto dbg7 = is_pole;
   auto tmp1 = IfThenZeroElse(is_pole, y);
   volatile auto dbg4 = tmp1;
   volatile auto dbg5 = kOne;
@@ -64,6 +71,7 @@ template <class D, class V> V Log1p(D d, V x) {
   (void)dbg4;
   (void)dbg5;
   (void)dbg6;
+  (void)dbg7;
 #endif
 #if 1
   auto non_pole = Mul(impl::Log<D, V, false>(d, y), Div(x, divisor));
@@ -89,6 +97,7 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class D> void TestMath(D d) {
+  //uint64_t kSamplesPerRange = 4000, start = 4318952042648305665 , stop = 9218868437227405311;
   uint64_t kSamplesPerRange = 4000, start = 0, stop = 9218868437227405311;
   uint64_t step(stop / kSamplesPerRange);
   for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
@@ -108,7 +117,7 @@ template <class D> void TestMath(D d) {
 }
 } // namespace hwy
 int main() {
-  feenableexcept(FE_INVALID | FE_DIVBYZERO );
+//  feenableexcept(FE_INVALID | FE_DIVBYZERO );
 //  feenableexcept( FE_INVALID );
   hwy::N_EMU128::Simd<double, 1, 0> b2;
   hwy::TestMath(b2);
