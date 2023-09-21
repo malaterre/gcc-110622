@@ -16,14 +16,14 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 
-clang++-16 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -fsanitize=memory -o works0 $input -Wall -Wextra -Wpedantic -Wconversion -Werror -Wfatal-errors 
-if ! test "$?" = "0"; then
-  exit 1
-fi
-( ulimit -t 10; ./works0 > /dev/null 2>&1 )
-if ! test "$?" = "0"; then
-  exit 1
-fi
+#clang++-16 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -fsanitize=memory -o works0 $input -Wall -Wextra -Wpedantic -Wconversion -Werror -Wfatal-errors 
+#if ! test "$?" = "0"; then
+#  exit 1
+#fi
+#( ulimit -t 10; ./works0 > /dev/null 2>&1 )
+#if ! test "$?" = "0"; then
+#  exit 1
+#fi
 
 g++ -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
 if ! test "$?" = "0"; then
