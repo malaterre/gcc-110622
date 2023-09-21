@@ -233,7 +233,7 @@ template <class D, class V, int> V Log(V x) {
 template <class D, class V> V Log1p(D d, V x) {
   V kOne = Set(d, 1.0), y = Add(x, kOne);
 #ifdef HIDESYMPTOM
-  asm volatile("" : "+r"(y.raw[0]) : : "memory");
+  asm("" : "+r"(y.raw[0]));
 #endif
   auto is_pole = Eq(y, kOne);
   auto divisor = Sub(IfThenZeroElse(is_pole, y), kOne);
