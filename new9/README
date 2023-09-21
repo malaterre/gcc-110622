@@ -1,2 +1,10 @@
 4318952042648305665
 4368493837572636672
+
+TODO:
+https://stackoverflow.com/questions/38552116/how-to-remove-noise-from-gcc-clang-assembly-output
+
+g++ -g -O3 -std=c++14 -c test.cc -o test.o && objdump -dS test.o
+
+g++ -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fverbose-asm \
+    -Wall -Wextra  foo.cpp   -O3 -masm=intel -S -o- | less
