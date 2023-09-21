@@ -1,6 +1,6 @@
-#ifndef HIGHWAY_HWY_BASE_H_
+#include <cmath>
+#include <cstdio>
 #include <inttypes.h>
-#include <stddef.h>
 template <size_t kBytes, typename From, typename To>
 static void CopyBytes(From from, To to) {
   __builtin_memcpy(to, static_cast<void *>(from), kBytes);
@@ -15,7 +15,6 @@ struct Relations {
 };
 template <typename> using MakeUnsigned = Relations::Unsigned;
 template <typename> using MakeSigned = Relations::Signed;
-#endif
 namespace N_EMU128 {
 template <typename Lane, size_t, int> struct Simd {
   using T = Lane;
@@ -31,9 +30,6 @@ template <class D> using TFromD = typename D::T;
 template <class D> size_t MaxLanes(D) { return HWY_MAX_LANES_D(D); }
 template <class T, class D> using Rebind = typename D::template Rebind<T>;
 template <class D> using RebindToUnsigned = Rebind<MakeUnsigned<D>, D>;
-} // namespace N_EMU128
-#include <cmath>
-namespace N_EMU128 {
 template <typename T, size_t N> struct Vec128 {
   using PrivateT = T;
   static constexpr size_t kPrivateN = N;
@@ -192,9 +188,6 @@ template <class V> V Sub(V a, V b) { return a - b; }
 template <class V> V Mul(V a, V b) { return a * b; }
 template <class V> V Div(V a, V b) { return a / b; }
 template <class V> auto Eq(V a, V b) -> decltype(a == b) { return a == b; }
-} // namespace N_EMU128
-#include <cstdio>
-namespace N_EMU128 {
 template <class D, class V> V CallLog1p(D d, V x) { return Log1p(d, x); }
 struct LogImpl {
   template <class D, class V>
