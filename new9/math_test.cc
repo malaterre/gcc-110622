@@ -107,13 +107,13 @@ Vec128<T, N> ShiftRight(Vec128<T, N> v) {
 }
 namespace detail {
 template <typename T, size_t N>
-Vec128<T, N> Add(int, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Add( Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] += b.raw[i];
   return a;
 }
 template <typename T, size_t N>
-Vec128<T, N> Sub(int, Vec128<T, N> a, Vec128<T, N> b) {
+Vec128<T, N> Sub( Vec128<T, N> a, Vec128<T, N> b) {
   for (size_t i = 0; i < N; ++i)
     a.raw[i] -= b.raw[i];
   return a;
@@ -121,13 +121,11 @@ Vec128<T, N> Sub(int, Vec128<T, N> a, Vec128<T, N> b) {
 } // namespace detail
 template <typename T, size_t N>
 Vec128<T, N> operator-(Vec128<T, N> a, Vec128<T, N> b) {
-  int __trans_tmp_18 = 0;
-  return detail::Sub(__trans_tmp_18, a, b);
+  return detail::Sub( a, b);
 }
 template <typename T, size_t N>
 Vec128<T, N> operator+(Vec128<T, N> a, Vec128<T, N> b) {
-  int __trans_tmp_19 = 0;
-  return detail::Add(__trans_tmp_19, a, b);
+  return detail::Add( a, b);
 }
 namespace detail {
 template <typename T, size_t N>
