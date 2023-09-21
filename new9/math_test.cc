@@ -167,7 +167,7 @@ Mask128<T, N> operator==(Vec128<T, N> a, Vec128<T, N> b) {
 }
 namespace detail {
 template <typename TFrom, typename DTo>
-VFromD<DTo> ConvertTo(int, DTo, Vec128<TFrom, HWY_MAX_LANES_D(DTo)> from) {
+VFromD<DTo> ConvertTo( DTo, Vec128<TFrom, HWY_MAX_LANES_D(DTo)> from) {
   VFromD<DTo> ret;
   size_t N = HWY_MAX_LANES_D(DTo);
   for (size_t i = 0; i < N; ++i)
@@ -175,11 +175,9 @@ VFromD<DTo> ConvertTo(int, DTo, Vec128<TFrom, HWY_MAX_LANES_D(DTo)> from) {
   return ret;
 }
 } // namespace detail
-int __trans_tmp_17;
 template <class DTo, typename TFrom>
 VFromD<DTo> ConvertTo(DTo d, Vec128<TFrom, HWY_MAX_LANES_D(DTo)> from) {
-  int __trans_tmp_16 = __trans_tmp_17;
-  return detail::ConvertTo(__trans_tmp_16, d, from);
+  return detail::ConvertTo(d, from);
 }
 template <typename T, size_t N> T GetLane(Vec128<T, N> v) { return v.raw[0]; }
 template <class D> using Vec = decltype(Zero(D()));
@@ -249,7 +247,8 @@ template <class Out, class In> Out BitCast(In in) {
   return out;
 }
 template <class D> void TestMath(D d) {
-  uint64_t kSamplesPerRange = 4000, start = 0, stop = 9218868437227405311;
+  uint64_t kSamplesPerRange = 4000, start = 0 /*4318952042648305665*/
+	  , stop = 9218868437227405311;
   uint64_t step(stop / kSamplesPerRange);
   for (uint64_t value_bits = start; value_bits <= stop; value_bits += step) {
     double value = BitCast<double>(value_bits),
