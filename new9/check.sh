@@ -2,7 +2,8 @@
 set -x
 input=math_test.cc
 #g++ -std=c++11 -g -m32 -fexcess-precision=fast -O1 -o works $input -Wfatal-errors -Wall -Wextra -Werror -Wpedantic -Wconversion
-g++ -DHIDESYMPTOM -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o works $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
+#g++ -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -DHIDESYMPTOM -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o works $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
+g++ -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -DHIDESYMPTOM -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o works $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
 if ! test "$?" = "0"; then
   exit 1
 fi
@@ -16,7 +17,8 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 
-clang++-16 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -fsanitize=memory -o works0 $input -Wall -Wextra -Wpedantic -Wconversion -Werror -Wfatal-errors 
+#clang++-16 -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -fsanitize=memory -o works0 $input -Wall -Wextra -Wpedantic -Wconversion -Werror -Wfatal-errors 
+clang++-16 -std=c++11 -fsanitize=memory -o works0 $input -Wall -Wextra -Wpedantic -Wconversion -Werror -Wfatal-errors 
 if ! test "$?" = "0"; then
   exit 1
 fi
@@ -25,7 +27,8 @@ if ! test "$?" = "0"; then
   exit 1
 fi
 
-g++ -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
+#g++ -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -DHWY_BROKEN_EMU128=0 -DHWY_COMPILE_ONLY_EMU128 -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
+g++ -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -std=c++11 -g -m32 -fexcess-precision=fast -O2 -o fails $input -Wfatal-errors -Wall -Wextra -Wpedantic -Wconversion -Werror
 if ! test "$?" = "0"; then
   exit 1
 fi
