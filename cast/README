@@ -1,0 +1,1 @@
+g++  -Wcast-align=strict  -Werror -c cast.cc
