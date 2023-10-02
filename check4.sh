@@ -1,6 +1,6 @@
 #!/bin/sh -x
 #g++ -o works inf2.ii -O0 -lhwy -lhwy_test -Wall -Wextra -Wno-narrowing -Wfatal-errors
-g++ -o works inf3.ii -O0 mem.cc -lhwy_test -Wall -Wextra -Werror -Wfatal-errors 
+g++ -g -o works inf4.cc -O0  -Wall -Wextra -Werror -Wfatal-errors 
 if ! test "$?" = "0"; then
   exit 1
 fi
@@ -10,9 +10,10 @@ if ! test "$?" = "0"; then
 fi
 
 #valgrind --leak-check=yes --error-exitcode=1 ./works 
+valgrind --error-exitcode=1 ./works 
 
 #g++ -o fails inf2.ii -O1 -lhwy -lhwy_test -Wall -Wextra -Wno-narrowing -Wfatal-errors
-g++ -o fails inf3.ii -O1 mem.cc -lhwy_test -Wall -Wextra -Werror -Wfatal-errors 
+g++ -g -o fails inf4.cc -O1   -Wall -Wextra -Werror -Wfatal-errors 
 if ! test "$?" = "0"; then
   exit 1
 fi
