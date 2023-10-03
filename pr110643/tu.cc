@@ -81,7 +81,7 @@ TypeInfo MakeTypeInfo() {
 //void AssertArrayEqual(const TypeInfo &, const void *, const void *, unsigned long, const char *, const char *, int);
 //[[gnu::noipa]]
 		void AssertArrayEqual(const TypeInfo &ti, const void *a, const void *b, unsigned long c,
-				                                      const char *, const char *, int) { if( memcmp(a, b, c * ti.sizeof_t) != 0 ) abort(); }
+				                                      const char *, const char *, int) { if( memcmp(a, b, c * ti.sizeof_t) != 0 ) exit(42); }
 
 } // namespace detail
 template <class V> using VecArg = V;
