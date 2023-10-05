@@ -90,7 +90,7 @@ template < class D > size_t MaxLanes(D) {
      }
       using AllocPtr = void *(void *, size_t);
       using FreePtr = void (*)(void *, void *);
-#if 0
+#if 1
       void *AllocateAlignedBytes(size_t, AllocPtr, void *);
       void FreeAlignedBytes(const void *, FreePtr, void *);
 #else
@@ -112,14 +112,14 @@ void FreeAlignedBytes2(const void *p, FreePtr, void *) {
       bool is_pow2 = 0;
       size_t bits(size);
       size_t bytes = is_pow2 ? bits : items;
-      return static_cast< T * >(AllocateAlignedBytes2(bytes, alloc_ptr, 0));
+      return static_cast< T * >(AllocateAlignedBytes(bytes, alloc_ptr, 0));
     }
      }
       struct AlignedFreer {
        AlignedFreer(FreePtr free_ptr, void *opaque_ptr)       : free_(free_ptr), opaque_ptr_(opaque_ptr) {
    }
        template < typename T > void operator()(T aligned_pointer) {
-        FreeAlignedBytes2(aligned_pointer, free_, opaque_ptr_);
+        FreeAlignedBytes(aligned_pointer, free_, opaque_ptr_);
       }
        FreePtr free_;
        void *opaque_ptr_;
@@ -218,6 +218,10 @@ void FreeAlignedBytes2(const void *p, FreePtr, void *) {
         namespace detail {
      struct TypeInfo {
       size_t sizeof_t;
+        bool is_float;
+  bool is_signed;
+  bool is_bf16;
+
     };
      template < typename T > TypeInfo MakeTypeInfo() {
       TypeInfo info;
@@ -245,8 +249,8 @@ void FreeAlignedBytes2(const void *p, FreePtr, void *) {
       //auto dbg1 = expected_lanes.get();
       //auto dbg2 = actual_lanes.get();
       //auto len = info.sizeof_t * N;
-      AssertArrayEqual2(info, expected_lanes.get(), actual_lanes.get(), N,                    &AssertVecEqual_target_name, filename, line);
-      //AssertArrayEqual(info, expected_lanes.get(), actual_lanes.get(), N,                    &AssertVecEqual_target_name, filename, line);
+      //AssertArrayEqual2(info, expected_lanes.get(), actual_lanes.get(), N,                    &AssertVecEqual_target_name, filename, line);
+      AssertArrayEqual(info, expected_lanes.get(), actual_lanes.get(), N,                    &AssertVecEqual_target_name, filename, line);
     }
 #define HWY_ASSERT_VEC_EQ(d, expected, actual)                                   AssertVecEqual(d, expected, actual, __FILE__, __LINE__)
 template < typename T, size_t kMul, size_t kMinArg, class Test > struct ForeachCappedR {
