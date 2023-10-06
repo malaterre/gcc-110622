@@ -11,7 +11,7 @@ struct TypeInfo {
 };
 
 void AssertArrayEqual2(const TypeInfo &ti, const void *a, const void *b,
-                       size_t c, const char *, const char *, int) noexcept {
+                       size_t c, const char *, const char *, int) {
   if (memcmp(a, b, c * ti.sizeof_t) != 0) {
 	  std::cerr << "lane" << "mismatch" << std::endl;
     abort();
