@@ -1,10 +1,10 @@
 #include <cstdlib>
 #include <memory>
 void *AllocateAlignedItems_opaque_ptr;
-void *AllocateAlignedBytes_memptr;
 using AllocPtr = void *;
 using FreePtr = void *;
 void *AllocateAlignedBytes(size_t s, AllocPtr, void *) {
+void *AllocateAlignedBytes_memptr = nullptr;
   int ret = posix_memalign(&AllocateAlignedBytes_memptr, 4, s);
   (void)ret;
   return AllocateAlignedBytes_memptr;
@@ -146,8 +146,9 @@ inline Vec128<T, N> And(Vec128<T, N> a, Vec128<T, N> b) {
 }
 template <int kBits, typename T, size_t N>
 Vec128<T, N> ShiftLeft(Vec128<T, N> v) {
+  using TU = MakeUnsigned<T>;
   for (size_t i = 0; i < N; ++i) {
-    T raw_u(v.raw[i]);
+    TU raw_u = static_cast<TU>(v.raw[i]);
     auto shifted = raw_u << kBits;
     v.raw[i] = T(shifted);
   }
@@ -258,6 +259,7 @@ struct TestSatWidenMulPairwiseAdd {
     RebindToUnsigned<decltype(dn)> dn_u;
     auto expected = AllocateAligned<TW>(NW);
     auto in_a = AllocateAligned<TN>(NN);
+//    volatile auto dbg1 = in_a;
     auto in_neg_b = AllocateAligned<TN>(NN);
     auto in_b = AllocateAligned<TN>(NN);
     int __trans_tmp_2 = LimitsMax<TN>();
@@ -300,3 +302,24 @@ template <int kPow2 = 1> struct ForShrinkableVectors {
 void TestAllSatWidenMulPairwiseAdd() { ForShrinkableVectors<>()(int8_t()); }
 } // namespace hwy
 int main() { hwy::TestAllSatWidenMulPairwiseAdd(); }
+
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+
+namespace hwy {
+namespace detail {
+
+[[gnu::noipa]] void AssertArrayEqual2(const TypeInfo &ti, const void *a,
+                                      const void *b, size_t c, const char *,
+                                      const char *, int) {
+  if (memcmp(a, b, c * ti.sizeof_t) != 0) {
+    std::cerr << "lane"
+              << "mismatch" << std::endl;
+    abort();
+  }
+}
+
+} // namespace detail
+} // namespace hwy
